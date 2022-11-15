@@ -1,4 +1,5 @@
 import { AppShell, Header, Title, Tabs } from "@mantine/core";
+import logo from './assets/simple-state-logo.png';
 
 export default function App() {
 
@@ -7,7 +8,7 @@ export default function App() {
       header={
         <Header height={{ base: 50, md: 70 }} p="md">
           <div style={{ display: "flex", alignItems: "center", height: "100%" }} >
-            <img src="./src/assets/simple-state-logo.png" width={180} />
+            <img src={logo} width={180} />
           </div>
         </Header>
       }
