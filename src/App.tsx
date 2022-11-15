@@ -1,6 +1,7 @@
 import { AppShell, Header, Title, Tabs } from "@mantine/core";
 
-export default function AppShellDemo() {
+export default function App() {
+
   return (
     <AppShell
       header={
