@@ -17,7 +17,7 @@ export default function App() {
   return (
     <AppShell
       header={
-        <Header height={{ base: 50, md: 70 }} p="md">
+        <Header height={{ base: 70 }} p="md">
           <Container>
             <div className={classes.headerContent} >
               <img src={logo} width={180} />
