@@ -1,5 +1,6 @@
-import { AppShell, Header, Title, Tabs, Button, createStyles, Container } from "@mantine/core";
+import { AppShell, Header, Title, Tabs, Button, createStyles, Container, Badge } from "@mantine/core";
 import logo from './assets/simple-state-logo.png';
+import { useMetamask } from "./hooks/useMetamask";
 
 const useStyles = createStyles((theme) => ({
   headerContent: {
@@ -11,8 +12,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function App() {
-
   const { classes } = useStyles();
+  const { connect, accounts, network } = useMetamask();
 
   return (
     <AppShell
@@ -21,9 +22,14 @@ export default function App() {
           <Container>
             <div className={classes.headerContent} >
               <img src={logo} width={180} />
-              <Button color="teal" radius={'lg'}>
-                Conectarse
-              </Button>
+              {accounts[0]
+                  ? <div>
+                      {accounts[0]} <Badge color={'teal'}>{network?.name}</Badge>
+                    </div>
+                  : <Button color="teal" radius={'lg'} onClick={connect}>
+                      Conectarse
+                    </Button>
+              }
             </div>
           </Container>
         </Header>
