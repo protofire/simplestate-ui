@@ -1,5 +1,7 @@
-import { AppShell, Header, Title, Tabs, Button, createStyles, Container, Badge, Tooltip } from "@mantine/core";
+import { AppShell, Header, Button, createStyles, Container, Badge, Tooltip, Tabs } from "@mantine/core";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import logo from './assets/simple-state-logo.png';
+import TabsHeader from "./components/TabsHeader";
 import { networkEnum } from "./constants/networks";
 import { useMetamask } from "./hooks/useMetamask";
 
@@ -23,65 +25,68 @@ export default function App() {
   }
 
   return (
-    <AppShell
-      header={
-        <Header height={{ base: 70 }} p="md">
-          <Container>
-            <div className={classes.headerContent} >
-              <img src={logo} width={180} />
-              {accounts[0]
-                  ? <div>
-                      {accounts[0]} 
-                      <Tooltip
-                        disabled={network?.chainId === networkEnum.GOERLI}
-                        multiline
-                        withArrow
-                        transition="fade"
-                        transitionDuration={200}
-                        label={"Red incorrecta, conéctate a la red de test Goerli"}
-                      >
-                        <Badge
-                          onClick={switchChain}
-                          color={network?.chainId === networkEnum.GOERLI ? 'teal' : 'red'}
-                        >{network?.name}</Badge>
-                      </Tooltip>
-                    </div>
-                  : <Button sx={(theme) => ({ "box-shadow": theme.shadows.sm, })} color="teal" variant="white" radius={'lg'} onClick={connect}>
-                      Conectar billetera
-                    </Button>
-              }
-            </div>
-          </Container>
-        </Header>
-      }
-    >
-      <Container>
-        <Title>Proyectos</Title>
-        <Tabs color="teal" variant="pills" radius="lg" defaultValue="invests" mt="lg">
-          <Tabs.List>
-            <Tabs.Tab value="invests">Mis inversiones</Tabs.Tab>
-            <Tabs.Tab value="explorer">Proyectos</Tabs.Tab>
-            <Tabs.Tab value="admin">Administrar Proyectos</Tabs.Tab>
-            <Tabs.Tab value="tressury">Tesoro</Tabs.Tab>
-          </Tabs.List>
+    <BrowserRouter>
+      <AppShell
+        header={
+          <Header height={{ base: 70 }} p="md">
+            <Container>
+              <div className={classes.headerContent} >
+                <img src={logo} width={180} />
+                {accounts[0]
+                    ? <div>
+                        {accounts[0]} 
+                        <Tooltip
+                          disabled={network?.chainId === networkEnum.GOERLI}
+                          multiline
+                          withArrow
+                          transition="fade"
+                          transitionDuration={200}
+                          label={"Red incorrecta, conéctate a la red de test Goerli"}
+                        >
+                          <Badge
+                            onClick={switchChain}
+                            color={network?.chainId === networkEnum.GOERLI ? 'teal' : 'red'}
+                          >{network?.name}</Badge>
+                        </Tooltip>
+                      </div>
+                    : <Button sx={(theme) => ({ "box-shadow": theme.shadows.sm, })} color="teal" variant="white" radius={'lg'} onClick={connect}>
+                        Conectar billetera
+                      </Button>
+                }
+              </div>
+            </Container>
+          </Header>
+        }
+      >
 
-          <Tabs.Panel value="invests" pt="xs">
-            Mis inversiones
-          </Tabs.Panel>
+      <Routes>
+        <Route path={'/'} element={<TabsHeader />} >
+          <Route path="investments" element={
+            <Tabs.Panel value="investments" pt="xs">
+              <div>Mis inversiones</div>
+            </Tabs.Panel>
+          } />
 
-          <Tabs.Panel value="explorer" pt="xs">
-            Proyectos
-          </Tabs.Panel>
+          <Route path="projects" element={
+            <Tabs.Panel value="projects" pt="xs">
+              <div>Proyectos</div>
+            </Tabs.Panel>
+          } />
 
-          <Tabs.Panel value="admin" pt="xs">
-            Administrar Proyectos
-          </Tabs.Panel>
+          <Route path="admin" element={
+            <Tabs.Panel value="admin" pt="xs">
+              <div>Administrar Proyectos</div>
+            </Tabs.Panel>
+          } />
 
-          <Tabs.Panel value="tressury" pt="xs">
-            Tesoro
-          </Tabs.Panel>
-        </Tabs>
-      </Container>
-    </AppShell>
+          <Route path="treasury" element={
+            <Tabs.Panel value="treasury" pt="xs">
+              <div>Tesoro</div>
+            </Tabs.Panel>
+          } />
+        </Route>
+      </Routes>
+      </AppShell>
+    </BrowserRouter>
   );
 }
