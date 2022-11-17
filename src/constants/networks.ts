@@ -17,3 +17,23 @@ export const networks: Record<number, string> = {
 	250:	'Fantom Opera',
 	4002:	'Fantom Test Network'
 };
+
+export enum networkEnum {
+ ETHEREUM_MAINNET=1,
+ ROPSTEN=3,
+ RINKEBY=4,
+ GOERLI=5,
+ KOVAN=42,
+ POLYGON=137,
+ MUMBAI=80001,
+ AVALANCHE=43114,
+ FUJI=43113,
+ METIS_ANDROMEDA=1088,
+ METIS_STARDUST=588,
+ AURORA=1313161554,
+ AURORA_TEST=1313161555,
+ BSC=56,
+ BSC_TEST=97,
+ FANTOM_OPERA=250,
+ FANTOM_TEST=4002
+}

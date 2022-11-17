@@ -53,12 +53,23 @@ function useMetamask() {
     return accounts;
   }
 
+  const sitchChainTo = async (chainId: number) => {
+    if (window.ethereum) {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainId.toString(16)}` }],
+        });
+    }
+  }
+
+
   return { 
     signer,
     accounts,
     network,
     connect,
-    getAccounts
+    getAccounts,
+    sitchChainTo
   }
 }
 
