@@ -886,6 +886,11 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.3.tgz#953b88c20ea00d0eddaffdc1b115c08474aa295d"
   integrity sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==
 
+"@tabler/icons@^1.111.0":
+  version "1.111.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.111.0.tgz#0538fdd8b5de7072ae60fc5d2f13a9a636d2d0e3"
+  integrity sha512-TZWYiMT5ccqfHxRE0Qtgvl+sGsMbNkrv7cJMt/tm8TN9l/CDXx/o7d8uAwUN+3PAlSFfF5e/rD1bi1WJs2xNIA==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
