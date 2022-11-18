@@ -1,7 +1,7 @@
 import { AppShell, Header, Button, createStyles, Container, Badge, Tooltip, Tabs } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import logo from './assets/simple-state-logo.png';
-import { AdminProjects } from "./components/AdminProjects";
+import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
 import TabsHeader from "./components/TabsHeader";
 import { networkEnum } from "./constants/networks";
 import { useMetamask } from "./hooks/useMetamask";

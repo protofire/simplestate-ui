@@ -1,45 +1,17 @@
-import { Button, Container, createStyles, Group, Input, Modal, Select, Title, Text, SimpleGrid, Switch } from "@mantine/core";
-import { IconBuilding } from '@tabler/icons';
-import { useState } from "react";
+import { Button, Container, createStyles, Group, Input, Select, Title, SimpleGrid, Switch } from "@mantine/core";
+
 
 const useStyles = createStyles(() => ({
-  group: {
-    justifyContent: 'space-between'
-  },
   input: {
     marginTop: 10
   }
 }));
 
-export function AdminProjects() {
-  const { classes } = useStyles();
-
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Container>
-      <Group className={classes.group}>
-        <Select label="Proyecto" data={[]}></Select>
-        <Button
-          color={'teal'} 
-          radius={'lg'} 
-          leftIcon={<IconBuilding size={18}/>}
-          onClick={() => setOpen(true)}
-        >Crear proyecto</Button>
-      </Group>
-
-      <Modal size={'xl'} opened={open} title={<Title order={3}>Nuevo Proyecto</Title>} onClose={() => setOpen(false)}>
-        <CreateProjectForm close={() => setOpen(false)}/>
-      </Modal>
-    </Container>
-  );
-}
-
 interface CreateProjectFormProps {
   close(): void;
 }
 
-function CreateProjectForm({ close } : CreateProjectFormProps) {
+export function CreateProjectForm({ close } : CreateProjectFormProps) {
   const { classes } = useStyles();
 
   return (
