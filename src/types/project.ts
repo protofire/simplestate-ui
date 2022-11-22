@@ -1,10 +1,25 @@
+
+interface IFinanctialMetadata {
+  foundingAmount: number;
+  foundingTime: number;
+  sellAmount: number;
+  sellTime: number;
+  raised: number;
+  
+}
+
 export interface IProject {
   name: string;
-  state: string;
-  maxSupply: number;
-  foundingAmountTarget: number;
-  foundingTimeTarget: number; // Unix timestamp
-  sellAmountTarget: number;
-  sellTimeTarget: number; // Unix timestamp
+  owner: string;
   incomeDepositor: string;
+  metadataURL: string;
+  permissioningModel: 'blacklist';
+  maxSupply: number;
+  unitOfAccount: 'USDC',
+  financtialMetadata: IFinanctialMetadata;
+  produceIncome: boolean,
+  allowPartialSell: boolean,
+  feeModel: 'listing',
+  valuationModel: 'rate'
+  state: string;
 }

@@ -26,29 +26,29 @@ export const abi = [
 				"type": "string"
 			},
 			{
-				"internalType": "uint256",
+				"internalType": "uint64",
 				"name": "maxSupply",
-				"type": "uint256"
+				"type": "uint64"
 			},
 			{
-				"internalType": "uint256",
-				"name": "foundingAmountTarget",
-				"type": "uint256"
+				"internalType": "uint64",
+				"name": "foundingAmount",
+				"type": "uint64"
 			},
 			{
-				"internalType": "uint256",
-				"name": "foundingTimeTarget",
-				"type": "uint256"
+				"internalType": "uint64",
+				"name": "foundingTime",
+				"type": "uint64"
 			},
 			{
-				"internalType": "uint256",
-				"name": "sellAmountTarget",
-				"type": "uint256"
+				"internalType": "uint64",
+				"name": "sellAmount",
+				"type": "uint64"
 			},
 			{
-				"internalType": "uint256",
-				"name": "sellTimeTarget",
-				"type": "uint256"
+				"internalType": "uint64",
+				"name": "sellTime",
+				"type": "uint64"
 			},
 			{
 				"internalType": "bool",
@@ -97,29 +97,41 @@ export const abi = [
 				"type": "string"
 			},
 			{
-				"internalType": "uint256",
+				"internalType": "uint64",
 				"name": "maxSupply",
-				"type": "uint256"
+				"type": "uint64"
 			},
 			{
-				"internalType": "uint256",
-				"name": "foundingAmountTarget",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "foundingTimeTarget",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "sellAmountTarget",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "sellTimeTarget",
-				"type": "uint256"
+				"components": [
+					{
+						"internalType": "uint64",
+						"name": "foundingAmount",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "foundingTime",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "sellAmount",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "sellTime",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "raised",
+						"type": "uint64"
+					}
+				],
+				"internalType": "struct ProjectsMock.FinanctialMetadata",
+				"name": "financtialMetadata",
+				"type": "tuple"
 			},
 			{
 				"internalType": "bool",

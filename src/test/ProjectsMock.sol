@@ -3,19 +3,24 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract ProjectsMock {
 
+    struct FinanctialMetadata {
+        uint64 foundingAmount;
+        uint64 foundingTime; // days
+        uint64 sellAmount;
+        uint64 sellTime;  // months
+        uint64 raised;
+    }
+
     struct Project {
-        string  name;
+        string name;
         address owner;
         address incomeDepositor;
         string metadataURL;
-        uint256 maxSupply;
-        uint256 foundingAmountTarget;
-        uint256 foundingTimeTarget; // days
-        uint256 sellAmountTarget;
-        uint256 sellTimeTarget;  // months
+        uint64 maxSupply;
+        FinanctialMetadata financtialMetadata;
         bool produceIncome;
         bool allowPartialSell;
-        string  state;
+        string state;
         //   feeModel: 'listing',
         //   unitOfAccount: 'USDC',
         //   permissioningModel: 'blacklist',
@@ -29,11 +34,11 @@ contract ProjectsMock {
         address owner,
         address incomeDepositor,
         string memory metadataURL,
-        uint256 maxSupply,
-        uint256 foundingAmountTarget,
-        uint256 foundingTimeTarget,
-        uint256 sellAmountTarget,
-        uint256 sellTimeTarget,
+        uint64 maxSupply,
+        uint64 foundingAmount,
+        uint64 foundingTime,
+        uint64 sellAmount,
+        uint64 sellTime,
         bool produceIncome,
         bool allowPartialSell
     ) public {
@@ -44,17 +49,19 @@ contract ProjectsMock {
             incomeDepositor: incomeDepositor,
             metadataURL: metadataURL,
             maxSupply: maxSupply,
-            foundingAmountTarget: foundingAmountTarget,
-            foundingTimeTarget: foundingTimeTarget,
-            sellAmountTarget: sellAmountTarget,
-            sellTimeTarget: sellTimeTarget,
+            financtialMetadata: FinanctialMetadata({
+                foundingAmount: foundingAmount,
+                foundingTime: foundingTime,
+                sellAmount: sellAmount,
+                sellTime: sellTime,
+                raised: 0
+            }),
             produceIncome: produceIncome,
             allowPartialSell: allowPartialSell,
             state: "created"
         });
 
         projects.push(current);
-
     }
 
     function size() public view returns(uint256) {

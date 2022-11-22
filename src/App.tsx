@@ -5,6 +5,7 @@ import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
 import TabsHeader from "./components/TabsHeader";
 import { networkEnum } from "./constants/networks";
 import { useMetamask } from "./hooks/useMetamask";
+import { Projects } from "./pages/Projects/Projects";
 
 const useStyles = createStyles((theme) => ({
   headerContent: {
@@ -70,7 +71,7 @@ export default function App() {
 
           <Route path="projects" element={
             <Tabs.Panel value="projects" pt="xs">
-              <div>Proyectos</div>
+              <Projects />
             </Tabs.Panel>
           } />
 
