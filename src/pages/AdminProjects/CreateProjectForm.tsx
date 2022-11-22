@@ -46,8 +46,8 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
 
     validate: {
       name: (value) => (!!value ? null : 'Campo requerido'),
-      owner: (value) => (!!value ? null : 'Campo requerido'),
-      incomeDepositor: (value) => (!!value ? null : 'Campo requerido'),
+      owner: (value) => (/^0x[a-fA-F0-9]{40}$/.test(value) ? null : 'Dirección inválida'),
+      incomeDepositor: (value) => (/^0x[a-fA-F0-9]{40}$/.test(value)  ? null : 'Dirección inválida'),
       maxSupply: (value) => (!!value ? null : 'Campo requerido'),
       fundingAmount: (value) => (!!value ? null : 'Campo requerido'),
       fundingTime: (value) => (!!value ? null : 'Campo requerido'),
