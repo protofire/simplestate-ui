@@ -1,7 +1,25 @@
-import { Card, Container, SimpleGrid, Text } from "@mantine/core";
+import { Card, Container, SimpleGrid, Text, Image, createStyles, Overlay } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
+
+
+const useStyles = createStyles(() => ({
+  absolute: {
+    position:'absolute',
+    bottom: 5,
+    left: 5,
+    zIndex: 20
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 0,
+    height: 100,
+    width: '100%',
+    zIndex: 10,
+    background: 'linear-gradient(transparent, #00000078 120%)'
+  }
+}));
 
 
 export function Projects() {
@@ -10,9 +28,12 @@ export function Projects() {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const { classes } = useStyles();
+
   useEffect(() => {
     if (contract) {
       setLoading(true);
+
       const fetchProjects = async () => {
         const projectList = [];
         const size = await contract?.functions.size();
@@ -23,11 +44,12 @@ export function Projects() {
         setProjects(projectList);
         setLoading(false);
       }
+
       fetchProjects();
     }
   }, [contract]);
 
-  if (loading) {
+  if (loading || !contract) {
     return (<div>Cargando...</div>);
   }
 
@@ -43,9 +65,18 @@ export function Projects() {
 
     return (
       <Card key={i} shadow="sm" radius="md" withBorder>
-        <Card.Section m={'md'}>
-          <Text weight={500}>{p.name}</Text>
+        <Card.Section>
+          <Image
+            src={p.metadataURL}
+            height={160}
+            alt={p.metadataURL}
+          />
+          <div style={{position: 'relative'}}>
+            <div className={classes.overlay}></div> 
+            <Text color={'white'} className={classes.absolute} weight={500}>{p.name}</Text>
+          </div>
         </Card.Section>
+
         <Card.Section m={'md'}>
           <Text>foundingAmount: {Number(foundingAmount)}</Text>
           <Text>foundingTime: {Number(foundingTime)}</Text>
