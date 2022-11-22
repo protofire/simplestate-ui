@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {address, abi, provider} from '../contract-config';
+import { JsonRpcSigner } from "@ethersproject/providers";
 import * as ethers from 'ethers';
 
 export function useContract() {
@@ -13,5 +14,12 @@ export function useContract() {
     });
   }, []);
 
-  return { contract }
+  const sign = useCallback(async (signer: JsonRpcSigner) => {
+    if (contract) {
+      const signed = contract.connect(signer);
+      return signed;
+    }
+  }, [contract]);
+
+  return { contract, sign }
 }

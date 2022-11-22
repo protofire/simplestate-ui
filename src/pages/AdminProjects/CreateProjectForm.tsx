@@ -1,6 +1,9 @@
-import { Button, Container, createStyles, Group, Input, Select, Title, SimpleGrid, Switch, TextInput, NumberInput } from "@mantine/core";
+import { Button, Container, createStyles, Group, Input, Select, Title, SimpleGrid, Switch, TextInput, NumberInput, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { ContractTransaction } from "ethers";
+import { useEffect, useState } from "react";
 import { useContract } from "../../hooks/useContract";
+import { useMetamask } from "../../hooks/useMetamask";
 
 const useStyles = createStyles(() => ({
   input: {
@@ -13,8 +16,14 @@ interface CreateProjectFormProps {
 }
 
 export function CreateProjectForm({ close } : CreateProjectFormProps) {
-  const { contract } = useContract();
+  const { contract, sign } = useContract();
   const { classes } = useStyles();
+  const { signer, connect } = useMetamask();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    connect();
+  },[])
 
   const form = useForm({
     initialValues: {
@@ -47,14 +56,41 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
     },
   });
 
-  const onSubmit = () => {
-    if(form.validate().errors) return;
+  const onSubmit = async () => {
+    if (form.validate().hasErrors) return;
+    if (!signer) return console.error('no signer');
+    setLoading(true);
 
-    console.log(form.values);
+    try {
+      console.log(form.values);
+      const protosoundSigned = await sign(signer);
+
+      const tx: ContractTransaction = await protosoundSigned?.functions.create(
+        form.values.name,
+        form.values.owner,
+        form.values.incomeDepositor,
+        form.values.metadataURL,
+        Number(form.values.maxSupply),
+        Number(form.values.fundingAmount),
+        Number(form.values.fundingTime),
+        Number(form.values.sellAmount),
+        Number(form.values.sellTime),
+        form.values.produceIncome,
+        form.values.allowPartialSell
+      );
+  
+      await tx.wait();
+      close();
+    } catch(e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <Container>
+      <LoadingOverlay visible={loading} overlayBlur={2} />
       <form>
         <Title order={4}>Detalles del proyecto</Title>
         <Input.Wrapper className={classes.input} withAsterisk label="Nombre del proyecto">

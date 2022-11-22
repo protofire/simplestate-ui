@@ -4,38 +4,53 @@ pragma solidity >=0.7.0 <0.9.0;
 contract ProjectsMock {
 
     struct Project {
-        string  name; 
-        string  state;
+        string  name;
+        address owner;
+        address incomeDepositor;
+        string metadataURL;
         uint256 maxSupply;
         uint256 foundingAmountTarget;
-        uint256 foundingTimeTarget; // Unix timestamp
+        uint256 foundingTimeTarget; // days
         uint256 sellAmountTarget;
-        uint256 sellTimeTarget;  // Unix timestamp
-        address incomeDepositor;
+        uint256 sellTimeTarget;  // months
+        bool produceIncome;
+        bool allowPartialSell;
+        string  state;
+        //   feeModel: 'listing',
+        //   unitOfAccount: 'USDC',
+        //   permissioningModel: 'blacklist',
+        //   valuationModel: 'rate'
     }
 
     Project[] public projects;
 
     function create( 
-        string memory name, 
-        string memory state,
+        string memory name,
+        address owner,
+        address incomeDepositor,
+        string memory metadataURL,
         uint256 maxSupply,
         uint256 foundingAmountTarget,
         uint256 foundingTimeTarget,
         uint256 sellAmountTarget,
         uint256 sellTimeTarget,
-        address incomeDepositor
+        bool produceIncome,
+        bool allowPartialSell
     ) public {
 
         Project memory current = Project({
-            name: name, 
-            state: state,
+            name: name,
+            owner: owner,
+            incomeDepositor: incomeDepositor,
+            metadataURL: metadataURL,
             maxSupply: maxSupply,
             foundingAmountTarget: foundingAmountTarget,
             foundingTimeTarget: foundingTimeTarget,
             sellAmountTarget: sellAmountTarget,
             sellTimeTarget: sellTimeTarget,
-            incomeDepositor: incomeDepositor
+            produceIncome: produceIncome,
+            allowPartialSell: allowPartialSell,
+            state: "created"
         });
 
         projects.push(current);

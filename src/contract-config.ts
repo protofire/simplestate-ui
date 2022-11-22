@@ -1,7 +1,7 @@
 import * as ethers from 'ethers';
 
 export const address = import.meta.env.VITE_CONTRACT_ADDRESS;
-export const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`);
+export const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`);
 export const abi = [
 	{
 		"inputs": [
@@ -11,8 +11,18 @@ export const abi = [
 				"type": "string"
 			},
 			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "incomeDepositor",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
-				"name": "state",
+				"name": "metadataURL",
 				"type": "string"
 			},
 			{
@@ -41,80 +51,20 @@ export const abi = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "incomeDepositor",
-				"type": "address"
+				"internalType": "bool",
+				"name": "produceIncome",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowPartialSell",
+				"type": "bool"
 			}
 		],
 		"name": "create",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "state",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "maxSupply",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "currentSupply",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "foundingAmountTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "foundingTimeTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "sellAmountTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "sellTimeTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "incomeDepositor",
-						"type": "address"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct Projects.Project",
-				"name": "project",
-				"type": "tuple"
-			}
-		],
-		"name": "ProjectCreated",
-		"type": "event"
 	},
 	{
 		"inputs": [
@@ -132,18 +82,23 @@ export const abi = [
 				"type": "string"
 			},
 			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "incomeDepositor",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
-				"name": "state",
+				"name": "metadataURL",
 				"type": "string"
 			},
 			{
 				"internalType": "uint256",
 				"name": "maxSupply",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "currentSupply",
 				"type": "uint256"
 			},
 			{
@@ -167,14 +122,19 @@ export const abi = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
+				"internalType": "bool",
+				"name": "produceIncome",
+				"type": "bool"
 			},
 			{
-				"internalType": "address",
-				"name": "incomeDepositor",
-				"type": "address"
+				"internalType": "bool",
+				"name": "allowPartialSell",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "state",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -186,7 +146,7 @@ export const abi = [
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "length",
+				"name": "",
 				"type": "uint256"
 			}
 		],
