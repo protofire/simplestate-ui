@@ -16,7 +16,7 @@ interface CreateProjectFormProps {
 }
 
 export function CreateProjectForm({ close } : CreateProjectFormProps) {
-  const { contract, sign } = useContract();
+  const { sign } = useContract();
   const { classes } = useStyles();
   const { signer, connect } = useMetamask();
   const [loading, setLoading] = useState(false);
@@ -60,11 +60,8 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
     if (form.validate().hasErrors) return;
     if (!signer) return console.error('no signer');
     setLoading(true);
-
     try {
-      console.log(form.values);
       const protosoundSigned = await sign(signer);
-
       const tx: ContractTransaction = await protosoundSigned?.functions.create(
         form.values.name,
         form.values.owner,
@@ -78,7 +75,6 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
         form.values.produceIncome,
         form.values.allowPartialSell
       );
-  
       await tx.wait();
       close();
     } catch(e) {
