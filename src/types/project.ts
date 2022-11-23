@@ -1,4 +1,6 @@
 
+export type ProjectState = 'created' | 'initialized' | 'funded' | 'finished';
+
 interface IFinanctialMetadata {
   foundingAmount: number;
   foundingTime: number;
@@ -21,5 +23,5 @@ export interface IProject {
   allowPartialSell: boolean,
   feeModel: 'listing',
   valuationModel: 'rate'
-  state: string;
+  state: ProjectState;
 }
