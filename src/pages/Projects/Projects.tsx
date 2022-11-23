@@ -54,7 +54,8 @@ export function Projects() {
 
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [modalState, setModalState] = useState<{ open: boolean,  project: IProject | null}>({ open: true, project: null});
+  
 
   const { classes } = useStyles();
 
@@ -169,7 +170,7 @@ export function Projects() {
             color={"teal"}
             radius={"lg"}
             leftIcon={<IconPlus size={18} />}
-            onClick={() => setOpen(true)}
+            onClick={() => setModalState({ open: true, project: p })}
           >
             Ver detalle
           </Button>
@@ -192,16 +193,17 @@ export function Projects() {
       </SimpleGrid>
       <Modal
         size={"xl"}
-        opened={open}
+        opened={modalState.open}
         title={<Title order={3}>Nuevo Proyecto</Title>}
-        onClose={() => setOpen(false)}
+        onClose={() => setModalState({ open: false, project: null })
+      }
       >
         <Card.Section>
-          <Image src={"#"} height={160} alt={"aas"} />
+          <Image src={modalState.project?.metadataURL} height={160} alt={modalState.project?.metadataURL} />
           <div style={{ position: "relative" }}>
             <div className={classes.overlay}></div>
             <Text color={"white"} className={classes.absolute} weight={500}>
-              Nombre
+              {modalState.project?.name}
             </Text>
           </div>
         </Card.Section>
