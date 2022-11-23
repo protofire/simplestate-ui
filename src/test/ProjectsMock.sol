@@ -21,8 +21,8 @@ contract ProjectsMock {
         bool produceIncome;
         bool allowPartialSell;
         string state;
+        string unitOfAccount;
         //   feeModel: 'listing',
-        //   unitOfAccount: 'USDC',
         //   permissioningModel: 'blacklist',
         //   valuationModel: 'rate'
     }
@@ -58,7 +58,8 @@ contract ProjectsMock {
             }),
             produceIncome: produceIncome,
             allowPartialSell: allowPartialSell,
-            state: "created"
+            state: "created",
+            unitOfAccount: "USDC"
         });
 
         projects.push(current);
