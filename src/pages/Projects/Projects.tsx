@@ -15,6 +15,7 @@ import {
   Slider,
   Modal,
   Button,
+  Center,
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
@@ -54,8 +55,10 @@ export function Projects() {
 
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
-  const [modalState, setModalState] = useState<{ open: boolean,  project: IProject | null}>({ open: true, project: null});
-  
+  const [modalState, setModalState] = useState<{
+    open: boolean;
+    project: IProject | null;
+  }>({ open: true, project: null });
 
   const { classes } = useStyles();
 
@@ -166,14 +169,17 @@ export function Projects() {
           </Group>
         </Card.Section>
         <Card.Section>
-          <Button
-            color={"teal"}
-            radius={"lg"}
-            leftIcon={<IconPlus size={18} />}
-            onClick={() => setModalState({ open: true, project: p })}
-          >
-            Ver detalle
-          </Button>
+          <Center>
+            <Button
+              color={"teal"}
+              radius={"lg"}
+              leftIcon={<IconPlus size={18} />}
+              onClick={() => setModalState({ open: true, project: p })}
+              m="md"
+            >
+              Ver detalle
+            </Button>
+          </Center>
         </Card.Section>
       </Card>
     );
@@ -195,11 +201,14 @@ export function Projects() {
         size={"xl"}
         opened={modalState.open}
         title={<Title order={3}>Nuevo Proyecto</Title>}
-        onClose={() => setModalState({ open: false, project: null })
-      }
+        onClose={() => setModalState({ open: false, project: null })}
       >
         <Card.Section>
-          <Image src={modalState.project?.metadataURL} height={160} alt={modalState.project?.metadataURL} />
+          <Image
+            src={modalState.project?.metadataURL}
+            height={160}
+            alt={modalState.project?.metadataURL}
+          />
           <div style={{ position: "relative" }}>
             <div className={classes.overlay}></div>
             <Text color={"white"} className={classes.absolute} weight={500}>
