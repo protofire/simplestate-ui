@@ -201,7 +201,6 @@ export function Projects() {
       <Modal
         size={"xl"}
         opened={modalState.open}
-        title={<Title order={3}>Nuevo Proyecto</Title>}
         onClose={() => setModalState({ open: false, project: null })}
       >
         <Grid>
@@ -315,14 +314,13 @@ export function Projects() {
             Detalles
           </Title>
 
-          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
-          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
-          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
-          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
-          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
-          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
-          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
-          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
+          <Text size={14}>Modelo de Valuación (Valuation model):<strong> by amount rate</strong></Text>
+          <Text size={14}>Modelo de Comisión (Fee model):<strong>Listing fee</strong></Text>
+          <Text size={14}>Unidades en circulación (Max supply):<strong> 300000 USDC</strong></Text>
+          <Text size={14}>Metas de venta:<strong>222000 USDC</strong></Text>
+          <Text size={14}>Meta de tiempo de ventas:<strong> 22 meses</strong></Text>
+          <Text size={14}>Meta de financiamiento:<strong>222000 USDC</strong></Text>
+          <Text size={14}>Meta de tiempor de financiamiento:<strong> 90 dias</strong></Text>
         </Card.Section>
       </Modal>
     </Container>
