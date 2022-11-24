@@ -121,22 +121,21 @@ export function Projects() {
           <Grid justify={"center"}>
             <Grid.Col span={5}>
               <Text size={16} align="center">
-                 
                 {`${profit(Number(sellAmount), Number(foundingAmount)).toFixed(
                   2
                 )} %`}
               </Text>
               <Text color={"dimmed"} size={12} align="center">
-                 {`Ganancia estimada`}
+                {`Ganancia estimada`}
               </Text>
             </Grid.Col>
             <Divider orientation="vertical" />
             <Grid.Col span={5}>
               <Text size={16} align="center">
-                 {`${sellTime} meses`}
+                {`${sellTime} meses`}
               </Text>
               <Text color={"dimmed"} size={12} align="center">
-                 {`Tiempo de retorno`}
+                {`Tiempo de retorno`}
               </Text>
             </Grid.Col>
           </Grid>
@@ -215,6 +214,26 @@ export function Projects() {
               {modalState.project?.name}
             </Text>
           </div>
+        </Card.Section>
+        <Card.Section>
+          <Slider
+            my={10}
+            thumbChildren={null}
+            style={{ cursor: "default" }}
+            styles={{ thumb: { cursor: "default" } }}
+            thumbSize={8}
+            label={null}
+            color={"teal"}
+            value={33}
+          />
+          <Group style={{ justifyContent: "space-between" }} mb={"md"}>
+            <Text color={"dimmed"} size={12}>
+              Total: 1550 USDC
+            </Text>
+            <Text color={"dimmed"} size={12}>
+              Meta: 222000 USDC
+            </Text>
+          </Group>
         </Card.Section>
       </Modal>
     </Container>
