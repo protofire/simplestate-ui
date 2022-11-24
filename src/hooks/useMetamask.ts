@@ -35,6 +35,16 @@ function useMetamask() {
 
     return newProvider
   }
+
+  const connectDefault = async () => {
+    const provider = setupProvider();
+    const accounts: string[] = await provider.send("eth_accounts", []);
+    const network: Network = await provider.getNetwork();
+    const signer: JsonRpcSigner = provider.getSigner();
+    setNetwork({...network, name: networks[network.chainId]});
+    setAccounts(accounts);
+    setSigner(signer);
+  }
   
   const connect = async () => {
     const provider = setupProvider();
@@ -68,6 +78,7 @@ function useMetamask() {
     accounts,
     network,
     connect,
+    connectDefault,
     getAccounts,
     sitchChainTo
   }

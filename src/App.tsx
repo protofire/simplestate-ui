@@ -6,6 +6,7 @@ import TabsHeader from "./components/TabsHeader";
 import { networkEnum } from "./constants/networks";
 import { useMetamask } from "./hooks/useMetamask";
 import { Projects } from "./pages/Projects/Projects";
+import { useEffect } from "react";
 
 const useStyles = createStyles((theme) => ({
   headerContent: {
@@ -18,7 +19,11 @@ const useStyles = createStyles((theme) => ({
 
 export default function App() {
   const { classes } = useStyles();
-  const { connect, accounts, network, sitchChainTo } = useMetamask();
+  const { connect, connectDefault, accounts, network, sitchChainTo } = useMetamask();
+
+  useEffect(() => {
+    connectDefault();
+  }, []);
 
   const switchChain = () => {
     if (network?.chainId !== networkEnum.GOERLI) {
