@@ -16,6 +16,8 @@ import {
   Modal,
   Button,
   Center,
+  Input,
+  TextInput,
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
@@ -202,38 +204,125 @@ export function Projects() {
         title={<Title order={3}>Nuevo Proyecto</Title>}
         onClose={() => setModalState({ open: false, project: null })}
       >
-        <Card.Section>
-          <Image
-            src={modalState.project?.metadataURL}
-            height={160}
-            alt={modalState.project?.metadataURL}
-          />
-          <div style={{ position: "relative" }}>
-            <div className={classes.overlay}></div>
-            <Text color={"white"} className={classes.absolute} weight={500}>
-              {modalState.project?.name}
+        <Grid>
+          <Grid.Col md={6} lg={8}>
+            <Card.Section>
+              <Image
+                src={modalState.project?.metadataURL}
+                height={160}
+                alt={modalState.project?.metadataURL}
+              />
+              <div style={{ position: "relative" }}>
+                <div className={classes.overlay}></div>
+                <Text color={"white"} className={classes.absolute} weight={500}>
+                  {modalState.project?.name}
+                </Text>
+              </div>
+            </Card.Section>
+          </Grid.Col>
+          <Grid.Col md={6} lg={4}>
+            <Card.Section m={"md"}>
+              <Grid justify={"center"}>
+                <Grid.Col span={5}>
+                  <Text size={18} align="center" color="teal">
+                    <strong>4%</strong>
+                  </Text>
+                  <Text color={"dimmed"} size={12} align="center">
+                    {`Ganancia estimada`}
+                  </Text>
+                </Grid.Col>
+                <Divider orientation="vertical" />
+                <Grid.Col span={5}>
+                  <Text size={18} align="center" color="teal">
+                    <strong>22 meses</strong>
+                  </Text>
+                  <Text color={"dimmed"} size={12} align="center">
+                    {`Tiempo de retorno`}
+                  </Text>
+                </Grid.Col>
+              </Grid>
+            </Card.Section>
+            <Card.Section>
+              <Text color={"dimmed"} size={12}>
+                20% invertido
+              </Text>
+              <Slider
+                my={10}
+                thumbChildren={null}
+                style={{ cursor: "default" }}
+                styles={{ thumb: { cursor: "default" } }}
+                thumbSize={8}
+                label={null}
+                color={"teal"}
+                value={33}
+              />
+              <Group style={{ justifyContent: "space-between" }} mb={"md"}>
+                <Text color={"dimmed"} size={12}>
+                  Total: 1550 USDC
+                </Text>
+                <Text color={"dimmed"} size={12}>
+                  Meta: 222000 USDC
+                </Text>
+              </Group>
+            </Card.Section>
+          </Grid.Col>
+        </Grid>
+        <Grid bg={"gray.1"} p="md">
+          <Grid.Col span={2}>
+            <Text color={"dimmed"} size={13} align="center">
+              TOKEN
             </Text>
-          </div>
-        </Card.Section>
-        <Card.Section>
-          <Slider
-            my={10}
-            thumbChildren={null}
-            style={{ cursor: "default" }}
-            styles={{ thumb: { cursor: "default" } }}
-            thumbSize={8}
-            label={null}
-            color={"teal"}
-            value={33}
-          />
-          <Group style={{ justifyContent: "space-between" }} mb={"md"}>
-            <Text color={"dimmed"} size={12}>
-              Total: 1550 USDC
+            <Text size={18} align="center">
+              <strong>SPT23</strong>
             </Text>
-            <Text color={"dimmed"} size={12}>
-              Meta: 222000 USDC
+          </Grid.Col>
+          <Grid.Col span={2}>
+            <Text color={"dimmed"} size={13} align="center">
+              RATE MODEL
             </Text>
-          </Group>
+            <Text size={18} align="center">
+              <strong>MANUAL</strong>
+            </Text>
+          </Grid.Col>
+          <Grid.Col span={2}>
+            <Text color={"dimmed"} size={13} align="center">
+              TOKEN
+            </Text>
+            <Text size={18} align="center">
+              <strong>SPT23</strong>
+            </Text>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <form>
+              <Input.Wrapper>
+                <Group position="center" grow>
+                  <TextInput placeholder="500 USDC" />
+                  <Button
+                    variant="gradient"
+                    gradient={{ from: "teal", to: "blue.9", deg: 60 }}
+                    radius={"lg"}
+                    m="md"
+                  >
+                    Invertir
+                  </Button>
+                </Group>
+              </Input.Wrapper>
+            </form>
+          </Grid.Col>
+        </Grid>
+        <Card.Section mt="lg">
+          <Title color={"teal"} size={24}>
+            Detalles
+          </Title>
+
+          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
+          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
+          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
+          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
+          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
+          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
+          <Text size={14}>Valuation Model:<strong> by amount rate</strong></Text>
+          <Text size={14}>Meta: <strong>222000 USDC</strong></Text>
         </Card.Section>
       </Modal>
     </Container>
