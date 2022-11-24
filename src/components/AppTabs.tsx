@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 
-export default function TabsHeader() {
+export function AppTabs() {
   const navigate = useNavigate();
   const { tabValue } = useParams();
   const [tab, setTab] = useState<string>();

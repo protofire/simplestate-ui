@@ -1,73 +1,17 @@
-import { AppShell, Header, Button, createStyles, Container, Badge, Tooltip, Tabs } from "@mantine/core";
+import { AppShell,  Tabs } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import logo from './assets/simple-state-logo.png';
 import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
-import TabsHeader from "./components/TabsHeader";
-import { networkEnum } from "./constants/networks";
-import { useMetamask } from "./hooks/useMetamask";
+import { AppTabs } from "./components/AppTabs";
 import { Projects } from "./pages/Projects/Projects";
-import { useEffect } from "react";
-
-const useStyles = createStyles((theme) => ({
-  headerContent: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
-    justifyContent: 'space-between'
-  }
-}));
+import { AppHeader } from "./components/AppHeader";
 
 export default function App() {
-  const { classes } = useStyles();
-  const { connect, connectDefault, accounts, network, sitchChainTo } = useMetamask();
-
-  useEffect(() => {
-    connectDefault();
-  }, []);
-
-  const switchChain = () => {
-    if (network?.chainId !== networkEnum.GOERLI) {
-      sitchChainTo(networkEnum.GOERLI);
-    }
-  }
 
   return (
     <BrowserRouter>
-      <AppShell
-        header={
-          <Header height={{ base: 70 }} p="md">
-            <Container>
-              <div className={classes.headerContent} >
-                <img src={logo} width={180} />
-                {accounts[0]
-                    ? <div>
-                        {accounts[0]} 
-                        <Tooltip
-                          disabled={network?.chainId === networkEnum.GOERLI}
-                          multiline
-                          withArrow
-                          transition="fade"
-                          transitionDuration={200}
-                          label={"Red incorrecta, conéctate a la red de test Goerli"}
-                        >
-                          <Badge
-                            onClick={switchChain}
-                            color={network?.chainId === networkEnum.GOERLI ? 'teal' : 'red'}
-                          >{network?.name ?? 'Invalid network'}</Badge>
-                        </Tooltip>
-                      </div>
-                    : <Button sx={(theme) => ({ "box-shadow": theme.shadows.sm, })} color="teal" variant="white" radius={'lg'} onClick={connect}>
-                        Conectar billetera
-                      </Button>
-                }
-              </div>
-            </Container>
-          </Header>
-        }
-      >
-
+      <AppShell header={<AppHeader />}>
       <Routes>
-        <Route path={'/'} element={<TabsHeader />} >
+        <Route path={'/'} element={<AppTabs />} >
           <Route path="investments" element={
             <Tabs.Panel value="investments" pt="xs">
               <div>Mis inversiones</div>
