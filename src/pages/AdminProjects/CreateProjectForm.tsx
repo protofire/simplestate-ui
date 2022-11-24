@@ -1,5 +1,6 @@
 import { Button, Container, createStyles, Group, Input, Select, Title, SimpleGrid, Switch, TextInput, NumberInput, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
 import { ContractTransaction } from "ethers";
 import { useEffect, useState } from "react";
 import { useContract } from "../../hooks/useContract";
@@ -76,9 +77,29 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
         form.values.allowPartialSell
       );
       await tx.wait();
+      
+      showNotification({
+        id: 'success',
+        autoClose: 5000,
+        title: "Proyecto creado",
+        message: 'El proyecto fue creado exitosamente',
+        color: 'green',
+        radius: 'md'
+      });
+
       close();
     } catch(e) {
       console.error(e);
+
+      showNotification({
+        id: 'success',
+        autoClose: 5000,
+        title: "Error",
+        message: 'Ocurrió un error intentando crear el proyecto',
+        color: 'red',
+        radius: 'md'
+      });
+
     } finally {
       setLoading(false);
     }
