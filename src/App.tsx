@@ -48,7 +48,7 @@ export default function App() {
                           <Badge
                             onClick={switchChain}
                             color={network?.chainId === networkEnum.GOERLI ? 'teal' : 'red'}
-                          >{network?.name}</Badge>
+                          >{network?.name ?? 'Invalid network'}</Badge>
                         </Tooltip>
                       </div>
                     : <Button sx={(theme) => ({ "box-shadow": theme.shadows.sm, })} color="teal" variant="white" radius={'lg'} onClick={connect}>
