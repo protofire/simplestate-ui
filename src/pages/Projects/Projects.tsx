@@ -7,7 +7,6 @@ import {
   Text,
   Image,
   createStyles,
-  Overlay,
   Title,
   Divider,
   Group,
@@ -60,7 +59,7 @@ export function Projects() {
   const [modalState, setModalState] = useState<{
     open: boolean;
     project: IProject | null;
-  }>({ open: true, project: null });
+  }>({ open: false, project: null });
 
   const { classes } = useStyles();
 
@@ -71,7 +70,7 @@ export function Projects() {
       const fetchProjects = async () => {
         const projectList = [];
         const size = await contract?.functions.size();
-        for (let i = 0; i < size; i++) {
+        for (let i = size - 1; i >= 0; i--) {
           const project: IProject = await contract?.functions.projects(i);
           projectList.push(project);
         }
@@ -88,7 +87,7 @@ export function Projects() {
   }
 
   const items = projects.map((p, i) => {
-    const { foundingAmount, foundingTime, sellAmount, sellTime, raised } =
+    const { foundingAmount, sellAmount, sellTime, raised } =
       p.financtialMetadata;
 
     return (
@@ -204,7 +203,7 @@ export function Projects() {
         onClose={() => setModalState({ open: false, project: null })}
       >
         <Grid>
-          <Grid.Col md={6} lg={8}>
+          <Grid.Col md={6} lg={7}>
             <Card.Section>
               <Image
                 src={modalState.project?.metadataURL}
@@ -219,12 +218,17 @@ export function Projects() {
               </div>
             </Card.Section>
           </Grid.Col>
-          <Grid.Col md={6} lg={4}>
+          <Grid.Col md={6} lg={5}>
             <Card.Section m={"md"}>
               <Grid justify={"center"}>
                 <Grid.Col span={5}>
                   <Text size={18} align="center" color="teal">
-                    <strong>4%</strong>
+                    <strong>
+                      {`${profit(
+                        Number(modalState.project?.financtialMetadata.sellAmount),
+                        Number(modalState.project?.financtialMetadata.foundingAmount)
+                      ).toFixed(2)} %`}
+                    </strong>
                   </Text>
                   <Text color={"dimmed"} size={12} align="center">
                     {`Ganancia estimada`}
@@ -233,7 +237,7 @@ export function Projects() {
                 <Divider orientation="vertical" />
                 <Grid.Col span={5}>
                   <Text size={18} align="center" color="teal">
-                    <strong>22 meses</strong>
+                    <strong>{`${Number(modalState.project?.financtialMetadata.sellTime)} Meses`}</strong>
                   </Text>
                   <Text color={"dimmed"} size={12} align="center">
                     {`Tiempo de retorno`}
@@ -243,7 +247,10 @@ export function Projects() {
             </Card.Section>
             <Card.Section>
               <Text color={"dimmed"} size={12}>
-                20% invertido
+                {`${raisedRate(
+                  Number(modalState.project?.financtialMetadata.raised),
+                  Number(modalState.project?.financtialMetadata.foundingAmount)
+                )}% invertido`}
               </Text>
               <Slider
                 my={10}
@@ -253,21 +260,24 @@ export function Projects() {
                 thumbSize={8}
                 label={null}
                 color={"teal"}
-                value={33}
+                value={modalState.project ? raisedRate(
+                  Number(modalState.project.financtialMetadata.raised),
+                  Number(modalState.project.financtialMetadata.foundingAmount)
+                ) : 0}
               />
               <Group style={{ justifyContent: "space-between" }} mb={"md"}>
                 <Text color={"dimmed"} size={12}>
-                  Total: 1550 USDC
+                  {`Total: ${Number(modalState.project?.financtialMetadata.raised)} USDC`}
                 </Text>
                 <Text color={"dimmed"} size={12}>
-                  Meta: 222000 USDC
+                  {`Meta: ${Number(modalState.project?.financtialMetadata.foundingAmount)} USDC`}
                 </Text>
               </Group>
             </Card.Section>
           </Grid.Col>
         </Grid>
         <Grid bg={"gray.1"} p="md">
-          <Grid.Col span={2}>
+          <Grid.Col span={3}>
             <Text color={"dimmed"} size={13} align="center">
               TOKEN
             </Text>
@@ -275,20 +285,12 @@ export function Projects() {
               <strong>SPT23</strong>
             </Text>
           </Grid.Col>
-          <Grid.Col span={2}>
+          <Grid.Col span={3}>
             <Text color={"dimmed"} size={13} align="center">
-              RATE MODEL
+              Modelo de ratio
             </Text>
             <Text size={18} align="center">
-              <strong>MANUAL</strong>
-            </Text>
-          </Grid.Col>
-          <Grid.Col span={2}>
-            <Text color={"dimmed"} size={13} align="center">
-              TOKEN
-            </Text>
-            <Text size={18} align="center">
-              <strong>SPT23</strong>
+              <strong>Lineal</strong>
             </Text>
           </Grid.Col>
           <Grid.Col span={6}>
@@ -314,13 +316,13 @@ export function Projects() {
             Detalles
           </Title>
 
-          <Text size={14}>Modelo de Valuación (Valuation model):<strong> by amount rate</strong></Text>
-          <Text size={14}>Modelo de Comisión (Fee model):<strong>Listing fee</strong></Text>
-          <Text size={14}>Unidades en circulación (Max supply):<strong> 300000 USDC</strong></Text>
-          <Text size={14}>Metas de venta:<strong>222000 USDC</strong></Text>
-          <Text size={14}>Meta de tiempo de ventas:<strong> 22 meses</strong></Text>
-          <Text size={14}>Meta de financiamiento:<strong>222000 USDC</strong></Text>
-          <Text size={14}>Meta de tiempor de financiamiento:<strong> 90 dias</strong></Text>
+          <Text size={14}>Modelo de valuación (Valuation model): <strong>{modalState.project?.valuationModel ?? 'Por ratio (rate)'}</strong></Text>
+          <Text size={14}>Modelo de comisión (Fee model): <strong>{modalState.project?.feeModel ?? 'Listado (Listing fee)'}</strong></Text>
+          <Text size={14}>Unidades en circulación (Max supply): <strong>{`${modalState.project?.maxSupply} Tokens`}</strong></Text>
+          <Text size={14}>Metas de venta: <strong>{`${modalState.project?.financtialMetadata.sellAmount} USDC`}</strong></Text>
+          <Text size={14}>Meta de tiempo de ventas: <strong>{`${modalState.project?.financtialMetadata.sellTime} Meses`}</strong></Text>
+          <Text size={14}>Meta de financiamiento:<strong>{`${modalState.project?.financtialMetadata.foundingAmount} USDC`}</strong></Text>
+          <Text size={14}>Meta de tiempo de financiamiento: <strong>{`${modalState.project?.financtialMetadata.foundingTime} Días`}</strong></Text>
         </Card.Section>
       </Modal>
     </Container>
