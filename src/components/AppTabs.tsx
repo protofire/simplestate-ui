@@ -22,7 +22,6 @@ export function AppTabs() {
 
   return (
     <Container>
-    <Title>Proyectos</Title>
     <Tabs
       value={tab}
       onTabChange={onTabChanged}

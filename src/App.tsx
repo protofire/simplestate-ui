@@ -15,7 +15,7 @@ export default function App() {
             <Route
               path="investments"
               element={
-                <Tabs.Panel value="investments" pt="xs">
+                <Tabs.Panel value="investments" pt="lg">
                   <div>Mis inversiones</div>
                 </Tabs.Panel>
               }
@@ -24,7 +24,7 @@ export default function App() {
             <Route
               path="projects"
               element={
-                <Tabs.Panel value="projects" pt="xs">
+                <Tabs.Panel value="projects" pt="lg">
                   <Projects />
                 </Tabs.Panel>
               }
@@ -33,7 +33,7 @@ export default function App() {
             <Route
               path="admin"
               element={
-                <Tabs.Panel value="admin" pt="xs">
+                <Tabs.Panel value="admin" pt="lg">
                   <AdminProjects />
                 </Tabs.Panel>
               }
@@ -42,7 +42,7 @@ export default function App() {
             <Route
               path="treasury"
               element={
-                <Tabs.Panel value="treasury" pt="xs">
+                <Tabs.Panel value="treasury" pt="lg">
                   <div>Tesoro</div>
                 </Tabs.Panel>
               }
