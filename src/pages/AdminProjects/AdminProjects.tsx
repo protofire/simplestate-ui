@@ -1,8 +1,10 @@
 import { Button, Container, createStyles, Group, Loader, Modal, Select, Title, Text, Input, Divider } from "@mantine/core";
 import { IconBuilding } from '@tabler/icons';
 import { useEffect, useState } from "react";
+import { projectStateLabels } from "../../constants/projectState";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
+import { profit } from "../../utils";
 import { CreateProjectForm } from "./CreateProjectForm";
 
 const useStyles = createStyles(() => ({
@@ -74,24 +76,34 @@ export function AdminProjects() {
 
       <Group style={{display: selectedProject ? 'block': 'none'}} m={'lg'}>
         <Text>
-          Current supply: - %
+          {`Cantidad de tokens en circulación: -`}
         </Text>
         <Text>
-          Current APY: - %
+          {`Tasa de retorno: ${
+            profit(
+              Number(selectedProject?.financtialMetadata.sellAmount), 
+              Number(selectedProject?.financtialMetadata.foundingAmount)
+            ).toFixed(2)
+          } %`}
         </Text>
         <Text>
-          Current Interest rate: - %
+          {`Tasa de interes (Interest rate): - %`}
         </Text>
         <Text>
-          Unit of account: USDC
+          {`Unidad de cuenta (Unit of account): ${selectedProject?.unitOfAccount ?? 'USDC'}`}
+        </Text>
+        <Text>
+          {selectedProject?.state && `Estado: ${projectStateLabels[selectedProject.state]}`}
         </Text>
 
         <Divider m={20}/>
 
-        <Input.Wrapper id="distribute" label="Deposit income to distribute (USDC)">
-          <Input id="distribute" placeholder="Distribute" type={'number'} width={400}/>
-          <Button onClick={() => {}}>Distribute</Button>
-        </Input.Wrapper>
+        {selectedProject?.state === 'initialized' &&
+          <Input.Wrapper id="distribute" label="Deposit income to distribute (USDC)">
+            <Input id="distribute" placeholder="Distribute" type={'number'} width={400}/>
+            <Button onClick={() => {}}>Distribute</Button>
+          </Input.Wrapper>
+        }
       </Group>
     </Container>
   );
