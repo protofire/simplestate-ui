@@ -1,9 +1,11 @@
 import { Button, Table, Title } from "@mantine/core";
+import SSToken from "../../assets/SSToken.svg";
 
 const elements = [
   {
     balance: 6,
-    token: "SPT23",
+    tokenSymbol: <img src={SSToken} width={30} />,
+    token: "SSP23",
     state: "Creado",
     value: 129000,
     rewards: 302,
@@ -15,7 +17,8 @@ const elements = [
   },
   {
     balance: 7,
-    token: "SPT23",
+    tokenSymbol: <img src={SSToken} width={30} />,
+    token: "SSP23",
     state: "Creado",
     value: 223000,
     rewards: 280,
@@ -27,7 +30,8 @@ const elements = [
   },
   {
     balance: 39,
-    token: "SPT23",
+    tokenSymbol: <img src={SSToken} width={30} />,
+    token: "SSP23",
     state: "Finalizado",
     value: 129000,
     rewards: 728,
@@ -39,7 +43,8 @@ const elements = [
   },
   {
     balance: 56,
-    token: "SPT23",
+    tokenSymbol: <img src={SSToken} width={30} />,
+    token: "SSP23",
     state: "Creado",
     value: 422000,
     rewards: 817,
@@ -51,7 +56,8 @@ const elements = [
   },
   {
     balance: 58,
-    token: "SPT23",
+    tokenSymbol: <img src={SSToken} width={30} />,
+    token: "SSP23",
     state: "Creado",
     value: 87000,
     rewards: 120,
@@ -65,9 +71,11 @@ const elements = [
 
 export function Investments() {
   const rows = elements.map((element) => (
-    <tr key={element.token}>
+    <tr>
       <td>{element.balance}</td>
-      <td>{element.token}</td>
+      <td>
+        {element.tokenSymbol} {element.token}
+      </td>
       <td>{element.state}</td>
       <td>{element.value}</td>
       <td>{element.rewards}</td>
