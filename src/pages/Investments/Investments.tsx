@@ -4,7 +4,7 @@ import SSToken from "../../assets/SSToken.svg";
 const elements = [
   {
     balance: 6,
-    tokenSymbol: <img src={SSToken} width={30} />,
+    tokenSymbol: <img src={SSToken} width={26} />,
     token: "SSP23",
     state: "Creado",
     value: 129000,
@@ -17,7 +17,7 @@ const elements = [
   },
   {
     balance: 7,
-    tokenSymbol: <img src={SSToken} width={30} />,
+    tokenSymbol: <img src={SSToken} width={26} />,
     token: "SSP23",
     state: "Creado",
     value: 223000,
@@ -30,7 +30,7 @@ const elements = [
   },
   {
     balance: 39,
-    tokenSymbol: <img src={SSToken} width={30} />,
+    tokenSymbol: <img src={SSToken} width={26} />,
     token: "SSP23",
     state: "Finalizado",
     value: 129000,
@@ -43,7 +43,7 @@ const elements = [
   },
   {
     balance: 56,
-    tokenSymbol: <img src={SSToken} width={30} />,
+    tokenSymbol: <img src={SSToken} width={26} />,
     token: "SSP23",
     state: "Creado",
     value: 422000,
@@ -56,7 +56,7 @@ const elements = [
   },
   {
     balance: 58,
-    tokenSymbol: <img src={SSToken} width={30} />,
+    tokenSymbol: <img src={SSToken} width={26} />,
     token: "SSP23",
     state: "Creado",
     value: 87000,
