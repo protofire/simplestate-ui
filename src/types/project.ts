@@ -11,6 +11,7 @@ interface IFinanctialMetadata {
 }
 
 export interface IProject {
+  id?: number;
   name: string;
   owner: string;
   incomeDepositor: string;
