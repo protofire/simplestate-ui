@@ -24,6 +24,8 @@ import { projectStateLabels } from "../../constants/projectState";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
 import { profit, raisedRate } from "../../utils";
+import { ethers } from "ethers";
+import { useMetamask } from "../../hooks/useMetamask";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -52,16 +54,22 @@ const useStyles = createStyles(() => ({
 }));
 
 export function Projects() {
-  const { contract } = useContract();
+  const { connectDefault, signer } = useMetamask();
+  const { contract, sign } = useContract();
 
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
+  const [investmentValue, setInvestmentValue] = useState<number>();
   const [modalState, setModalState] = useState<{
     open: boolean;
     project: IProject | null;
   }>({ open: false, project: null });
 
   const { classes } = useStyles();
+
+  useEffect(() => {
+    connectDefault();
+  }, []);
 
   useEffect(() => {
     if (contract) {
@@ -81,6 +89,14 @@ export function Projects() {
       fetchProjects();
     }
   }, [contract]);
+
+  const invest = async () => {
+    if (!investmentValue || !signer) return;
+    console.log(signer);
+    const signedContract = await sign(signer);
+    const tx = await signedContract?.functions.invest(modalState.project?.id, { value: investmentValue });
+    tx.wait();
+  }
 
   if (loading || !contract) {
     return <div>Cargando...</div>;
@@ -297,12 +313,17 @@ export function Projects() {
             <form>
               <Input.Wrapper>
                 <Group position="center" grow>
-                  <TextInput placeholder="500 USDC" />
+                  <TextInput
+                    placeholder="500 USDC"
+                    type={'number'}
+                    onChange={(e) => setInvestmentValue(Number(e.target.value))}
+                  />
                   <Button
                     variant="gradient"
                     gradient={{ from: "teal", to: "blue.9", deg: 60 }}
                     radius={"lg"}
                     m="md"
+                    onClick={invest}
                   >
                     Invertir
                   </Button>

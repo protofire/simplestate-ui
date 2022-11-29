@@ -29,6 +29,7 @@ export function AdminProjects() {
       const fetchProjects = async () => {
         const projectList = [];
         const size = await contract?.functions.size();
+        console.log(size - 1);
         for (let i = size - 1; i >= 0; i--) {
           const project: IProject = await contract?.functions.projects(i);
           const projectWithId = { ...project, id: i };
