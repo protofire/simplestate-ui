@@ -1,4 +1,13 @@
-import { Button, Table, Title, Tooltip, Text, Group } from "@mantine/core";
+import {
+  Button,
+  Table,
+  Title,
+  Tooltip,
+  Text,
+  Group,
+  Flex,
+  Badge,
+} from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import SSToken from "../../assets/SSToken.svg";
 
@@ -6,13 +15,28 @@ const elements = [
   {
     name: "House La tablada",
     balance: (
-      <Text align="center" color="violet.9">
-        <strong>2112</strong>
-      </Text>
+      <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+        <Tooltip label="1 SIP10 = 2.63 USDC" withArrow>
+          <Group>
+          <Text color="violet.9">
+            <strong>2112</strong>
+          </Text>
+          <IconInfoCircle size={20} />
+          </Group>
+          
+        </Tooltip>
+        <Text align="center">
+          (<strong>4622</strong> USDC)
+        </Text>
+      </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP10",
-    state: "Inicializado",
+    state: (
+      <Badge color="green" radius="lg" variant="dot">
+        Inicializado
+      </Badge>
+    ),
     value: (
       <Text align="center">
         <strong>3922</strong> USDC
@@ -24,7 +48,7 @@ const elements = [
           <strong>212</strong> USDC
         </Text>
         <Tooltip label="Retirar renta disponible" withArrow>
-          <Button size="xs" color={"teal"} radius={"lg"}>
+          <Button size="xs" color={"teal"} radius={"lg"} compact>
             Retirar
           </Button>
         </Tooltip>
@@ -35,13 +59,28 @@ const elements = [
   {
     name: "House La Tablada Resort",
     balance: (
-      <Text align="center" color="violet.9">
-        <strong>9892</strong>
-      </Text>
+      <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+        <Tooltip label="1 SIP28 = 2.63 USDC" withArrow>
+          <Group>
+          <Text color="violet.9">
+            <strong>2112</strong>
+          </Text>
+          <IconInfoCircle size={20} />
+          </Group>
+          
+        </Tooltip>
+        <Text align="center">
+          (<strong>4622</strong> USDC)
+        </Text>
+      </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP28",
-    state: "Inicializado",
+    state: (
+      <Badge color="green" radius="lg" variant="dot">
+        Inicializado
+      </Badge>
+    ),
     value: (
       <Text align="center">
         <strong>9222</strong> USDC
@@ -53,7 +92,7 @@ const elements = [
           <strong>212</strong> USDC
         </Text>
         <Tooltip label="Retirar renta disponible" withArrow>
-          <Button size="xs" color={"teal"} radius={"lg"}>
+          <Button size="xs" color={"teal"} radius={"lg"} compact>
             Retirar
           </Button>
         </Tooltip>
@@ -64,13 +103,28 @@ const elements = [
   {
     name: "House La Abeja",
     balance: (
-      <Text align="center" color="violet.9">
-        <strong>632</strong>
-      </Text>
+      <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+        <Tooltip label="1 SIP82 = 2.63 USDC" withArrow>
+          <Group>
+          <Text color="violet.9">
+            <strong>2112</strong>
+          </Text>
+          <IconInfoCircle size={20} />
+          </Group>
+          
+        </Tooltip>
+        <Text align="center">
+          (<strong>4622</strong> USDC)
+        </Text>
+      </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP82",
-    state: "Finalizado",
+    state: (
+      <Badge color="blue" radius="lg" variant="dot">
+        Finalizado
+      </Badge>
+    ),
     value: (
       <Text align="center">
         <strong>212212</strong> USDC
@@ -82,7 +136,7 @@ const elements = [
           <strong>0</strong> USDC
         </Text>
         <Tooltip label="Retirar renta disponible" withArrow>
-          <Button size="xs" color={"teal"} radius={"lg"} disabled>
+          <Button size="xs" color={"teal"} radius={"lg"} compact disabled>
             Retirar
           </Button>
         </Tooltip>
@@ -99,13 +153,28 @@ const elements = [
   {
     name: "House La Falda",
     balance: (
-      <Text align="center" color="violet.9">
-        <strong>2112</strong>
-      </Text>
+      <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+        <Tooltip label="1 SIP14 = 2.63 USDC" withArrow>
+          <Group>
+          <Text color="violet.9">
+            <strong>2112</strong>
+          </Text>
+          <IconInfoCircle size={20} />
+          </Group>
+          
+        </Tooltip>
+        <Text align="center">
+          (<strong>4622</strong> USDC)
+        </Text>
+      </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP14",
-    state: "Inicializado",
+    state: (
+      <Badge color="green" radius="lg" variant="dot">
+        Inicializado
+      </Badge>
+    ),
     value: (
       <Text align="center">
         <strong>76542</strong> USDC
@@ -117,7 +186,7 @@ const elements = [
           <strong>212</strong> USDC
         </Text>
         <Tooltip label="Retirar renta disponible" withArrow>
-          <Button size="xs" color={"teal"} radius={"lg"}>
+          <Button size="xs" color={"teal"} radius={"lg"} compact>
             Retirar
           </Button>
         </Tooltip>
@@ -128,13 +197,28 @@ const elements = [
   {
     name: "Hotel Patagonia",
     balance: (
-      <Text align="center" color="violet.9">
-        <strong>890</strong>
-      </Text>
+      <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+        <Tooltip label="1 SIP29 = 2.63 USDC" withArrow>
+          <Group>
+          <Text color="violet.9">
+            <strong>2112</strong>
+          </Text>
+          <IconInfoCircle size={20} />
+          </Group>
+          
+        </Tooltip>
+        <Text align="center">
+          (<strong>4622</strong> USDC)
+        </Text>
+      </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP29",
-    state: "Inicializado",
+    state: (
+      <Badge color="green" radius="lg" variant="dot">
+        Inicializado
+      </Badge>
+    ),
     value: (
       <Text align="center">
         <strong>59235</strong> USDC
@@ -146,7 +230,7 @@ const elements = [
           <strong>212</strong> USDC
         </Text>
         <Tooltip label="Retirar renta disponible" withArrow>
-          <Button size="xs" color={"teal"} radius={"lg"}>
+          <Button size="xs" color={"teal"} radius={"lg"} compact>
             Retirar
           </Button>
         </Tooltip>
@@ -165,7 +249,6 @@ export function Investments() {
         {element.tokenSymbol} {element.token}
       </td>
       <td>{element.balance}</td>
-      <td>{element.value}</td>
       <td>{element.rewards}</td>
       <td>{element.actions}</td>
     </tr>
@@ -178,8 +261,9 @@ export function Investments() {
       <Table
         horizontalSpacing="md"
         verticalSpacing="md"
-        striped
+        withBorder
         highlightOnHover
+        mt={"lg"}
       >
         <thead>
           <tr>
@@ -187,7 +271,6 @@ export function Investments() {
             <th>Estado</th>
             <th>Token</th>
             <th>Balance</th>
-            <th>Valor estimado</th>
             <th>Renta disponible</th>
             <th>Acciones</th>
           </tr>
