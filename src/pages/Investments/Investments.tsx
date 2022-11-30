@@ -19,7 +19,7 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Group>
+      <Group position="right">
         <Text align="center" color="teal">
           <strong>212</strong> USDC
         </Text>
@@ -48,7 +48,7 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Group>
+      <Group position="right">
         <Text align="center" color="teal">
           <strong>212</strong> USDC
         </Text>
@@ -77,7 +77,7 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Group>
+      <Group position="right">
         <Text align="center" color="gray">
           <strong>0</strong> USDC
         </Text>
@@ -112,7 +112,7 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Group>
+      <Group position="right">
         <Text align="center" color="teal">
           <strong>212</strong> USDC
         </Text>
@@ -141,7 +141,7 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Group>
+      <Group position="right">
         <Text align="center" color="teal">
           <strong>212</strong> USDC
         </Text>
