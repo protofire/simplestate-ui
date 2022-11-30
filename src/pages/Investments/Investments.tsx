@@ -1,5 +1,5 @@
-import { Button, Table, Title, ActionIcon, Tooltip, Text } from "@mantine/core";
-import { IconArrowBarDown, IconArrowBarUp } from "@tabler/icons";
+import { Button, Table, Title, Tooltip, Text, Group } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons";
 import SSToken from "../../assets/SSToken.svg";
 
 const elements = [
@@ -19,15 +19,18 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Text align="center" color="teal">
-        <strong>212</strong> USDC
-      </Text>
+      <Group>
+        <Text align="center" color="teal">
+          <strong>212</strong> USDC
+        </Text>
+        <Tooltip label="Retirar renta disponible" withArrow>
+          <Button size="xs" color={"teal"} radius={"lg"}>
+            Retirar
+          </Button>
+        </Tooltip>
+      </Group>
     ),
-    actions: (
-      <Button size="xs" color={"teal"} radius={"lg"}>
-        Retirar
-      </Button>
-    ),
+    actions: "",
   },
   {
     name: "House La Tablada Resort",
@@ -45,15 +48,18 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Text align="center" color="teal">
-        <strong>212</strong> USDC
-      </Text>
+      <Group>
+        <Text align="center" color="teal">
+          <strong>212</strong> USDC
+        </Text>
+        <Tooltip label="Retirar renta disponible" withArrow>
+          <Button size="xs" color={"teal"} radius={"lg"}>
+            Retirar
+          </Button>
+        </Tooltip>
+      </Group>
     ),
-    actions: (
-      <Button size="xs" color={"teal"} radius={"lg"}>
-        Retirar
-      </Button>
-    ),
+    actions: "",
   },
   {
     name: "House La Abeja",
@@ -71,14 +77,23 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Text align="center" color="teal">
-        <strong>212</strong> USDC
-      </Text>
+      <Group>
+        <Text align="center" color="gray">
+          <strong>0</strong> USDC
+        </Text>
+        <Tooltip label="Retirar renta disponible" withArrow>
+          <Button size="xs" color={"teal"} radius={"lg"} disabled>
+            Retirar
+          </Button>
+        </Tooltip>
+      </Group>
     ),
     actions: (
-      <Button size="xs" color={"teal"} radius={"lg"}>
-        Retirar
-      </Button>
+      <Tooltip label="Redimir balance" withArrow>
+        <Button size="xs" color={"teablue"} radius={"lg"} variant="light">
+          Redimir
+        </Button>
+      </Tooltip>
     ),
   },
   {
@@ -97,15 +112,18 @@ const elements = [
       </Text>
     ),
     rewards: (
-      <Text align="center" color="teal">
-        <strong>212</strong> USDC
-      </Text>
+      <Group>
+        <Text align="center" color="teal">
+          <strong>212</strong> USDC
+        </Text>
+        <Tooltip label="Retirar renta disponible" withArrow>
+          <Button size="xs" color={"teal"} radius={"lg"}>
+            Retirar
+          </Button>
+        </Tooltip>
+      </Group>
     ),
-    actions: (
-      <Button size="xs" color={"teal"} radius={"lg"}>
-        Retirar
-      </Button>
-    ),
+    actions: "",
   },
   {
     name: "Hotel Patagonia",
@@ -117,24 +135,24 @@ const elements = [
     tokenSymbol: <img src={SSToken} width={26} />,
     token: "SIP29",
     state: "Inicializado",
-    value: 
-    (
+    value: (
       <Text align="center">
         <strong>59235</strong> USDC
       </Text>
     ),
     rewards: (
-      <Text align="center" color="teal">
-        <strong>212</strong> USDC
-      </Text>
+      <Group>
+        <Text align="center" color="teal">
+          <strong>212</strong> USDC
+        </Text>
+        <Tooltip label="Retirar renta disponible" withArrow>
+          <Button size="xs" color={"teal"} radius={"lg"}>
+            Retirar
+          </Button>
+        </Tooltip>
+      </Group>
     ),
-    actions: (
-      <Tooltip label="Retirar renta disponible">
-        <Button size="xs" color={"teal"} radius={"lg"}>
-          Retirar
-        </Button>
-      </Tooltip>
-    ),
+    actions: "",
   },
 ];
 
@@ -143,10 +161,10 @@ export function Investments() {
     <tr>
       <td>{element.name}</td>
       <td>{element.state}</td>
-      <td>{element.balance}</td>
       <td>
         {element.tokenSymbol} {element.token}
       </td>
+      <td>{element.balance}</td>
       <td>{element.value}</td>
       <td>{element.rewards}</td>
       <td>{element.actions}</td>
@@ -167,8 +185,8 @@ export function Investments() {
           <tr>
             <th>Nombre</th>
             <th>Estado</th>
-            <th>Balance</th>
             <th>Token</th>
+            <th>Balance</th>
             <th>Valor estimado</th>
             <th>Renta disponible</th>
             <th>Acciones</th>
