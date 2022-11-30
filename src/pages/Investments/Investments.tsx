@@ -7,6 +7,10 @@ import {
   Group,
   Flex,
   Badge,
+  Paper,
+  Grid,
+  Input,
+  TextInput,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import SSToken from "../../assets/SSToken.svg";
@@ -18,12 +22,11 @@ const elements = [
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP10 = 2.63 USDC" withArrow>
           <Group>
-          <Text color="violet.9">
-            <strong>2112</strong>
-          </Text>
-          <IconInfoCircle size={20} />
+            <Text color="violet.9">
+              <strong>2112</strong>
+            </Text>
+            <IconInfoCircle size={20} />
           </Group>
-          
         </Tooltip>
         <Text align="center">
           (<strong>4622</strong> USDC)
@@ -62,12 +65,11 @@ const elements = [
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP28 = 2.63 USDC" withArrow>
           <Group>
-          <Text color="violet.9">
-            <strong>2112</strong>
-          </Text>
-          <IconInfoCircle size={20} />
+            <Text color="violet.9">
+              <strong>2112</strong>
+            </Text>
+            <IconInfoCircle size={20} />
           </Group>
-          
         </Tooltip>
         <Text align="center">
           (<strong>4622</strong> USDC)
@@ -106,12 +108,11 @@ const elements = [
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP82 = 2.63 USDC" withArrow>
           <Group>
-          <Text color="violet.9">
-            <strong>2112</strong>
-          </Text>
-          <IconInfoCircle size={20} />
+            <Text color="violet.9">
+              <strong>2112</strong>
+            </Text>
+            <IconInfoCircle size={20} />
           </Group>
-          
         </Tooltip>
         <Text align="center">
           (<strong>4622</strong> USDC)
@@ -156,12 +157,11 @@ const elements = [
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP14 = 2.63 USDC" withArrow>
           <Group>
-          <Text color="violet.9">
-            <strong>2112</strong>
-          </Text>
-          <IconInfoCircle size={20} />
+            <Text color="violet.9">
+              <strong>2112</strong>
+            </Text>
+            <IconInfoCircle size={20} />
           </Group>
-          
         </Tooltip>
         <Text align="center">
           (<strong>4622</strong> USDC)
@@ -200,12 +200,11 @@ const elements = [
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP29 = 2.63 USDC" withArrow>
           <Group>
-          <Text color="violet.9">
-            <strong>2112</strong>
-          </Text>
-          <IconInfoCircle size={20} />
+            <Text color="violet.9">
+              <strong>2112</strong>
+            </Text>
+            <IconInfoCircle size={20} />
           </Group>
-          
         </Tooltip>
         <Text align="center">
           (<strong>4622</strong> USDC)
@@ -256,14 +255,43 @@ export function Investments() {
 
   return (
     <>
-      <Title size={"lg"}>Proyectos</Title>
+      <Title size={"lg"} mb="lg">
+        Simple Earn
+      </Title>
+      <Paper radius="xs" p="lg" mb="xl" withBorder>
+        <Grid>
+          <Grid.Col span={4}>
+            <Text>Balance: 29199 USDC</Text>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Text>Valor actual: 29199 USDC</Text>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Text>APY: 6%</Text>
+          </Grid.Col>
+        </Grid>
+        <Group position="center" grow>
+          <Text>Comprar Simple Earn Token (SET)</Text>
 
+          <TextInput placeholder="500 SET" type={"number"} />
+          <Button
+            variant="gradient"
+            gradient={{ from: "teal", to: "blue.9", deg: 60 }}
+            radius={"lg"}
+            m="md"
+          >
+            Comprar
+          </Button>
+        </Group>
+      </Paper>
+      <Title size={"lg"} mb="lg">
+        Proyectos
+      </Title>
       <Table
         horizontalSpacing="md"
         verticalSpacing="md"
         withBorder
         highlightOnHover
-        mt={"lg"}
       >
         <thead>
           <tr>
