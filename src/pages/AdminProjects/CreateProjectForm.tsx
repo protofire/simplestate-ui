@@ -92,7 +92,7 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
       console.error(e);
 
       showNotification({
-        id: 'success',
+        id: 'error',
         autoClose: 5000,
         title: "Error",
         message: 'Ocurrió un error intentando crear el proyecto',

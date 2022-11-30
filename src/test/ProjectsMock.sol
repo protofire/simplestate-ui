@@ -4,28 +4,28 @@ pragma solidity >=0.7.0 <0.9.0;
 contract ProjectsMock {
 
     struct FinanctialMetadata {
-        uint64 foundingAmount;
-        uint64 foundingTime; // days
-        uint64 sellAmount;
-        uint64 sellTime;  // months
-        uint64 raised;
+        uint256 foundingAmount;
+        uint256 foundingTime; // days
+        uint256 sellAmount;
+        uint256 sellTime;  // months
+        uint256 raised;
     }
 
     struct Project {
+        uint256 id;
         string name;
         address owner;
         address incomeDepositor;
         string metadataURL;
-        uint64 maxSupply;
+        uint256 maxSupply;
         FinanctialMetadata financtialMetadata;
         bool produceIncome;
         bool allowPartialSell;
         string state;
         string unitOfAccount;
-        //   feeModel: 'listing',
-        //   permissioningModel: 'blacklist',
-        //   valuationModel: 'rate'
     }
+
+    event SingleProjectInvestment(address user, uint256 projectId, uint256 amount);
 
     Project[] public projects;
 
@@ -44,6 +44,7 @@ contract ProjectsMock {
     ) public {
 
         Project memory current = Project({
+            id: projects.length,
             name: name,
             owner: owner,
             incomeDepositor: incomeDepositor,
@@ -68,4 +69,10 @@ contract ProjectsMock {
     function size() public view returns(uint256) {
         return projects.length;
     }
+
+    function invest(uint256 projectId) public payable {
+        projects[projectId].financtialMetadata.raised += msg.value;
+        emit SingleProjectInvestment(msg.sender, projectId, msg.value);
+    }
+
 }

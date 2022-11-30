@@ -70,12 +70,55 @@ export const abi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "projectId",
+				"type": "uint256"
+			}
+		],
+		"name": "invest",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "projectId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "SingleProjectInvestment",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
 		],
 		"name": "projects",
 		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
 			{
 				"internalType": "string",
 				"name": "name",
@@ -97,36 +140,36 @@ export const abi = [
 				"type": "string"
 			},
 			{
-				"internalType": "uint64",
+				"internalType": "uint256",
 				"name": "maxSupply",
-				"type": "uint64"
+				"type": "uint256"
 			},
 			{
 				"components": [
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "foundingAmount",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "foundingTime",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "sellAmount",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "sellTime",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "raised",
-						"type": "uint64"
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct ProjectsMock.FinanctialMetadata",
@@ -146,6 +189,11 @@ export const abi = [
 			{
 				"internalType": "string",
 				"name": "state",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "unitOfAccount",
 				"type": "string"
 			}
 		],
