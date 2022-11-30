@@ -1,4 +1,4 @@
-import { Container, SimpleGrid, Modal } from "@mantine/core";
+import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
@@ -35,11 +35,15 @@ export function Projects() {
   }, [contract]);
 
   const openModal = (p: IProject) => {
-    setModalState({ open: true , project: p });
-  }
+    setModalState({ open: true, project: p });
+  };
 
   if (loading || !contract) {
-    return <div>Cargando...</div>;
+    return (
+      <Center m={"xl"}>
+        <Loader color="teal" size="lg" variant="bars" />
+      </Center>
+    );
   }
 
   return (
@@ -47,16 +51,21 @@ export function Projects() {
       <SimpleGrid
         cols={3}
         spacing="lg"
-        breakpoints={[{ maxWidth: 755, cols: 2, spacing: "sm" }, { maxWidth: 600, cols: 1, spacing: "sm" }]}
+        breakpoints={[
+          { maxWidth: 755, cols: 2, spacing: "sm" },
+          { maxWidth: 600, cols: 1, spacing: "sm" },
+        ]}
       >
-        {projects.map((p, i) => (<ProjectCard key={i} project={p} openModal={openModal}/>))}
+        {projects.map((p, i) => (
+          <ProjectCard key={i} project={p} openModal={openModal} />
+        ))}
       </SimpleGrid>
       <Modal
         size={"xl"}
         opened={modalState.open}
         onClose={() => setModalState({ open: false, project: null })}
       >
-        <ProjectDetail project={modalState.project!}/>
+        <ProjectDetail project={modalState.project!} />
       </Modal>
     </Container>
   );
