@@ -54,6 +54,10 @@ export function ProjectDetail({ project }: { project: IProject}) {
     tx.wait();
   }
 
+  if (!project) {
+    return (<></>)
+  }
+
   return (
       <>
         <Grid>
