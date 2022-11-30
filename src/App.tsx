@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
 import { AppTabs } from "./components/AppTabs";
 import { Projects } from "./pages/Projects/Projects";
+import { Investments } from "./pages/Investments/Investments";
 import { AppHeader } from "./components/AppHeader";
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
               path="investments"
               element={
                 <Tabs.Panel value="investments" pt="lg">
-                  <div>Mis inversiones</div>
+                  <Investments />
                 </Tabs.Panel>
               }
             />
