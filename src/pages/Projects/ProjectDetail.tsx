@@ -41,22 +41,25 @@ const useStyles = createStyles(() => ({
 
 export function ProjectDetail({ project }: { project: IProject}) {
   const { classes } = useStyles();
+  const { connectDefault, signer, accounts } = useMetamask();
+  const { sign } = useContract();
+
   const [investmentValue, setInvestmentValue] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
-  const { connectDefault, signer } = useMetamask();
-  const { sign } = useContract();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     connectDefault();
   }, []);
 
   const invest = async () => {
-    if (!investmentValue || !signer) return;
+    if (!investmentValue) return setError('Please set an investment value');
+    if (!signer || accounts.length === 0) return setError('Please connect your wallet');
+    setError('');
     setLoading(true);
     const signedContract = await sign(signer);
     const tx = await signedContract?.functions.invest(project.id, { value: investmentValue });
-    tx.wait();
-          
+    await tx.wait();
     showNotification({
       id: 'success',
       autoClose: 5000,
@@ -174,6 +177,7 @@ export function ProjectDetail({ project }: { project: IProject}) {
                     type={'number'}
                     onChange={(e) => setInvestmentValue(Number(e.target.value))}
                     disabled={loading}
+                    error={error}
                   />
                   <Button
                     variant="gradient"
