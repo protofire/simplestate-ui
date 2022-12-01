@@ -12,6 +12,7 @@ import {
   Button,
   Input,
   TextInput,
+  Loader,
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
 import { profit, raisedRate } from "../../utils";
 import { useMetamask } from "../../hooks/useMetamask";
+import { showNotification } from "@mantine/notifications";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -40,6 +42,7 @@ const useStyles = createStyles(() => ({
 export function ProjectDetail({ project }: { project: IProject}) {
   const { classes } = useStyles();
   const [investmentValue, setInvestmentValue] = useState<number>();
+  const [loading, setLoading] = useState<boolean>(false);
   const { connectDefault, signer } = useMetamask();
   const { sign } = useContract();
 
@@ -49,9 +52,20 @@ export function ProjectDetail({ project }: { project: IProject}) {
 
   const invest = async () => {
     if (!investmentValue || !signer) return;
+    setLoading(true);
     const signedContract = await sign(signer);
     const tx = await signedContract?.functions.invest(project.id, { value: investmentValue });
     tx.wait();
+          
+    showNotification({
+      id: 'success',
+      autoClose: 5000,
+      title: "Inversion realizada",
+      message: `Haz invertido ${investmentValue} USDC en el proyecto: ${project.name}`,
+      color: 'green',
+      radius: 'md'
+    });
+    setLoading(false);
   }
 
   if (!project) {
@@ -159,6 +173,7 @@ export function ProjectDetail({ project }: { project: IProject}) {
                     placeholder="500 USDC"
                     type={'number'}
                     onChange={(e) => setInvestmentValue(Number(e.target.value))}
+                    disabled={loading}
                   />
                   <Button
                     variant="gradient"
@@ -166,6 +181,8 @@ export function ProjectDetail({ project }: { project: IProject}) {
                     radius={"lg"}
                     m="md"
                     onClick={invest}
+                    disabled={loading}
+                    leftIcon={loading && <Loader size={14}/>}
                   >
                     Invertir
                   </Button>
