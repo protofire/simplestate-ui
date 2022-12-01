@@ -241,7 +241,7 @@ const elements = [
 
 export function Investments() {
   const rows = elements.map((element) => (
-    <tr>
+    <tr key={element.name}>
       <td>{element.name}</td>
       <td>{element.state}</td>
       <td>
