@@ -19,7 +19,7 @@ const elements = [
     name: "Macondo 1",
     balance: (
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-        <Tooltip label="1 SIP10 = 2.63 USDC" withArrow>
+        <Tooltip label="1 SIP8 = 2.63 USDC" withArrow>
           <Group>
             <Text color="violet.9">
               <strong>2112</strong>
@@ -33,7 +33,7 @@ const elements = [
       </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
-    token: "SIP10",
+    token: "SIP8",
     state: (
       <Badge color="green" radius="lg" variant="dot">
         Inicializado
@@ -68,7 +68,7 @@ const elements = [
     name: "Macondo 2",
     balance: (
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-        <Tooltip label="1 SIP10 = 2.63 USDC" withArrow>
+        <Tooltip label="1 SIP9 = 2.63 USDC" withArrow>
           <Group>
             <Text color="violet.9">
               <strong>2112</strong>
@@ -82,7 +82,7 @@ const elements = [
       </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
-    token: "SIP10",
+    token: "SIP9",
     state: (
       <Badge color="green" radius="lg" variant="dot">
         Inicializado
