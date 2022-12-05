@@ -4,7 +4,7 @@ import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
 import { AppTabs } from "./components/AppTabs";
 import { Projects } from "./pages/Projects/Projects";
 import { Investments } from "./pages/Investments/Investments";
-import { AppHeader } from "./components/AppHeader";
+import { AppHeader } from "./components/AppHeader/AppHeader";
 
 export default function App() {
   return (
