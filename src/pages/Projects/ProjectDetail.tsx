@@ -21,6 +21,7 @@ import { IProject } from "../../types/project";
 import { profit, raisedRate } from "../../utils";
 import { useMetamask } from "../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
+import { utils } from 'ethers';
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -57,18 +58,34 @@ export function ProjectDetail({ project }: { project: IProject}) {
     if (!signer || accounts.length === 0) return setError('Please connect your wallet');
     setError('');
     setLoading(true);
-    const signedContract = await sign(signer);
-    const tx = await signedContract?.functions.invest(project.id, { value: investmentValue });
-    await tx.wait();
-    showNotification({
-      id: 'success',
-      autoClose: 5000,
-      title: "Inversion realizada",
-      message: `Haz invertido ${investmentValue} USDC en el proyecto: ${project.name}`,
-      color: 'green',
-      radius: 'md'
-    });
-    setLoading(false);
+
+    try {
+      const signedContract = await sign(signer);
+      const tx = await signedContract?.functions.invest(project.id, { value: utils.parseUnits(investmentValue.toString(), "ether") });
+      await tx.wait();
+      showNotification({
+        id: 'success',
+        autoClose: 5000,
+        title: "Inversion realizada",
+        message: `Haz invertido ${investmentValue} USDC en el proyecto: ${project.name}`,
+        color: 'green',
+        radius: 'md'
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        showNotification({
+          id: 'error',
+          autoClose: 5000,
+          title: "Ocurrió un error",
+          message: err.message,
+          color: 'red',
+          radius: 'md'
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+
   }
 
   if (!project) {
