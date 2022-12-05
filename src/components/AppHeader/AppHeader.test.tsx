@@ -1,10 +1,9 @@
 import '@testing-library/react'
 import { render, screen } from '@testing-library/react';
-import { useMetamask } from '../../hooks/useMetamask';
 import { AppHeader } from './AppHeader'
 
 jest.mock('../../hooks/useMetamask', () => {
-  return  {
+  return {
     useMetamask: jest.fn(() => ({
       connect: jest.fn(), 
       connectDefault: jest.fn(), 
