@@ -1,7 +1,7 @@
 import { Header, Button, createStyles, Container, Badge, Tooltip } from "@mantine/core";
-import logo from '../assets/simple-state-logo.png';
-import { networkEnum } from "../constants/networks";
-import { useMetamask } from "../hooks/useMetamask";
+import logo from '../../assets/simple-state-logo.png';
+import { networkEnum } from "../../constants/networks";
+import { useMetamask } from "../../hooks/useMetamask";
 import { useEffect } from "react";
 import { Network } from '@ethersproject/providers';
 
