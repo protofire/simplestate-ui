@@ -244,10 +244,10 @@ const elements = [
     actions: "",
   },
   {
-    name: "House La Abeja",
+    name: "House La Abeja - NORTE",
     balance: (
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-        <Tooltip label="1 SIP82 = 2.63 USDC" withArrow>
+        <Tooltip label="1 SIP81 = 2.63 USDC" withArrow>
           <Group>
             <Text color="violet.9">
               <strong>2112</strong>
@@ -261,7 +261,7 @@ const elements = [
       </Flex>
     ),
     tokenSymbol: <img src={SSToken} width={26} />,
-    token: "SIP82",
+    token: "SIP81",
     state: (
       <Badge color="blue" radius="lg" variant="dot">
         Finalizado
@@ -293,7 +293,7 @@ const elements = [
     ),
   },
   {
-    name: "House La Abeja",
+    name: "House La Abeja - SUR",
     balance: (
       <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
         <Tooltip label="1 SIP82 = 2.63 USDC" withArrow>
