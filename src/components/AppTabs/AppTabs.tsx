@@ -1,4 +1,4 @@
-import { Container, Tabs, Title } from "@mantine/core";
+import { Container, Tabs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
