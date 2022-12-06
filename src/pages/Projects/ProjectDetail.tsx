@@ -40,7 +40,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-export function ProjectDetail({ project }: { project: IProject}) {
+export function ProjectDetail({ project }: { project: IProject | null}) {
   const { classes } = useStyles();
   const { connectDefault, signer, accounts } = useMetamask();
   const { sign } = useContract();
@@ -61,13 +61,13 @@ export function ProjectDetail({ project }: { project: IProject}) {
 
     try {
       const signedContract = await sign(signer);
-      const tx = await signedContract?.functions.invest(project.id, { value: utils.parseUnits(investmentValue.toString(), "ether") });
+      const tx = await signedContract?.functions.invest(project?.id, { value: utils.parseUnits(investmentValue.toString(), "ether") });
       await tx.wait();
       showNotification({
         id: 'success',
         autoClose: 5000,
         title: "Inversion realizada",
-        message: `Haz invertido ${investmentValue} USDC en el proyecto: ${project.name}`,
+        message: `Haz invertido ${investmentValue} USDC en el proyecto: ${project?.name}`,
         color: 'green',
         radius: 'md'
       });
