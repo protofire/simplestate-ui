@@ -20,6 +20,12 @@ import { projectStateLabels } from '../../constants/projectState';
 import { ProjectDetail } from '../Projects/ProjectDetail';
 import { mockProjects } from '../../mock/projects';
 
+const colorsByState: Record<string, string> = {
+  'initialized': 'green',
+  'funded': 'blue',
+  'finished': 'orange'
+}
+
 export function Investments() {
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -30,7 +36,7 @@ export function Investments() {
     <tr key={project.name}>
       <td>{project.name}</td>
       <td>
-        <Badge color="green" radius="lg" variant="dot">
+        <Badge color={colorsByState[project.state]} radius="lg" variant="dot">
           {projectStateLabels[project.state]}
         </Badge>
       </td>
