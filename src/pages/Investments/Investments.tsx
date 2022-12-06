@@ -418,7 +418,7 @@ export function Investments() {
         onClose={() => setOpened(false)}
         title="Depositar fondos"
       >
-        {/* Modal content */}
+        <h3>Nombre del proyecto</h3>
       </Modal>
     </>
   );
