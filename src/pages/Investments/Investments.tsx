@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Button,
   Table,
@@ -15,16 +15,16 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import SSToken from "../../assets/SSToken.svg";
-import { IProject } from '../../types/project';
-import { projectStateLabels } from '../../constants/projectState';
-import { ProjectDetail } from '../Projects/ProjectDetail';
-import { mockProjects } from '../../mock/projects';
+import { IProject } from "../../types/project";
+import { projectStateLabels } from "../../constants/projectState";
+import { ProjectDetail } from "../Projects/ProjectDetail";
+import { mockProjects } from "../../mock/projects";
 
 const colorsByState: Record<string, string> = {
-  'initialized': 'green',
-  'funded': 'blue',
-  'finished': 'orange'
-}
+  initialized: "green",
+  funded: "blue",
+  finished: "orange",
+};
 
 export function Investments() {
   const [modalState, setModalState] = useState<{
@@ -58,40 +58,63 @@ export function Investments() {
           </Text>
         </Flex>
       </td>
-      <td>        
+      <td>
         <Group position="right">
           <Text align="center" color="gray">
-            {project.state !== 'funded' && !(project.id === 16)
-              ? <span>
-                  <strong>0</strong> USDC
-                </span>
-              :  <Text color='green'>
-                  <strong>216</strong> USDC
-                </Text>} 
+            {project.state !== "funded" && !(project.id === 16) ? (
+              <span>
+                <strong>0</strong> USDC
+              </span>
+            ) : (
+              <Text color="green">
+                <strong>216</strong> USDC
+              </Text>
+            )}
           </Text>
           <Tooltip label="Retirar renta disponible" withArrow>
-            <Button size="xs" color={"teal"} radius={"lg"} compact disabled={project.state !== 'funded' && !(project.id === 16)}>
+            <Button
+              size="xs"
+              color={"teal"}
+              radius={"lg"}
+              compact
+              disabled={project.state !== "funded" && !(project.id === 16)}
+            >
               Retirar
             </Button>
           </Tooltip>
         </Group>
       </td>
       <td>
-        <Tooltip label="Depositar fondos" withArrow>
-          <Button
-            size="xs"
-            color={"teal"}
-            radius={"lg"}
-            variant="light"
-            onClick={() => setModalState({open: true, project })}
-            disabled={project.state !== 'initialized'}>
-            Depositar
-          </Button>
-        </Tooltip>
+        {project.state !== "finished" ? (
+          <Tooltip label="Depositar fondos" withArrow>
+            <Button
+              size="xs"
+              color={"teal"}
+              radius={"lg"}
+              variant="light"
+              onClick={() => setModalState({ open: true, project })}
+              disabled={project.state !== "initialized"}
+            >
+              Depositar
+            </Button>
+          </Tooltip>
+        ) : (
+          <Tooltip label="Redimir fondos" withArrow>
+            <Button
+              size="xs"
+              color={"blue"}
+              radius={"lg"}
+              variant="light"
+              onClick={() => setModalState({ open: true, project })}
+              disabled={project.state === "finished" && !(project.id === 14)}
+            >
+              Redimir
+            </Button>
+          </Tooltip>
+        )}
       </td>
     </tr>
   ));
-
 
   return (
     <>
@@ -151,7 +174,7 @@ export function Investments() {
         title="Depositar fondos"
         size={"xl"}
       >
-        <ProjectDetail project={modalState.project}/>
+        <ProjectDetail project={modalState.project} />
       </Modal>
     </>
   );
