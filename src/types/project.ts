@@ -1,5 +1,4 @@
-
-export type ProjectState = 'created' | 'initialized' | 'funded' | 'finished';
+export type ProjectState = "created" | "initialized" | "funded" | "finished";
 
 interface IFinanctialMetadata {
   foundingAmount: number;
@@ -7,7 +6,6 @@ interface IFinanctialMetadata {
   sellAmount: number;
   sellTime: number;
   raised: number;
-  
 }
 
 export interface IProject {
@@ -16,13 +14,14 @@ export interface IProject {
   owner: string;
   incomeDepositor: string;
   metadataURL: string;
-  permissioningModel: 'blacklist';
+  permissioningModel: "blacklist";
   maxSupply: number;
-  unitOfAccount: 'USDC',
+  unitOfAccount: "USDC";
   financtialMetadata: IFinanctialMetadata;
-  produceIncome: boolean,
-  allowPartialSell: boolean,
-  feeModel: 'listing',
-  valuationModel: 'rate'
+  produceIncome: boolean;
+  allowPartialSell: boolean;
+  feeModel: "listing";
+  valuationModel: "rate";
   state: ProjectState;
+  redeemableAmount: number;
 }
