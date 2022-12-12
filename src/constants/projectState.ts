@@ -6,3 +6,9 @@ export const projectStateLabels: Record<ProjectState, string> = {
 	'funded':	'Fondeado',
 	'finished':	'Finalizado'
 };
+
+export const colorsByState: Record<string, string> = {
+  initialized: "green",
+  funded: "blue",
+  finished: "orange",
+};

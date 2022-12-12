@@ -1,8 +1,6 @@
 
 
 import '@testing-library/react'
-import { render, screen } from '@testing-library/react';
-import { AppTabs } from './AppTabs';
 
 jest.mock('react-router-dom', () => {
   return {
