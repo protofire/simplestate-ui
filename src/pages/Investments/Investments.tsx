@@ -106,7 +106,7 @@ export function Investments() {
               radius={"lg"}
               variant="light"
               onClick={() => setModalState({ open: true, project })}
-              disabled={project.state === "finished" && project.redeemableAmount === 0}
+              disabled={project.redeemableAmount === 0}
             >
               Redimir
             </Button>
