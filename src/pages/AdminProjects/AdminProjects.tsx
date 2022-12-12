@@ -1,5 +1,5 @@
-import { Button, Container, createStyles, Group, Loader, Modal, Select, Title, Text, Input, Divider } from "@mantine/core";
-import { IconBuilding } from '@tabler/icons';
+import { Button, Container, createStyles, Group, Loader, Modal, Select, Title, Text, Input, Divider, SimpleGrid, Badge } from "@mantine/core";
+import { IconArrowDown, IconArrowUp, IconBuilding } from '@tabler/icons';
 import { useEffect, useState } from "react";
 import { projectStateLabels } from "../../constants/projectState";
 import { useContract } from "../../hooks/useContract";
@@ -29,7 +29,6 @@ export function AdminProjects() {
       const fetchProjects = async () => {
         const projectList = [];
         const size = await contract?.functions.size();
-        console.log(size - 1);
         for (let i = size - 1; i >= 0; i--) {
           const project: IProject = await contract?.functions.projects(i);
           const projectWithId = { ...project, id: i };
@@ -51,6 +50,8 @@ export function AdminProjects() {
     setSelectedProject(project);
   }
 
+  const disableDepositRent = selectedProject?.state !== 'funded';
+  const disableDepositSell = selectedProject?.state !== 'finished';
 
   return (
     <Container>
@@ -98,13 +99,68 @@ export function AdminProjects() {
         </Text>
 
         <Divider m={20}/>
+        
+        <Group m={'md'}>
+          <Badge color={'teal'}>
+            {`Depósito acumulado: ${0} USDC`}
+          </Badge>
+        </Group>
 
-        {selectedProject?.state === 'initialized' &&
-          <Input.Wrapper id="distribute" label="Deposit income to distribute (USDC)">
-            <Input id="distribute" placeholder="Distribute" type={'number'} width={400}/>
-            <Button onClick={() => {}}>Distribute</Button>
-          </Input.Wrapper>
-        }
+        <Input.Wrapper id="withdraw" label="Retirar Inversión">
+          <SimpleGrid cols={2}>
+            <Input
+              icon={<IconArrowDown/>} 
+              id="withdraw" 
+              placeholder="Cantidad a retirar (USDC)" 
+              type={'number'} width={400} />
+            <Button 
+              color={'teal'} 
+              radius={'lg'} 
+              style={{ maxWidth: '200px' }} 
+              onClick={() => {}}>
+                Retirar Inversión
+            </Button>
+          </SimpleGrid>
+        </Input.Wrapper>
+
+
+        <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
+          <SimpleGrid cols={2}>
+            <Input 
+              icon={<IconArrowUp/>} 
+              id="distribute-rent" 
+              placeholder="Valor renta (USDC)" 
+              type={'number'} width={400} 
+              disabled={disableDepositRent}/>
+            <Button 
+              color={'teal'} 
+              radius={'lg'} 
+              style={{ maxWidth: '200px' }} 
+              onClick={() => {}} 
+              disabled={disableDepositRent}>
+                Depositar Renta
+            </Button>
+          </SimpleGrid>
+        </Input.Wrapper>
+
+        <Input.Wrapper id="distribute-sell" label="Depositar venta (USDC)">
+          <SimpleGrid cols={2}>
+            <Input 
+              icon={<IconArrowUp/>} 
+              id="distribute-sell" 
+              placeholder="Valor venta (USDC)" 
+              type={'number'} width={400} 
+              disabled={disableDepositSell}/>
+            <Button 
+              color={'teal'} 
+              radius={'lg'} 
+              style={{ maxWidth: '200px' }} 
+              onClick={() => {}} 
+              disabled={disableDepositSell}>
+                Depositar Venta
+            </Button>
+          </SimpleGrid>
+        </Input.Wrapper>
       </Group>
     </Container>
   );
