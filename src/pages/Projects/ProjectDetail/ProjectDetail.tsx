@@ -16,10 +16,10 @@ import {
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
-import { useContract } from "../../hooks/useContract";
-import { IProject } from "../../types/project";
-import { profit, raisedRate } from "../../utils";
-import { useMetamask } from "../../hooks/useMetamask";
+import { useContract } from "../../../hooks/useContract";
+import { IProject } from "../../../types/project";
+import { profit, raisedRate } from "../../../utils";
+import { useMetamask } from "../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
 import { utils } from 'ethers';
 

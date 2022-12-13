@@ -1,9 +1,9 @@
 import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useContract } from "../../hooks/useContract";
-import { IProject } from "../../types/project";
-import { ProjectCard } from "./ProjectCard";
-import { ProjectDetail } from "./ProjectDetail";
+import { useContract } from "../../../hooks/useContract";
+import { IProject } from "../../../types/project";
+import { ProjectCard } from "../ProjectCard/ProjectCard";
+import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
 export function Projects() {
   const { contract } = useContract();
