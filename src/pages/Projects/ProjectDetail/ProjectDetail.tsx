@@ -20,7 +20,7 @@ import { IProject } from "../../../types/project";
 import { profit, raisedRate } from "../../../utils";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
-import { NotificationMessage } from "../../components/Notification/NotificationMessage";
+import { NotificationMessage } from "../../../components/Notification/NotificationMessage";
 import { utils } from "ethers";
 import { IconCheck, IconX } from "@tabler/icons";
 
@@ -69,7 +69,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
       await tx.wait();
       showNotification({
         id: "success",
-        autoClose: false,
+        autoClose: 5000,
         title: "Inversion realizada",
         icon:<IconCheck size={18} />,
         message: (
