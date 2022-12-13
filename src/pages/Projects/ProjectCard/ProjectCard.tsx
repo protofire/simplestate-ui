@@ -13,9 +13,9 @@ import {
   Button,
   Center,
 } from "@mantine/core";
-import { projectStateLabels } from "../../constants/projectState";
-import { IProject } from "../../types/project";
-import { profit, raisedRate } from "../../utils";
+import { projectStateLabels } from "../../../constants/projectState";
+import { IProject } from "../../../types/project";
+import { profit, raisedRate } from "../../../utils";
 
 const useStyles = createStyles(() => ({
   absolute: {

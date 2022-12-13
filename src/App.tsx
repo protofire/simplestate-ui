@@ -2,7 +2,7 @@ import { AppShell, Tabs } from "@mantine/core";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AdminProjects } from "./pages/AdminProjects/AdminProjects";
 import { AppTabs } from "./components/AppTabs/AppTabs";
-import { Projects } from "./pages/Projects/Projects";
+import { Projects } from "./pages/Projects/Projects/Projects";
 import { Investments } from "./pages/Investments/Investments";
 import { AppHeader } from "./components/AppHeader/AppHeader";
 

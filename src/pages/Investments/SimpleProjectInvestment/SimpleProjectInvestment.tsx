@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { colorsByState, projectStateLabels } from "../../../constants/projectState";
 import { mockProjects } from "../../../mock/projects";
-import { ProjectDetail } from "../../Projects/ProjectDetail";
+import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
 import SSToken from "../../../assets/SSToken.svg";
 import { IconInfoCircle } from "@tabler/icons";
 import { IProject } from "../../../types/project";
