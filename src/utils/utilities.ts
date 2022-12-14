@@ -1,5 +1,3 @@
-
-
 export function profit(sellAmount: number, foundingAmount: number): number {
   const profitAmount = sellAmount - foundingAmount;
   const profitProportion = profitAmount / foundingAmount;

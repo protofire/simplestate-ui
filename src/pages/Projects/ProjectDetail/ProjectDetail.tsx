@@ -17,12 +17,12 @@ import {
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
 import { IProject } from "../../../types/project";
-import { profit, raisedRate } from "../../../utils";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
 import { NotificationMessage } from "../../../components/Notification/NotificationMessage";
 import { utils } from "ethers";
 import { IconCheck, IconX } from "@tabler/icons";
+import * as Utils from "../../../utils/utilities";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -126,7 +126,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
               <Grid.Col span={5}>
                 <Text size={18} align="center" color="teal">
                   <strong>
-                    {`${profit(
+                    {`${Utils.profit(
                       Number(project.financtialMetadata.sellAmount),
                       Number(project.financtialMetadata.foundingAmount)
                     ).toFixed(2)} %`}
@@ -151,7 +151,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
           </Card.Section>
           <Card.Section>
             <Text color={"dimmed"} size={12}>
-              {`${raisedRate(
+              {`${Utils.raisedRate(
                 Number(project.financtialMetadata.raised),
                 Number(project.financtialMetadata.foundingAmount)
               )}% invertido`}
@@ -166,7 +166,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
               color={"teal"}
               value={
                 project
-                  ? raisedRate(
+                  ? Utils.raisedRate(
                       Number(project.financtialMetadata.raised),
                       Number(project.financtialMetadata.foundingAmount)
                     )

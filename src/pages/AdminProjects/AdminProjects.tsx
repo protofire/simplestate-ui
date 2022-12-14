@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { projectStateLabels } from "../../constants/projectState";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
-import { profit } from "../../utils";
+import * as Utils from "../../utils/utilities";
 import { CreateProjectForm } from "./CreateProjectForm/CreateProjectForm";
 
 const useStyles = createStyles(() => ({
@@ -92,7 +92,7 @@ export function AdminProjects() {
         </Text>
         <Text>
           {`Tasa de retorno: ${
-            profit(
+            Utils.profit(
               Number(selectedProject?.financtialMetadata.sellAmount), 
               Number(selectedProject?.financtialMetadata.foundingAmount)
             ).toFixed(2)

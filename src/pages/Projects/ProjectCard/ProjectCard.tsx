@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { projectStateLabels } from "../../../constants/projectState";
 import { IProject } from "../../../types/project";
-import { profit, raisedRate } from "../../../utils";
+import * as Utils from "../../../utils/utilities";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -80,7 +80,7 @@ export function ProjectCard({ project, openModal }: { project: IProject, openMod
         <Grid justify={"center"}>
           <Grid.Col span={5}>
             <Text size={16} align="center">
-              {`${profit(Number(sellAmount), Number(foundingAmount)).toFixed(
+              {`${Utils.profit(Number(sellAmount), Number(foundingAmount)).toFixed(
                 2
               )} %`}
             </Text>
@@ -103,7 +103,7 @@ export function ProjectCard({ project, openModal }: { project: IProject, openMod
       <Divider />
 
       <Card.Section m={"md"}>
-        <Text color={"dimmed"} size={12}>{`${raisedRate(
+        <Text color={"dimmed"} size={12}>{`${Utils.raisedRate(
           Number(raised),
           Number(foundingAmount)
         )}% invertido`}</Text>
@@ -115,7 +115,7 @@ export function ProjectCard({ project, openModal }: { project: IProject, openMod
           thumbSize={8}
           label={null}
           color={"teal"}
-          value={raisedRate(Number(raised), Number(foundingAmount))}
+          value={Utils.raisedRate(Number(raised), Number(foundingAmount))}
         />
         <Group style={{ justifyContent: "space-between" }} mb={"md"}>
           <Text color={"dimmed"} size={12}>{`Total: ${Number(raised)} ${

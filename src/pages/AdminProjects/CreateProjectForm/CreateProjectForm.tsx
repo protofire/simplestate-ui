@@ -1,10 +1,23 @@
-import { Button, Container, createStyles, Group, Input, Select, Title, SimpleGrid, Switch, TextInput, NumberInput, LoadingOverlay } from "@mantine/core";
+import {
+  Button,
+  Container,
+  createStyles,
+  Group,
+  Input,
+  Select,
+  Title,
+  SimpleGrid,
+  Switch,
+  TextInput,
+  NumberInput,
+  LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ContractTransaction } from "ethers";
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
 import { useMetamask } from "../../../hooks/useMetamask";
+import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
 
 const useStyles = createStyles(() => ({
   input: {
@@ -47,16 +60,18 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
     },
 
     validate: {
-      name: (value) => (!!value ? null : 'Campo requerido'),
-      owner: (value) => (/^0x[a-fA-F0-9]{40}$/.test(value) ? null : 'Dirección inválida'),
-      incomeDepositor: (value) => (/^0x[a-fA-F0-9]{40}$/.test(value)  ? null : 'Dirección inválida'),
-      maxSupply: (value) => (!!value ? null : 'Campo requerido'),
-      fundingAmount: (value) => (!!value ? null : 'Campo requerido'),
-      fundingTime: (value) => (!!value ? null : 'Campo requerido'),
-      sellAmount: (value) => (!!value ? null : 'Campo requerido'),
-      sellTime: (value) => (!!value ? null : 'Campo requerido'),
+      name: (value) => requiredValidation(value),
+      owner: (value) => addressValidation(value),
+      incomeDepositor: (value) => addressValidation(value),
+      maxSupply: (value) => positiveIntegerValidation(value),
+      fundingAmount: (value) => requiredValidation(value),
+      fundingTime: (value) => requiredValidation(value),
+      sellAmount: (value) => requiredValidation(value),
+      sellTime: (value) => requiredValidation(value),
     },
   });
+
+
 
   const onSubmit = async () => {
     if (form.validate().hasErrors) return;
