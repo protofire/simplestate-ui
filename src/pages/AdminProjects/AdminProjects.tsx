@@ -79,6 +79,15 @@ export function AdminProjects() {
 
       <Group style={{display: selectedProject ? 'block': 'none'}} m={'lg'}>
         <Text>
+          {`Dueño del proyecto (owner): ${selectedProject?.owner}`}
+        </Text>
+        <Text>
+          {`Depositante de ingresos (Income depositor): ${selectedProject?.incomeDepositor}`}
+        </Text>
+        <Text>
+          {`Cantidad de tokens en circulación: -`}
+        </Text>
+        <Text>
           {`Cantidad de tokens en circulación: -`}
         </Text>
         <Text>
