@@ -5,7 +5,7 @@ import { projectStateLabels } from "../../constants/projectState";
 import { useContract } from "../../hooks/useContract";
 import { IProject } from "../../types/project";
 import { profit } from "../../utils";
-import { CreateProjectForm } from "./CreateProjectForm";
+import { CreateProjectForm } from "./CreateProjectForm/CreateProjectForm";
 
 const useStyles = createStyles(() => ({
   group: {

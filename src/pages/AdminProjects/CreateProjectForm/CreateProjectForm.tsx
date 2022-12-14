@@ -3,8 +3,8 @@ import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ContractTransaction } from "ethers";
 import { useEffect, useState } from "react";
-import { useContract } from "../../hooks/useContract";
-import { useMetamask } from "../../hooks/useMetamask";
+import { useContract } from "../../../hooks/useContract";
+import { useMetamask } from "../../../hooks/useMetamask";
 
 const useStyles = createStyles(() => ({
   input: {
