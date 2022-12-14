@@ -24,7 +24,8 @@ jest.mock('../../../hooks/useMetamask', () => {
 
 it('should render CreateProjectForm component', () => {
   const closeFn = jest.fn();
-  render(<CreateProjectForm close={closeFn}/>);
+  const onCreateFn = jest.fn();
+  render(<CreateProjectForm close={closeFn} onCreate={onCreateFn}/>);
 
   const details = screen.getByText('Detalles del proyecto');
   expect(details).toBeDefined();

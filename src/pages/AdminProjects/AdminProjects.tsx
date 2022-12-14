@@ -20,6 +20,7 @@ export function AdminProjects() {
   const { contract } = useContract();
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
+  const [projectCreated, setProjectCreated] = useState(false);
   const [selectedProject, setSelectedProject] = useState<IProject>();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function AdminProjects() {
 
       fetchProjects();
     }
-  }, [contract]);
+  }, [contract, projectCreated]);
 
   const onProjectSelected = (id: string) => {
     const numericId = Number(id);
@@ -73,7 +74,7 @@ export function AdminProjects() {
       </Group>
 
       <Modal size={'xl'} opened={open} closeOnClickOutside={false} title={<Title order={3}>Nuevo Proyecto</Title>} onClose={() => setOpen(false)}>
-        <CreateProjectForm close={() => setOpen(false)}/>
+        <CreateProjectForm close={() => setOpen(false)} onCreate={() => setProjectCreated(true)}/>
       </Modal>
 
       <Group style={{display: selectedProject ? 'block': 'none'}} m={'lg'}>

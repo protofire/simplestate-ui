@@ -14,9 +14,10 @@ const useStyles = createStyles(() => ({
 
 interface CreateProjectFormProps {
   close(): void;
+  onCreate(): void;
 }
 
-export function CreateProjectForm({ close } : CreateProjectFormProps) {
+export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) {
   const { sign } = useContract();
   const { classes } = useStyles();
   const { signer, connect } = useMetamask();
@@ -87,6 +88,7 @@ export function CreateProjectForm({ close } : CreateProjectFormProps) {
         radius: 'md'
       });
 
+      onCreate();
       close();
     } catch(e) {
       console.error(e);
