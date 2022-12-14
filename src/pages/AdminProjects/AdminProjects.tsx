@@ -72,7 +72,7 @@ export function AdminProjects() {
         >Crear proyecto</Button>
       </Group>
 
-      <Modal size={'xl'} opened={open} title={<Title order={3}>Nuevo Proyecto</Title>} onClose={() => setOpen(false)}>
+      <Modal size={'xl'} opened={open} closeOnClickOutside={false} title={<Title order={3}>Nuevo Proyecto</Title>} onClose={() => setOpen(false)}>
         <CreateProjectForm close={() => setOpen(false)}/>
       </Modal>
 
