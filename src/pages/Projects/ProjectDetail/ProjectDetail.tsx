@@ -23,6 +23,7 @@ import { NotificationMessage } from "../../../components/Notification/Notificati
 import { utils } from "ethers";
 import { IconCheck, IconX } from "@tabler/icons";
 import * as Utils from "../../../utils/utilities";
+import { metamaskErrors } from "../../../constants/errors";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -88,7 +89,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
           autoClose: 5000,
           title: "Ocurrió un error",
           icon:<IconX size={18} />,
-          message: err.message,
+          message: metamaskErrors[(err as any).reason] ?? '',
           color: "red",
           radius: "md",
         });
