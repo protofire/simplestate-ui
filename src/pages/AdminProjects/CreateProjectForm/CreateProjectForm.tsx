@@ -17,7 +17,7 @@ import { ContractTransaction } from "ethers";
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
 import { useMetamask } from "../../../hooks/useMetamask";
-import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
+import { addressValidation, positiveIntegerValidation, positiveNumberValidation, requiredValidation } from "../../../utils/validations";
 
 const useStyles = createStyles(() => ({
   input: {
@@ -64,10 +64,10 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
       owner: (value) => addressValidation(value),
       incomeDepositor: (value) => addressValidation(value),
       maxSupply: (value) => positiveIntegerValidation(value),
-      fundingAmount: (value) => requiredValidation(value),
-      fundingTime: (value) => requiredValidation(value),
-      sellAmount: (value) => requiredValidation(value),
-      sellTime: (value) => requiredValidation(value),
+      fundingAmount: (value) => positiveIntegerValidation(value),
+      fundingTime: (value) => positiveIntegerValidation(value),
+      sellAmount: (value) => positiveIntegerValidation(value),
+      sellTime: (value) => positiveIntegerValidation(value),
     },
   });
 
