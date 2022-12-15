@@ -84,6 +84,9 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
       });
     } catch (err) {
       if (err instanceof Error) {
+
+        console.log((err as any).reason);
+
         showNotification({
           id: "error",
           autoClose: 5000,
