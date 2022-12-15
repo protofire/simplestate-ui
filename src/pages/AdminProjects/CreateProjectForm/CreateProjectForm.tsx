@@ -33,12 +33,18 @@ interface CreateProjectFormProps {
 export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) {
   const { sign } = useContract();
   const { classes } = useStyles();
-  const { signer, connect } = useMetamask();
+  const { signer, connect, accounts } = useMetamask();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    connect();
+    connect()
   },[])
+
+  useEffect(() => {
+    if (accounts[0]) {
+      form.setFieldValue('owner', accounts[0]);
+    }
+  }, [accounts]);
 
   const form = useForm({
     initialValues: {
