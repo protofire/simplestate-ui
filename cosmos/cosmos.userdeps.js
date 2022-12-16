@@ -5,7 +5,9 @@
 // because this way they become hot-reloadable.
 
 
-import fixture0 from './../src/components/Notification/NotificationMessage.fixture.tsx';
+import fixture0 from './../src/components/AppHeader/AppHeader.fixture.tsx';
+import fixture1 from './../src/components/AppTabs/AppTabs.fixture.tsx';
+import fixture2 from './../src/components/Notification/NotificationMessage.fixture.tsx';
 
 
 
@@ -14,7 +16,9 @@ export const rendererConfig = {
 };
 
 export const fixtures = {
-  'src/components/Notification/NotificationMessage.fixture.tsx': { module: { default: fixture0 } }
+  'src/components/AppHeader/AppHeader.fixture.tsx': { module: { default: fixture0 } },
+  'src/components/AppTabs/AppTabs.fixture.tsx': { module: { default: fixture1 } },
+  'src/components/Notification/NotificationMessage.fixture.tsx': { module: { default: fixture2 } }
 };
 
 export const decorators = {
