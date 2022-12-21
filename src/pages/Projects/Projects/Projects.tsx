@@ -2,13 +2,14 @@ import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
 import { IProject } from "../../../types/project";
+import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
 export function Projects() {
-  const { contract } = useContract('registry');
-
-  const [projects, setProjects] = useState<IProject[]>([]);
+  const { contract, initContract } = useContract('registry');
+  const [projects, setProjects] = useState<IProjectMetadata[]>([]);
+  // const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -20,11 +21,16 @@ export function Projects() {
       setLoading(true);
 
       const fetchProjects = async () => {
-        const projectList = [];
-        const size = await contract?.functions.size();
+        const projectList: IProjectMetadata[] = [];
+        console.log(contract.address);
+        const size = await contract?.functions.getNumberOfProjects();
+        console.log('number of projects', size);
         for (let i = size - 1; i >= 0; i--) {
-          const project: IProject = await contract?.functions.projects(i);
-          projectList.push(project);
+          const [projectAddress] = await contract?.functions.keys(i);
+          console.log('project address', projectAddress);
+          const projectContract = initContract(projectAddress, 'project');
+          const projectMetadata: IProjectMetadata = await projectContract?.functions.metadata();
+          projectList.push(projectMetadata);
         }
         setProjects(projectList);
         setLoading(false);
@@ -57,7 +63,8 @@ export function Projects() {
         ]}
       >
         {projects.map((p, i) => (
-          <ProjectCard key={i} project={p} openModal={openModal} />
+          <div key={i}>{p.name}</div>
+          // <ProjectCard key={i} project={p} openModal={openModal} />
         ))}
       </SimpleGrid>
       <Modal

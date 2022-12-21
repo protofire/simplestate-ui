@@ -1,5 +1,42 @@
 export default [
 	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_project",
+				"type": "address"
+			}
+		],
+		"name": "insert",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -23,6 +60,42 @@ export default [
 		"inputs": [],
 		"name": "ProjectNotFound",
 		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -100,32 +173,6 @@ export default [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "REGISTRY_MANAGER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -139,6 +186,19 @@ export default [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -173,7 +233,13 @@ export default [
 	{
 		"inputs": [],
 		"name": "getNumberOfProjects",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -266,24 +332,6 @@ export default [
 				"type": "address"
 			}
 		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
 		"name": "hasRole",
 		"outputs": [
 			{
@@ -312,25 +360,6 @@ export default [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_project",
-				"type": "address"
-			}
-		],
-		"name": "insert",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -410,39 +439,16 @@ export default [
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "REGISTRY_MANAGER_ROLE",
+		"outputs": [
 			{
 				"internalType": "bytes32",
-				"name": "role",
+				"name": "",
 				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
 			}
 		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

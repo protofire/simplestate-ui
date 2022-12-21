@@ -1,1 +1,1 @@
-export declare type ContractType = 'factory' | 'registry';
+export declare type ContractType = 'factory' | 'registry' | 'project';
