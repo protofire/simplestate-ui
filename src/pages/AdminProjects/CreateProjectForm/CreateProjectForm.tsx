@@ -17,7 +17,7 @@ import { ContractTransaction } from "ethers";
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
 import { useMetamask } from "../../../hooks/useMetamask";
-import { addressValidation, positiveIntegerValidation, positiveNumberValidation, requiredValidation } from "../../../utils/validations";
+import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
 
 const useStyles = createStyles(() => ({
   input: {
@@ -31,7 +31,7 @@ interface CreateProjectFormProps {
 }
 
 export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) {
-  const { sign } = useContract();
+  const { sign } = useContract('factory');
   const { classes } = useStyles();
   const { signer, connect, accounts } = useMetamask();
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,19 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
     },
   });
 
+  function calculateFundingTime() {
+    const days = Number(form.values.fundingTime);
+    var date = new Date();
+    date.setDate(date.getDate() + days);
+    return Math.floor(date.getTime() / 1000);
+  }
 
+  function calculateSellTime() {
+    const months = Number(form.values.sellTime);
+    var date = new Date();
+    date.setMonth(date.getMonth() + months);
+    return Math.floor(date.getTime() / 1000);
+  }
 
   const onSubmit = async () => {
     if (form.validate().hasErrors) return;
@@ -85,20 +97,21 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
     setLoading(true);
     try {
       const protosoundSigned = await sign(signer);
-      const tx: ContractTransaction = await protosoundSigned?.functions.create(
+
+      const fundingAmount = Number(form.values.fundingAmount);
+      const fundingTime = calculateFundingTime();
+      const sellAmount = Number(form.values.sellAmount);
+      const sellTime = calculateSellTime();
+      
+      const tx: ContractTransaction = await protosoundSigned?.functions.deployProject(
         form.values.name,
-        form.values.owner,
-        form.values.incomeDepositor,
-        form.values.metadataURL,
-        Number(form.values.maxSupply),
-        Number(form.values.fundingAmount),
-        Number(form.values.fundingTime),
-        Number(form.values.sellAmount),
-        Number(form.values.sellTime),
-        form.values.produceIncome,
-        form.values.allowPartialSell
+        fundingAmount,
+        fundingTime,
+        sellAmount,
+        sellTime
       );
-      await tx.wait();
+      const recipt = await tx.wait();
+      console.log(recipt.events);
       
       showNotification({
         id: 'success',

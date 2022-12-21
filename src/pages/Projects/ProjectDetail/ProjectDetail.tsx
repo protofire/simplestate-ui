@@ -45,7 +45,7 @@ const useStyles = createStyles(() => ({
 export function ProjectDetail({ project }: { project: IProject | null }) {
   const { classes } = useStyles();
   const { connectDefault, signer, accounts } = useMetamask();
-  const { sign } = useContract();
+  const { sign } = useContract('registry');
 
   const [investmentValue, setInvestmentValue] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);

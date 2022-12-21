@@ -6,7 +6,7 @@ import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
 export function Projects() {
-  const { contract } = useContract();
+  const { contract } = useContract('registry');
 
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);

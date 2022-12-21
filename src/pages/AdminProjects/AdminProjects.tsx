@@ -17,7 +17,7 @@ export function AdminProjects() {
   const { classes } = useStyles();
   const [open, setOpen] = useState(false); 
   
-  const { contract } = useContract();
+  const { contract } = useContract('registry');
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
