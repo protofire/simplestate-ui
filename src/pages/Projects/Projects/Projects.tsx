@@ -1,13 +1,13 @@
 import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useContract } from "../../../hooks/useContract";
+import { useApi } from "../../../hooks/useApi";
 import { IProject } from "../../../types/project";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
 export function Projects() {
-  const { contract, initContract } = useContract('registry');
+  const { fetchProjects, registryReady } = useApi();
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   // const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
@@ -17,34 +17,18 @@ export function Projects() {
   }>({ open: false, project: null });
 
   useEffect(() => {
-    if (contract) {
-      setLoading(true);
-
-      const fetchProjects = async () => {
-        const projectList: IProjectMetadata[] = [];
-        console.log(contract.address);
-        const size = await contract?.functions.getNumberOfProjects();
-        console.log('number of projects', size);
-        for (let i = size - 1; i >= 0; i--) {
-          const [projectAddress] = await contract?.functions.keys(i);
-          console.log('project address', projectAddress);
-          const projectContract = initContract(projectAddress, 'project');
-          const projectMetadata: IProjectMetadata = await projectContract?.functions.metadata();
-          projectList.push(projectMetadata);
-        }
-        setProjects(projectList);
-        setLoading(false);
-      };
-
-      fetchProjects();
-    }
-  }, [contract]);
+    setLoading(true);
+    fetchProjects().then((p) => {
+      setProjects(p);
+      setLoading(false);
+    });
+  }, [fetchProjects]);
 
   const openModal = (p: IProject) => {
     setModalState({ open: true, project: p });
   };
 
-  if (loading || !contract) {
+  if (loading || !registryReady) {
     return (
       <Center m={"xl"}>
         <Loader color="teal" size="lg" variant="bars" />
