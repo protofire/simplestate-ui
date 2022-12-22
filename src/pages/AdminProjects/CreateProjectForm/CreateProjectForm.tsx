@@ -12,10 +12,10 @@ import {
   NumberInput,
   LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import { ContractTransaction } from "ethers";
+import { NotificationProps, showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { useContract } from "../../../hooks/useContract";
+import { createProjectError, createProjectSuccess } from "../../../constants/notifications";
+import { useApi } from "../../../hooks/useApi";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
 
@@ -31,14 +31,20 @@ interface CreateProjectFormProps {
 }
 
 export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) {
-  const { sign } = useContract();
+  const { createProject } = useApi();
   const { classes } = useStyles();
-  const { signer, connect } = useMetamask();
+  const { connect, accounts } = useMetamask();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    connect();
+    connect()
   },[])
+
+  useEffect(() => {
+    if (accounts[0]) {
+      form.setFieldValue('owner', accounts[0]);
+    }
+  }, [accounts]);
 
   const form = useForm({
     initialValues: {
@@ -64,59 +70,50 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
       owner: (value) => addressValidation(value),
       incomeDepositor: (value) => addressValidation(value),
       maxSupply: (value) => positiveIntegerValidation(value),
-      fundingAmount: (value) => requiredValidation(value),
-      fundingTime: (value) => requiredValidation(value),
-      sellAmount: (value) => requiredValidation(value),
-      sellTime: (value) => requiredValidation(value),
+      fundingAmount: (value) => positiveIntegerValidation(value),
+      fundingTime: (value) => positiveIntegerValidation(value),
+      sellAmount: (value) => positiveIntegerValidation(value),
+      sellTime: (value) => positiveIntegerValidation(value),
     },
   });
 
+  function calculateFundingTime() {
+    const days = Number(form.values.fundingTime);
+    var date = new Date();
+    date.setDate(date.getDate() + days);
+    return Math.floor(date.getTime() / 1000);
+  }
 
+  function calculateSellTime() {
+    const months = Number(form.values.sellTime);
+    var date = new Date();
+    date.setMonth(date.getMonth() + months);
+    return Math.floor(date.getTime() / 1000);
+  }
 
   const onSubmit = async () => {
     if (form.validate().hasErrors) return;
-    if (!signer) return console.error('no signer');
     setLoading(true);
     try {
-      const protosoundSigned = await sign(signer);
-      const tx: ContractTransaction = await protosoundSigned?.functions.create(
-        form.values.name,
-        form.values.owner,
-        form.values.incomeDepositor,
-        form.values.metadataURL,
-        Number(form.values.maxSupply),
-        Number(form.values.fundingAmount),
-        Number(form.values.fundingTime),
-        Number(form.values.sellAmount),
-        Number(form.values.sellTime),
-        form.values.produceIncome,
-        form.values.allowPartialSell
-      );
-      await tx.wait();
-      
-      showNotification({
-        id: 'success',
-        autoClose: 5000,
-        title: "Proyecto creado",
-        message: 'El proyecto fue creado exitosamente',
-        color: 'green',
-        radius: 'md'
-      });
+      const fundingAmount = Number(form.values.fundingAmount);
+      const fundingTime = calculateFundingTime();
+      const sellAmount = Number(form.values.sellAmount);
+      const sellTime = calculateSellTime();
 
+      await createProject(
+        form.values.name,
+        fundingAmount,
+        fundingTime,
+        sellAmount,
+        sellTime
+      );
+
+      showNotification(createProjectSuccess);
       onCreate();
       close();
     } catch(e) {
       console.error(e);
-
-      showNotification({
-        id: 'error',
-        autoClose: 5000,
-        title: "Error",
-        message: 'Ocurrió un error intentando crear el proyecto',
-        color: 'red',
-        radius: 'md'
-      });
-
+      showNotification(createProjectError);
     } finally {
       setLoading(false);
     }

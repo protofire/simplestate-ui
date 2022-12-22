@@ -16,13 +16,14 @@ import {
 
 import { useEffect, useState } from "react";
 import { useContract } from "../../../hooks/useContract";
-import { IProject } from "../../../types/project";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
 import { NotificationMessage } from "../../../components/Notification/NotificationMessage";
 import { utils } from "ethers";
 import { IconCheck, IconX } from "@tabler/icons";
 import * as Utils from "../../../utils/utilities";
+import { metamaskErrors } from "../../../constants/errors";
+import { IProjectMetadata } from "../../../types/projectMetadata";
 
 const useStyles = createStyles(() => ({
   absolute: {
@@ -41,10 +42,10 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-export function ProjectDetail({ project }: { project: IProject | null }) {
+export function ProjectDetail({ project }: { project: IProjectMetadata | null }) {
   const { classes } = useStyles();
   const { connectDefault, signer, accounts } = useMetamask();
-  const { sign } = useContract();
+  const { sign } = useContract('registry');
 
   const [investmentValue, setInvestmentValue] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,7 +64,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
 
     try {
       const signedContract = await sign(signer);
-      const tx = await signedContract?.functions.invest(project?.id, {
+      const tx = await signedContract?.functions.invest(project?.address, {
         value: utils.parseUnits(investmentValue.toString(), "ether"),
       });
       await tx.wait();
@@ -83,12 +84,15 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
       });
     } catch (err) {
       if (err instanceof Error) {
+
+        console.log((err as any).reason);
+
         showNotification({
           id: "error",
           autoClose: 5000,
           title: "Ocurrió un error",
           icon:<IconX size={18} />,
-          message: err.message,
+          message: metamaskErrors[(err as any).reason] ?? '',
           color: "red",
           radius: "md",
         });
@@ -102,15 +106,24 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
     return <></>;
   }
 
+  const { 
+    sellingAmountTarget,
+    fundingAmountTarget,
+    sellingTimeTarget,
+    fundingTimeTarget
+  } = project.targets;
+
+  const { fundingRaised,  } = project.financialTracking
+
   return (
     <>
       <Grid>
         <Grid.Col md={6} lg={7}>
           <Card.Section>
             <Image
-              src={project.metadataURL}
+              src={project.offchainLink}
               height={160}
-              alt={project.metadataURL}
+              alt={project.offchainLink}
             />
             <div style={{ position: "relative" }}>
               <div className={classes.overlay}></div>
@@ -127,8 +140,8 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
                 <Text size={18} align="center" color="teal">
                   <strong>
                     {`${Utils.profit(
-                      Number(project.financtialMetadata.sellAmount),
-                      Number(project.financtialMetadata.foundingAmount)
+                      Number(sellingAmountTarget),
+                      Number(fundingAmountTarget)
                     ).toFixed(2)} %`}
                   </strong>
                 </Text>
@@ -139,9 +152,7 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
               <Divider orientation="vertical" />
               <Grid.Col span={5}>
                 <Text size={18} align="center" color="teal">
-                  <strong>{`${Number(
-                    project.financtialMetadata.sellTime
-                  )} Meses`}</strong>
+                  <strong>{new Date(sellingTimeTarget * 1000).toLocaleDateString('es-AR')}</strong>
                 </Text>
                 <Text color={"dimmed"} size={12} align="center">
                   {`Tiempo de retorno`}
@@ -152,8 +163,8 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
           <Card.Section>
             <Text color={"dimmed"} size={12}>
               {`${Utils.raisedRate(
-                Number(project.financtialMetadata.raised),
-                Number(project.financtialMetadata.foundingAmount)
+                Number(fundingRaised),
+                Number(fundingAmountTarget)
               )}% invertido`}
             </Text>
             <Slider
@@ -167,20 +178,18 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
               value={
                 project
                   ? Utils.raisedRate(
-                      Number(project.financtialMetadata.raised),
-                      Number(project.financtialMetadata.foundingAmount)
+                      Number(fundingRaised),
+                      Number(fundingAmountTarget)
                     )
                   : 0
               }
             />
             <Group style={{ justifyContent: "space-between" }} mb={"md"}>
               <Text color={"dimmed"} size={12}>
-                {`Total: ${Number(project.financtialMetadata.raised)} USDC`}
+                {`Total: ${Number(fundingRaised)} USDC`}
               </Text>
               <Text color={"dimmed"} size={12}>
-                {`Meta: ${Number(
-                  project.financtialMetadata.foundingAmount
-                )} USDC`}
+                {`Meta: ${Number(fundingAmountTarget)} USDC`}
               </Text>
             </Group>
           </Card.Section>
@@ -244,24 +253,20 @@ export function ProjectDetail({ project }: { project: IProject | null }) {
           <strong>{project.feeModel ?? "Listado (Listing fee)"}</strong>
         </Text>
         <Text size={14}>
-          Unidades en circulación (Max supply):{" "}
-          <strong>{`${project.maxSupply} Tokens`}</strong>
-        </Text>
-        <Text size={14}>
           Metas de venta:{" "}
-          <strong>{`${project.financtialMetadata.sellAmount} USDC`}</strong>
+          <strong>{`${sellingAmountTarget} USDC`}</strong>
         </Text>
         <Text size={14}>
           Meta de tiempo de ventas:{" "}
-          <strong>{`${project?.financtialMetadata.sellTime} Meses`}</strong>
+          <strong>{new Date(sellingTimeTarget * 1000).toLocaleDateString('es-AR')}</strong>
         </Text>
         <Text size={14}>
           Meta de financiamiento:
-          <strong>{`${project.financtialMetadata.foundingAmount} USDC`}</strong>
+          <strong>{`${fundingAmountTarget} USDC`}</strong>
         </Text>
         <Text size={14}>
           Meta de tiempo de financiamiento:{" "}
-          <strong>{`${project.financtialMetadata.foundingTime} Días`}</strong>
+          <strong>{new Date(fundingTimeTarget * 1000).toLocaleDateString('es-AR')}</strong>
         </Text>
       </Card.Section>
     </>

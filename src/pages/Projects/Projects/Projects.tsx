@@ -1,44 +1,32 @@
 import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useContract } from "../../../hooks/useContract";
-import { IProject } from "../../../types/project";
+import { useApi } from "../../../hooks/useApi";
+import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
 export function Projects() {
-  const { contract } = useContract();
-
-  const [projects, setProjects] = useState<IProject[]>([]);
+  const { fetchProjects, registryReady } = useApi();
+  const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState<{
     open: boolean;
-    project: IProject | null;
+    project: IProjectMetadata | null;
   }>({ open: false, project: null });
 
   useEffect(() => {
-    if (contract) {
-      setLoading(true);
+    setLoading(true);
+    fetchProjects().then((p) => {
+      setProjects(p);
+      setLoading(false);
+    });
+  }, [fetchProjects]);
 
-      const fetchProjects = async () => {
-        const projectList = [];
-        const size = await contract?.functions.size();
-        for (let i = size - 1; i >= 0; i--) {
-          const project: IProject = await contract?.functions.projects(i);
-          projectList.push(project);
-        }
-        setProjects(projectList);
-        setLoading(false);
-      };
-
-      fetchProjects();
-    }
-  }, [contract]);
-
-  const openModal = (p: IProject) => {
+  const openModal = (p: IProjectMetadata) => {
     setModalState({ open: true, project: p });
   };
 
-  if (loading || !contract) {
+  if (loading || !registryReady) {
     return (
       <Center m={"xl"}>
         <Loader color="teal" size="lg" variant="bars" />
