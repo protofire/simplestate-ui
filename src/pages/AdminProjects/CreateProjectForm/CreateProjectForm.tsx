@@ -12,10 +12,10 @@ import {
   NumberInput,
   LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import { ContractTransaction } from "ethers";
+import { NotificationProps, showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { useContract } from "../../../hooks/useContract";
+import { createProjectError, createProjectSuccess } from "../../../constants/notifications";
+import { useApi } from "../../../hooks/useApi";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
 
@@ -31,9 +31,9 @@ interface CreateProjectFormProps {
 }
 
 export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) {
-  const { sign } = useContract('factory');
+  const { createProject } = useApi();
   const { classes } = useStyles();
-  const { signer, connect, accounts } = useMetamask();
+  const { connect, accounts } = useMetamask();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -93,49 +93,27 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
 
   const onSubmit = async () => {
     if (form.validate().hasErrors) return;
-    if (!signer) return console.error('no signer');
     setLoading(true);
     try {
-      const protosoundSigned = await sign(signer);
-
       const fundingAmount = Number(form.values.fundingAmount);
       const fundingTime = calculateFundingTime();
       const sellAmount = Number(form.values.sellAmount);
       const sellTime = calculateSellTime();
-      
-      const tx: ContractTransaction = await protosoundSigned?.functions.deployProject(
+
+      await createProject(
         form.values.name,
         fundingAmount,
         fundingTime,
         sellAmount,
         sellTime
       );
-      const recipt = await tx.wait();
-      console.log(recipt.events);
-      
-      showNotification({
-        id: 'success',
-        autoClose: 5000,
-        title: "Proyecto creado",
-        message: 'El proyecto fue creado exitosamente',
-        color: 'green',
-        radius: 'md'
-      });
 
+      showNotification(createProjectError);
       onCreate();
       close();
     } catch(e) {
       console.error(e);
-
-      showNotification({
-        id: 'error',
-        autoClose: 5000,
-        title: "Error",
-        message: 'Ocurrió un error intentando crear el proyecto',
-        color: 'red',
-        radius: 'md'
-      });
-
+      showNotification(createProjectSuccess);
     } finally {
       setLoading(false);
     }
