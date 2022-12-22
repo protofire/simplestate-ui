@@ -53,7 +53,7 @@ export function Projects() {
         opened={modalState.open}
         onClose={() => setModalState({ open: false, project: null })}
       >
-        <ProjectDetail project={modalState.project!} />
+        <ProjectDetail project={modalState.project} />
       </Modal>
     </Container>
   );

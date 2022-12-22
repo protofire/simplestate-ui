@@ -31,7 +31,7 @@ export function SimpleProjectInvestment() {
       <td>{project.name}</td>
       <td>
         <Badge color={colorsByState[project.state]} radius="lg" variant="dot">
-          {projectStateLabels[project.state]}
+          {/* {projectStateLabels[project.state]} */}
         </Badge>
       </td>
       <td>
@@ -139,7 +139,7 @@ export function SimpleProjectInvestment() {
         title="Depositar fondos"
         size={"xl"}
       >
-        <ProjectDetail project={modalState.project} />
+        {/* <ProjectDetail project={modalState.project} /> */}
       </Modal>
     </>
   );
