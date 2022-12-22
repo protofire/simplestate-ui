@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { useContract } from "./useContract";
 import { IProjectMetadata } from "../types/projectMetadata";
+import { useMetamask } from "./useMetamask";
+import { ContractTransaction, Event } from "ethers";
 
 export function useApi() {
   const registry = useContract('registry');
   const factory = useContract('factory');
+  const { signer, connect } = useMetamask();
 
   const [factoryReady, setFactoryReady] = useState(false);
   const [registryReady, setRegistryReady] = useState(false);
+
+  useEffect(() => {
+    connect();
+  },[])
 
   useEffect(() => {
     setFactoryReady(!!factory.contract);
@@ -32,8 +39,28 @@ export function useApi() {
       projectList.push(projectMetadata);
     }
     return projectList;
-  }, [registry.contract]); 
+  }, [registry.contract]);
+
+  const createProject = useCallback(async (
+    name: string,
+    fundingAmount: number,
+    fundingTime: number,
+    sellAmount: number, 
+    sellTime: number
+  ): Promise<Event[] | undefined> => {
+    if (!signer) return;
+    const signedContract = await registry.sign(signer);
+    const tx: ContractTransaction = await signedContract?.functions.deployProject(
+      name,
+      fundingAmount,
+      fundingTime,
+      sellAmount,
+      sellTime
+    );
+    const recipt = await tx.wait();
+    return recipt.events;
+  }, [factory.contract, signer]);
 
 
-  return { fetchProjects, factoryReady, registryReady }
+  return { fetchProjects, createProject, factoryReady, registryReady }
 }
