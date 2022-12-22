@@ -35,7 +35,19 @@ export function useApi() {
     for (let i = size - 1; i >= 0; i--) {
       const [projectAddress] = await functions.keys(i);
       const projectContract = initContract(projectAddress, 'project');
-      const projectMetadata: IProjectMetadata = await projectContract?.functions.metadata();
+      const [metadata, state, targets, financialTracking] = await Promise.all([
+        projectContract?.functions.metadata(),
+        projectContract?.functions.state(),
+        projectContract?.functions.targets(),
+        projectContract?.functions.financialTracking()
+      ]);
+      const projectMetadata: IProjectMetadata = {
+        ...metadata, 
+        address: projectAddress,
+        state,
+        targets,
+        financialTracking
+      };
       projectList.push(projectMetadata);
     }
     return projectList;

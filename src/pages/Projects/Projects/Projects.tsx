@@ -1,7 +1,6 @@
 import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/useApi";
-import { IProject } from "../../../types/project";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
@@ -9,11 +8,10 @@ import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 export function Projects() {
   const { fetchProjects, registryReady } = useApi();
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
-  // const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState<{
     open: boolean;
-    project: IProject | null;
+    project: IProjectMetadata | null;
   }>({ open: false, project: null });
 
   useEffect(() => {
@@ -24,7 +22,7 @@ export function Projects() {
     });
   }, [fetchProjects]);
 
-  const openModal = (p: IProject) => {
+  const openModal = (p: IProjectMetadata) => {
     setModalState({ open: true, project: p });
   };
 
@@ -47,8 +45,7 @@ export function Projects() {
         ]}
       >
         {projects.map((p, i) => (
-          <div key={i}>{p.name}</div>
-          // <ProjectCard key={i} project={p} openModal={openModal} />
+          <ProjectCard key={i} project={p} openModal={openModal} />
         ))}
       </SimpleGrid>
       <Modal
