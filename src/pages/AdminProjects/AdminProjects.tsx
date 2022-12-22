@@ -45,7 +45,7 @@ export function AdminProjects() {
       setProjects(p);
       setLoading(false);
     });
-  }, [fetchProjects]);
+  }, [fetchProjects, projectCreated]);
 
   const onProjectSelected = (address: string) => {
     const project = projects.find((p) => p.address === address);

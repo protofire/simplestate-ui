@@ -61,7 +61,7 @@ export function useApi() {
     sellTime: number
   ): Promise<Event[] | undefined> => {
     if (!signer) return;
-    const signedContract = await registry.sign(signer);
+    const signedContract = await factory.sign(signer);
     const tx: ContractTransaction = await signedContract?.functions.deployProject(
       name,
       fundingAmount,
