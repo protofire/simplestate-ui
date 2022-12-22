@@ -108,12 +108,12 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         sellTime
       );
 
-      showNotification(createProjectError);
+      showNotification(createProjectSuccess);
       onCreate();
       close();
     } catch(e) {
       console.error(e);
-      showNotification(createProjectSuccess);
+      showNotification(createProjectError);
     } finally {
       setLoading(false);
     }
