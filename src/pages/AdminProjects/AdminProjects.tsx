@@ -33,13 +33,12 @@ export function AdminProjects() {
   const { fetchProjects, registryReady } = useApi();
 
   const { classes } = useStyles();
-  const { contract } = useContract("registry");
 
   const [open, setOpen] = useState(false);
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   const [loading, setLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<IProject>();
+  const [selectedProject] = useState<IProject>();
 
   useEffect(() => {
     setLoading(true);
@@ -49,32 +48,10 @@ export function AdminProjects() {
     });
   }, [fetchProjects]);
 
-  useEffect(() => {
-    if (contract) {
-      setLoading(true);
-
-      const fetchProjects = async () => {
-        const projectList = [];
-        const size = await contract?.functions.size();
-        for (let i = size - 1; i >= 0; i--) {
-          const project: IProject = await contract?.functions.projects(i);
-          const projectWithId = { ...project, id: i };
-          projectList.push(projectWithId);
-        }
-        //setProjects(projectList);
-        setLoading(false);
-      };
-
-      fetchProjects();
-    }
-  }, [contract, projectCreated]);
-
   const onProjectSelected = (id: string) => {
     const numericId = Number(id);
     const project = projects.find((p) => p.id === numericId);
     if (!project) return;
-
-    //setSelectedProject(project);
   };
 
   const disableDepositRent = selectedProject?.state !== "funded";
