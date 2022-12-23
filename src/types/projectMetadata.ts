@@ -15,7 +15,7 @@ interface IFinanctialTracking {
   fundingWithdrawed: number;
 }
 
-interface IProjectToken {
+export interface IProjectToken {
   symbol: string;
   name: string;
 }
