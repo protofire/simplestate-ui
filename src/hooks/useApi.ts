@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useContract } from "./useContract";
-import { IProjectMetadata } from "../types/projectMetadata";
+import { IProjectMetadata, IProjectToken } from "../types/projectMetadata";
 import { useMetamask } from "./useMetamask";
-import { ContractTransaction, Event } from "ethers";
+import { Contract, ContractTransaction, Event } from "ethers";
+import { State } from "../constants/projectState";
 
 export function useApi() {
   const registry = useContract('registry');
@@ -24,6 +25,15 @@ export function useApi() {
     setRegistryReady(!!registry.contract);
   }, [registry.contract]);
 
+  const fetchToken = async (address: string) => {
+    const token = registry.initContract(address, 'ipToken');
+    const [[symbol], [name]] = await Promise.all([
+      token.functions.symbol(),
+      token.functions.name()
+    ]);
+    return { symbol, name };
+  }
+
   const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
     if (!registry.contract) return [];
 
@@ -35,18 +45,26 @@ export function useApi() {
     for (let i = size - 1; i >= 0; i--) {
       const [projectAddress] = await functions.keys(i);
       const projectContract = initContract(projectAddress, 'project');
-      const [metadata, state, targets, financialTracking] = await Promise.all([
+      const [metadata, [state], targets, financialTracking, tokens] = await Promise.all([
         projectContract?.functions.metadata(),
         projectContract?.functions.state(),
         projectContract?.functions.targets(),
-        projectContract?.functions.financialTracking()
+        projectContract?.functions.financialTracking(),
+        projectContract?.functions.tokens()
       ]);
+
+      const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
+      const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
+
+      console.log('hasToken', hasToken, 'token data', token);
+
       const projectMetadata: IProjectMetadata = {
         ...metadata, 
         address: projectAddress,
         state,
         targets,
-        financialTracking
+        financialTracking,
+        token
       };
       projectList.push(projectMetadata);
     }

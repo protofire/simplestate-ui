@@ -3,6 +3,7 @@ import { ContractType } from '../types/contract';
 import factoryAbi from '../abi/factory-abi';
 import registryAbi from '../abi/registry-abi';
 import projectAbi from '../abi/project-abi';
+import ipTokenAbi from '../abi/ipToken-abi';
 
 interface IContractMetadata {
 	address: string;
@@ -17,6 +18,10 @@ const contractMetadata: Record<string, IContractMetadata> = {
 	registry: {
 		address: import.meta.env.VITE_REGISTRY_CONTRACT_ADDRESS,
 		abi: registryAbi
+	},
+	ipToken: {
+		address: '',
+		abi: ipTokenAbi
 	},
 	project: {
 		address: '',
