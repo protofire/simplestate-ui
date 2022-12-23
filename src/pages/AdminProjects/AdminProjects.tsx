@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { IconArrowDown, IconArrowUp, IconBuilding } from "@tabler/icons";
 import { useEffect, useState } from "react";
-import { projectStateLabels } from "../../constants/projectState";
+import { State, projectStateLabels } from "../../constants/projectState";
 import { IProject } from "../../types/project";
 import * as Utils from "../../utils/utilities";
 import { CreateProjectForm } from "./CreateProjectForm/CreateProjectForm";
@@ -37,7 +37,7 @@ export function AdminProjects() {
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   const [loading, setLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
-  const [selectedProject] = useState<IProject>();
+  const [selectedProject, setSelectedProject] = useState<IProjectMetadata>();
 
   useEffect(() => {
     setLoading(true);
@@ -48,12 +48,13 @@ export function AdminProjects() {
   }, [fetchProjects, projectCreated]);
 
   const onProjectSelected = (address: string) => {
-    const project = projects.find((p) => p.address === address);
+    const project:IProjectMetadata | undefined = projects.find((p) => p.address === address);
     if (!project) return;
+    setSelectedProject(project);
   };
 
-  const disableDepositRent = selectedProject?.state !== "funded";
-  const disableDepositSell = selectedProject?.state !== "finished";
+  const enabledDepositRent = selectedProject?.state === State.Funded;
+  const enableDepositSell = selectedProject?.state === State.Funded;
 
   return (
     <Container>
@@ -95,11 +96,13 @@ export function AdminProjects() {
       <Group style={{ display: selectedProject ? "block" : "none" }} m={"lg"}>
         <Text>
           {`Dueño del proyecto (owner): `}
-          <strong>{selectedProject?.owner}</strong>
+          <strong> -</strong>
+          {/* <strong>{selectedProject?.owner}</strong> */}
         </Text>
         <Text>
           {`Depositante de ingresos (Income depositor): `}
-          <strong>{selectedProject?.incomeDepositor}</strong>
+          <strong> -</strong>
+          {/* <strong>{selectedProject?.incomeDepositor}</strong> */}
         </Text>
         <Text>
           {`Cantidad de tokens en circulación: `}
@@ -109,8 +112,8 @@ export function AdminProjects() {
           {`Tasa de retorno: `}
           <strong>
             {Utils.profit(
-              Number(selectedProject?.financtialMetadata.sellAmount),
-              Number(selectedProject?.financtialMetadata.foundingAmount)
+              Number(selectedProject?.targets.sellingAmountTarget),
+              Number(selectedProject?.targets.fundingAmountTarget)
             ).toFixed(2)}{" "}
             %
           </strong>
@@ -126,7 +129,7 @@ export function AdminProjects() {
         {selectedProject?.state !== undefined && (
           <Text>
             {`Estado: `}
-            {/* <strong>{projectStateLabels[selectedProject.state]}</strong> */}
+            <strong>{projectStateLabels[selectedProject.state]}</strong>
           </Text>
         )}
 
@@ -164,14 +167,14 @@ export function AdminProjects() {
               placeholder="Valor renta (USDC)"
               type={"number"}
               width={400}
-              disabled={disableDepositRent}
+              disabled={!enabledDepositRent}
             />
             <Button
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
               onClick={() => {}}
-              disabled={disableDepositRent}
+              disabled={!enabledDepositRent}
             >
               Depositar Renta
             </Button>
@@ -186,14 +189,14 @@ export function AdminProjects() {
               placeholder="Valor venta (USDC)"
               type={"number"}
               width={400}
-              disabled={disableDepositSell}
+              disabled={!enableDepositSell}
             />
             <Button
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
               onClick={() => {}}
-              disabled={disableDepositSell}
+              disabled={!enableDepositSell}
             >
               Depositar Venta
             </Button>
