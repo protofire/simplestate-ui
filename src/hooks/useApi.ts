@@ -56,8 +56,6 @@ export function useApi() {
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
       const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
 
-      console.log('hasToken', hasToken, 'token data', token);
-
       const projectMetadata: IProjectMetadata = {
         ...metadata, 
         address: projectAddress,
