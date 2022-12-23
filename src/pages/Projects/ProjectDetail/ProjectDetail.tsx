@@ -201,7 +201,7 @@ export function ProjectDetail({ project }: { project: IProjectMetadata | null })
             TOKEN
           </Text>
           <Text size={18} align="center">
-            <strong>SPT23</strong>
+            <strong>{project.token ? project.token.symbol : ' - '}</strong>
           </Text>
         </Grid.Col>
         <Grid.Col span={3}>

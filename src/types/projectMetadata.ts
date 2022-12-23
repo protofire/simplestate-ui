@@ -15,6 +15,11 @@ interface IFinanctialTracking {
   fundingWithdrawed: number;
 }
 
+interface IProjectToken {
+  symbol: string;
+  name: string;
+}
+
 export interface IProjectMetadata {
   address: string;
   name: string;
@@ -22,6 +27,7 @@ export interface IProjectMetadata {
   state: State;
   targets: IProjectTargets;
   financialTracking: IFinanctialTracking;
+  token?: IProjectToken;
   lastUpdate: number;
   numberOfUpdates: number;
   avgTimeBetweenUpdates: number;
