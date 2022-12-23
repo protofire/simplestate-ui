@@ -243,7 +243,10 @@ export function ProjectDetail({ project }: { project: IProjectMetadata | null })
         <Title color={"teal"} size={24}>
           Detalles
         </Title>
-
+        <Text size={14}>
+          Address:{" "}
+          <strong>{project.address ?? "-"}</strong>
+        </Text>
         <Text size={14}>
           Modelo de valuación (Valuation model):{" "}
           <strong>{project.valuationModel ?? "Por ratio (rate)"}</strong>

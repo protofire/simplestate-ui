@@ -95,6 +95,11 @@ export function AdminProjects() {
 
       <Group style={{ display: selectedProject ? "block" : "none" }} m={"lg"}>
         <Text>
+          {`Address: `}
+          <strong>{selectedProject?.address ?? ' - '}</strong>
+          {/* <strong>{selectedProject?.owner}</strong> */}
+        </Text>
+        <Text>
           {`Dueño del proyecto (owner): `}
           <strong> -</strong>
           {/* <strong>{selectedProject?.owner}</strong> */}
