@@ -45,24 +45,26 @@ export function useApi() {
     for (let i = size - 1; i >= 0; i--) {
       const [projectAddress] = await functions.keys(i);
       const projectContract = initContract(projectAddress, 'project');
-      const [metadata, [state], targets, financialTracking, tokens] = await Promise.all([
+      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs] = await Promise.all([
         projectContract?.functions.metadata(),
         projectContract?.functions.state(),
         projectContract?.functions.targets(),
         projectContract?.functions.financialTracking(),
-        projectContract?.functions.tokens()
+        projectContract?.functions.tokens(),
+        projectContract?.functions.booleanConfigs()
       ]);
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
       const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
 
       const projectMetadata: IProjectMetadata = {
-        ...metadata, 
+        ...metadata,
         address: projectAddress,
         state,
         targets,
         financialTracking,
-        token
+        token,
+        booleanConfigs
       };
       projectList.push(projectMetadata);
     }
@@ -74,7 +76,9 @@ export function useApi() {
     fundingAmount: number,
     fundingTime: number,
     sellAmount: number, 
-    sellTime: number
+    sellTime: number,
+    metadataURL: string,
+    produceIncome: boolean
   ): Promise<Event[] | undefined> => {
     if (!signer) return;
     const signedContract = await factory.sign(signer);
@@ -83,7 +87,9 @@ export function useApi() {
       fundingAmount,
       fundingTime,
       sellAmount,
-      sellTime
+      sellTime,
+      metadataURL,
+      produceIncome
     );
     const recipt = await tx.wait();
     return recipt.events;

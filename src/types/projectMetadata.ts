@@ -20,6 +20,12 @@ export interface IProjectToken {
   name: string;
 }
 
+export interface IBooleanConfigs {
+  produceIncome: boolean;
+  allowPartialSell: boolean;
+  allowWithdrawalOnPartialFunding: boolean;
+}
+
 export interface IProjectMetadata {
   address: string;
   name: string;
@@ -28,6 +34,7 @@ export interface IProjectMetadata {
   targets: IProjectTargets;
   financialTracking: IFinanctialTracking;
   token?: IProjectToken;
+  booleanConfigs: IBooleanConfigs;
   lastUpdate: number;
   numberOfUpdates: number;
   avgTimeBetweenUpdates: number;

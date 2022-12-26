@@ -30,6 +30,16 @@ export default [
 				"internalType": "address",
 				"name": "_ipRegistry",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_offchainLink",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_produceIncome",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -604,6 +614,11 @@ export default [
 		"outputs": [
 			{
 				"internalType": "bool",
+				"name": "produceIncome",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
 				"name": "allowPartialSell",
 				"type": "bool"
 			},
@@ -673,19 +688,6 @@ export default [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_fundingAmountTarget",
-				"type": "uint256"
-			}
-		],
-		"name": "fundingAmountTarget",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1150,19 +1152,6 @@ export default [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_offchainMetadataLink",
-				"type": "string"
-			}
-		],
-		"name": "updateMetadata",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

@@ -25,10 +25,26 @@ export default [
 				"internalType": "uint256",
 				"name": "_sellTimeTarget",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_offChainLink",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_produceIncome",
+				"type": "bool"
 			}
 		],
 		"name": "deployProject",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},

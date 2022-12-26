@@ -105,7 +105,9 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         fundingAmount,
         fundingTime,
         sellAmount,
-        sellTime
+        sellTime,
+        form.values.metadataURL,
+        form.values.produceIncome
       );
 
       showNotification(createProjectSuccess);

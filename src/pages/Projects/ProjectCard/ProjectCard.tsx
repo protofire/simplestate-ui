@@ -58,6 +58,8 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
     sellingTimeTarget 
   } = project.targets;
 
+  console.log(project);
+
   const { fundingRaised } = project.financialTracking;
 
   return (
@@ -77,8 +79,7 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
 
       <Card.Section m={"md"}>
         <Title align="center" order={3}>
-          {/* {project.produceIncome ? "Renta Mensual" : "Renta Final"} */}
-          {false ? "Renta Mensual" : "Renta Final"}
+          {project.booleanConfigs.produceIncome ? "Renta Mensual" : "Renta Final"}
         </Title>
         <Text color={"dimmed"} size={14} align="center">
           {/* {project.produceIncome
@@ -107,7 +108,7 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
               {new Date(sellingTimeTarget * 1000).toLocaleDateString('es-AR')}
             </Text>
             <Text color={"dimmed"} size={12} align="center">
-              {`Tiempo de retorno`}
+              {`Fecha de retorno`}
             </Text>
           </Grid.Col>
         </Grid>
