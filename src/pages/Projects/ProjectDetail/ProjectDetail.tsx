@@ -264,7 +264,7 @@ export function ProjectDetail({ project }: { project: IProjectMetadata | null })
           <strong>{new Date(sellingTimeTarget * 1000).toLocaleDateString('es-AR')}</strong>
         </Text>
         <Text size={14}>
-          Meta de financiamiento:
+          Meta de financiamiento:{" "}
           <strong>{`${fundingAmountTarget} USDC`}</strong>
         </Text>
         <Text size={14}>
