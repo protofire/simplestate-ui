@@ -52,7 +52,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
       owner: '',
       incomeDepositor: '',
       metadataURL: '',
-      permissioningModel: 'blacklist',
+      permissioningModel: 'whitelist',
       maxSupply: '',
       unitOfAccount: 'USDC',
       fundingAmount: '',
@@ -158,7 +158,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         </Input.Wrapper>
 
         <Input.Wrapper className={classes.input} withAsterisk label="Modelo de permisionado">
-          <Select disabled {...form.getInputProps('permissioningModel')} data={[{value: 'blacklist', label: 'by Blacklist provider'}]} />
+          <Select disabled {...form.getInputProps('permissioningModel')} data={[{value: 'whitelist', label: 'by Whitelist provider'}]} />
         </Input.Wrapper>
 
         <Title mt={20} order={4}>Finanzas del proyecto</Title>
