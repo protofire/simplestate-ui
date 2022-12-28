@@ -18,6 +18,7 @@ import { utils } from "ethers";
 import { IconCheck, IconX } from "@tabler/icons";
 import { metamaskErrors } from "../../../../constants/errors";
 import { IProjectMetadata } from "../../../../types/projectMetadata";
+import { buildNotification, NotificationType } from "../../../../constants/notifications";
 
 export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) {
   const { connectDefault, signer, accounts } = useMetamask();
@@ -44,34 +45,18 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
         value: utils.parseUnits(investmentValue.toString(), "ether"),
       });
       await tx.wait();
-      showNotification({
-        id: "success",
-        autoClose: 5000,
-        title: "Inversion realizada",
-        icon:<IconCheck size={18} />,
-        message: (
-          <NotificationMessage
-            investmentValue={investmentValue}
-            projectName={project?.name}
-          />
-        ),
-        color: "teal",
-        radius: "md",
-      });
+
+      const successNotification = buildNotification(
+        NotificationType.INVEST_PROJECT_SUCCESS,
+        { investmentValue, name: project?.name });
+      showNotification(successNotification);
     } catch (err) {
       if (err instanceof Error) {
-
         console.log((err as any).reason);
-
-        showNotification({
-          id: "error",
-          autoClose: 5000,
-          title: "Ocurrió un error",
-          icon:<IconX size={18} />,
-          message: metamaskErrors[(err as any).reason] ?? '',
-          color: "red",
-          radius: "md",
-        });
+        const errorNotification = buildNotification(
+          NotificationType.INVEST_PROJECT_ERROR,
+          { error: err });
+        showNotification(errorNotification);
       }
     } finally {
       setLoading(false);

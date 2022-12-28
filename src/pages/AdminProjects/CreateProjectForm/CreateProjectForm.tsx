@@ -12,9 +12,9 @@ import {
   NumberInput,
   LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { NotificationProps, showNotification } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { createProjectError, createProjectSuccess } from "../../../constants/notifications";
+import { buildNotification, NotificationType } from "../../../constants/notifications";
 import { useApi } from "../../../hooks/useApi";
 import { useMetamask } from "../../../hooks/useMetamask";
 import { addressValidation, positiveIntegerValidation, requiredValidation } from "../../../utils/validations";
@@ -109,13 +109,14 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         form.values.metadataURL,
         form.values.produceIncome
       );
-
-      showNotification(createProjectSuccess);
+      const successNotification = buildNotification(NotificationType.CREATE_PROJECT_SUCCESS);
+      showNotification(successNotification);
       onCreate();
       close();
     } catch(e) {
       console.error(e);
-      showNotification(createProjectError);
+      const errorNotification = buildNotification(NotificationType.CREATE_PROJECT_ERROR);
+      showNotification(errorNotification);
     } finally {
       setLoading(false);
     }
