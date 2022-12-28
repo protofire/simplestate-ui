@@ -2,14 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useContract } from "./useContract";
 import { IProjectMetadata, IProjectToken } from "../types/projectMetadata";
 import { useMetamask } from "./useMetamask";
-import { Contract, ContractTransaction, Event } from "ethers";
+import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
 
 export function useApi() {
   const registry = useContract('registry');
   const factory = useContract('factory');
-  const { signer, connect } = useMetamask();
+  const underlyingToken = useContract('underlyingToken');
 
+  const { signer, connect } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
   const [registryReady, setRegistryReady] = useState(false);
 
@@ -95,6 +96,17 @@ export function useApi() {
     return recipt.events;
   }, [factory.contract, signer]);
 
+  const investInProject = useCallback(async (ipAddress: string, amount: number) => {
+    if (!signer) return;
+    const signedContract = await underlyingToken.sign(signer);
+    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, amount);
+    const recipt = await approveTx.wait();
 
-  return { fetchProjects, createProject, factoryReady, registryReady }
+    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const investTx: ContractTransaction = await ipContract?.functions.invest(amount);
+    const reciptInvest = await investTx.wait();
+  }, [underlyingToken.contract, signer]);
+
+
+  return { fetchProjects, createProject, factoryReady, registryReady, investInProject }
 }

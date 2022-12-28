@@ -10,19 +10,15 @@ import {
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
-import { useContract } from "../../../../hooks/useContract";
 import { useMetamask } from "../../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
-import { NotificationMessage } from "../../../../components/Notification/NotificationMessage";
-import { utils } from "ethers";
-import { IconCheck, IconX } from "@tabler/icons";
-import { metamaskErrors } from "../../../../constants/errors";
 import { IProjectMetadata } from "../../../../types/projectMetadata";
 import { buildNotification, NotificationType } from "../../../../constants/notifications";
+import { useApi } from "../../../../hooks/useApi";
 
 export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) {
   const { connectDefault, signer, accounts } = useMetamask();
-  const { sign } = useContract('registry');
+  const { investInProject } = useApi();
 
   const [investmentValue, setInvestmentValue] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,24 +36,17 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
     setLoading(true);
 
     try {
-      const signedContract = await sign(signer);
-      const tx = await signedContract?.functions.invest(project?.address, {
-        value: utils.parseUnits(investmentValue.toString(), "ether"),
-      });
-      await tx.wait();
-
+      await investInProject(project.address, investmentValue);
       const successNotification = buildNotification(
         NotificationType.INVEST_PROJECT_SUCCESS,
         { investmentValue, name: project?.name });
       showNotification(successNotification);
     } catch (err) {
-      if (err instanceof Error) {
-        console.log((err as any).reason);
-        const errorNotification = buildNotification(
-          NotificationType.INVEST_PROJECT_ERROR,
-          { error: err });
-        showNotification(errorNotification);
-      }
+      console.error(err);
+      const errorNotification = buildNotification(
+        NotificationType.INVEST_PROJECT_ERROR,
+        { error: err });
+      showNotification(errorNotification);
     } finally {
       setLoading(false);
     }

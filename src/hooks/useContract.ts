@@ -15,9 +15,11 @@ export function useContract(contractType: ContractType) {
     });
   }, []);
 
-  const initContract = (address: string, contractType: ContractType) => {
+  const initContract = (address: string, contractType: ContractType, signer?: JsonRpcSigner) => {
     const { abi } = getContractMetadata(contractType);
-    return new ethers.Contract(address, abi, provider);
+    const initializedContract = new ethers.Contract(address, abi, provider);
+    if (signer) return initializedContract.connect(signer);
+    return initializedContract;
   }
 
   const sign = useCallback(async (signer: JsonRpcSigner) => {
