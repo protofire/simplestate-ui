@@ -53,12 +53,9 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
 
   const { 
     fundingAmountTarget,
-    fundingTimeTarget,
     sellingAmountTarget,
     sellingTimeTarget 
   } = project.targets;
-
-  console.log(project);
 
   const { fundingRaised } = project.financialTracking;
 
