@@ -68,7 +68,7 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
             Modelo de ratio
           </Text>
           <Text size={18} align="center">
-            <strong>Lineal</strong>
+            <strong>Manual</strong>
           </Text>
         </Grid.Col>
         <Grid.Col span={6}>
