@@ -1,4 +1,5 @@
 import { State } from "../constants/projectState";
+import { IProjectToken } from "./token";
 
 interface IProjectTargets {
   fundingAmountTarget: number;
@@ -13,11 +14,6 @@ interface IFinanctialTracking {
   cumulativeRedeemableAmount: number;
   accruedFees: number;
   fundingWithdrawed: number;
-}
-
-export interface IProjectToken {
-  symbol: string;
-  name: string;
 }
 
 export interface IBooleanConfigs {

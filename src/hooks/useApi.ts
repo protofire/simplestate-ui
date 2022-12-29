@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { useContract } from "./useContract";
-import { IProjectMetadata, IProjectToken } from "../types/projectMetadata";
+import { IProjectMetadata } from "../types/projectMetadata";
 import { useMetamask } from "./useMetamask";
 import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
+import { Investment } from "../types/investment";
+import { IProjectToken } from "../types/token";
 
 export function useApi() {
   const registry = useContract('registry');
   const factory = useContract('factory');
   const underlyingToken = useContract('underlyingToken');
 
-  const { signer, connect } = useMetamask();
+  const { signer, connect, accounts } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
   const [registryReady, setRegistryReady] = useState(false);
 
@@ -32,7 +34,13 @@ export function useApi() {
       token.functions.symbol(),
       token.functions.name()
     ]);
-    return { symbol, name };
+    return { symbol, name, address };
+  }
+
+  const fetchTokenBalance = async (token: string, account: string) => {
+    const contract = registry.initContract(token, 'ipToken');
+    const [balance] = await contract.functions.balanceOf(account);
+    return balance;
   }
 
   const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
@@ -108,5 +116,23 @@ export function useApi() {
   }, [underlyingToken.contract, signer]);
 
 
-  return { fetchProjects, createProject, factoryReady, registryReady, investInProject }
+  const getInvestments = useCallback(async (): Promise<Investment[] | null> => {
+    if (!accounts[0]) return null;
+    const projects = await fetchProjects();
+    const tokenizedProjects = projects.filter(p => !!p.token);
+    const tokens = tokenizedProjects.map(p => p.token!);
+
+    const queries = tokens.map(t => fetchTokenBalance(t.address, accounts[0]))
+    const balances = await Promise.all(queries);
+
+    const investments = tokens.map((t, i) => ({
+      project: tokenizedProjects[i],
+      token: t,
+      balance: Number(balances[i])
+    }));
+    
+    return investments.filter((i) => i.balance !== 0);
+  }, [fetchProjects, accounts]);
+
+  return { fetchProjects, createProject, factoryReady, registryReady, investInProject, getInvestments }
 }

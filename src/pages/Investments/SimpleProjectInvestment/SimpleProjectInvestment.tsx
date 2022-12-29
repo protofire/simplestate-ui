@@ -10,58 +10,83 @@ import {
   Flex,
   Badge,
   Modal,
+  Center,
+  Loader,
 } from "@mantine/core";
-import { colorsByState, projectStateLabels } from "../../../constants/projectState";
-import { mockProjects } from "../../../mock/projects";
-import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
+import { colorsByState, projectStateLabels, State } from "../../../constants/projectState";
 import SSToken from "../../../assets/SSToken.svg";
 import { IconInfoCircle } from "@tabler/icons";
-import { IProject } from "../../../types/project";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useApi } from "../../../hooks/useApi";
+import { Investment } from "../../../types/investment";
+import { IProjectMetadata } from "../../../types/projectMetadata";
+import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
 
 export function SimpleProjectInvestment() {
+  const { getInvestments } = useApi();
 
   const [modalState, setModalState] = useState<{
     open: boolean;
-    project: IProject | null;
+    project: IProjectMetadata | null;
   }>({ open: false, project: null });
 
-  const rows = mockProjects.map((project) => (
-    <tr key={project.name}>
-      <td>{project.name}</td>
+  const [investments, setInvestments] = useState<Investment[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    getInvestments().then((investments) => {
+      if (investments) {
+        setInvestments(investments);
+        setLoading(false);
+      }
+    });
+  }, [getInvestments]);
+
+  if (loading) {
+    return (
+      <Center m={"xl"}>
+        <Loader color="teal" size="lg" variant="bars" />
+      </Center>
+    );
+  }
+
+  const rows = investments.map((investment) => (
+    <tr key={investment.project.name}>
+      <td>{investment.project.name}</td>
       <td>
-        <Badge color={colorsByState[project.state]} radius="lg" variant="dot">
-          {/* {projectStateLabels[project.state]} */}
+        <Badge color={colorsByState[investment.project.state]} radius="lg" variant="dot">
+          {projectStateLabels[investment.project.state]}
         </Badge>
       </td>
       <td>
-        <img src={SSToken} width={26} /> {`SIP${project.id}`}
+        <img src={SSToken} width={26} /> {investment.token.symbol}
       </td>
       <td>
         <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-          <Tooltip label="1 SIP8 = 2.63 USDC" withArrow>
+          <Tooltip label="-" withArrow>
             <Group>
               <Text color="violet.9">
-                <strong>2112</strong>
+                <strong>{investment.balance}</strong>
               </Text>
               <IconInfoCircle size={20} />
             </Group>
           </Tooltip>
           <Text align="center">
-            (<strong>4622</strong> USDC)
+            (<strong>-</strong> USDC)
           </Text>
         </Flex>
       </td>
       <td>
         <Group position="right">
           <Text align="center" color="gray">
-            {project.state !== "funded" && !(project.id === 16) ? (
+            {investment.project.state !== State.Funded ? (
               <span>
                 <strong>0</strong> USDC
               </span>
             ) : (
               <Text color="green">
-                <strong>216</strong> USDC
+                <strong>-</strong> USDC
               </Text>
             )}
           </Text>
@@ -71,7 +96,7 @@ export function SimpleProjectInvestment() {
               color={"teal"}
               radius={"lg"}
               compact
-              disabled={project.state !== "funded" && !(project.id === 16)}
+              disabled={investment.project.state !== State.Funded}
             >
               Retirar
             </Button>
@@ -79,17 +104,17 @@ export function SimpleProjectInvestment() {
         </Group>
       </td>
       <td>
-        {project.state !== "finished" ? (
+        {investment.project.state < State.Finalized ? (
           <Tooltip label="Depositar fondos" withArrow>
             <Button
               size="xs"
               color={"teal"}
               radius={"lg"}
               variant="light"
-              onClick={() => setModalState({ open: true, project })}
-              disabled={project.state !== "initialized"}
+              onClick={() => setModalState({ open: true, project: investment.project })}
+              disabled={investment.project.state !== State.Initialized}
             >
-              Depositar
+              Invertir
             </Button>
           </Tooltip>
         ) : (
@@ -99,8 +124,8 @@ export function SimpleProjectInvestment() {
               color={"blue"}
               radius={"lg"}
               variant="light"
-              onClick={() => setModalState({ open: true, project })}
-              disabled={project.redeemableAmount === 0}
+              onClick={() => setModalState({ open: true, project: investment.project })}
+              disabled={investment.project.state !== State.Redeemable}
             >
               Redimir
             </Button>
@@ -139,7 +164,7 @@ export function SimpleProjectInvestment() {
         title="Depositar fondos"
         size={"xl"}
       >
-        {/* <ProjectDetail project={modalState.project} /> */}
+        <ProjectDetail project={modalState.project} />
       </Modal>
     </>
   );
