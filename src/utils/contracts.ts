@@ -5,6 +5,7 @@ import registryAbi from '../abi/registry-abi';
 import projectAbi from '../abi/project-abi';
 import ipTokenAbi from '../abi/ipToken-abi';
 import erc20Abi from '../abi/erc20-abi';
+import rateModelAbi from '../abi/rateModel-abi';
 
 interface IContractMetadata {
 	address: string;
@@ -31,6 +32,10 @@ const contractMetadata: Record<string, IContractMetadata> = {
 	underlyingToken: {
 		address: import.meta.env.VITE_UNDERLYING_TOKEN_ADDRESS,
 		abi: erc20Abi
+	},
+	rateModel: {
+		address: '',
+		abi: rateModelAbi
 	},
 }
 

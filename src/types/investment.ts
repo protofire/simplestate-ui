@@ -5,4 +5,5 @@ export interface Investment {
   project: IProjectMetadata;
   token: IProjectToken;
   balance: number;
+  rate: number;
 }

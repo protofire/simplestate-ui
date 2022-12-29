@@ -43,6 +43,12 @@ export function useApi() {
     return balance;
   }
 
+  const fetchProjectRate = async (projectAddress: string, rateModelAddress: string) => {
+    const contract = registry.initContract(rateModelAddress, 'rateModel');
+    const [rate] = await contract.functions.getRate(projectAddress);
+    return rate;
+  }
+
   const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
     if (!registry.contract) return [];
 
@@ -52,15 +58,16 @@ export function useApi() {
     const projectList: IProjectMetadata[] = [];
     const size = await functions.getNumberOfProjects();
     for (let i = size - 1; i >= 0; i--) {
-      const [projectAddress] = await functions.keys(i);
-      const projectContract = initContract(projectAddress, 'project');
-      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs] = await Promise.all([
+      const [address] = await functions.keys(i);
+      const projectContract = initContract(address, 'project');
+      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs, modules] = await Promise.all([
         projectContract?.functions.metadata(),
         projectContract?.functions.state(),
         projectContract?.functions.targets(),
         projectContract?.functions.financialTracking(),
         projectContract?.functions.tokens(),
-        projectContract?.functions.booleanConfigs()
+        projectContract?.functions.booleanConfigs(),
+        projectContract?.functions.modules()
       ]);
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
@@ -68,12 +75,13 @@ export function useApi() {
 
       const projectMetadata: IProjectMetadata = {
         ...metadata,
-        address: projectAddress,
+        address,
         state,
         targets,
         financialTracking,
         token,
-        booleanConfigs
+        booleanConfigs,
+        modules
       };
       projectList.push(projectMetadata);
     }
@@ -121,14 +129,18 @@ export function useApi() {
     const projects = await fetchProjects();
     const tokenizedProjects = projects.filter(p => !!p.token);
     const tokens = tokenizedProjects.map(p => p.token!);
+    const projectRates = tokenizedProjects.map(p => ({ address: p.address, rate: p.modules.rateModel }));
 
-    const queries = tokens.map(t => fetchTokenBalance(t.address, accounts[0]))
-    const balances = await Promise.all(queries);
+    const balanceQueries = tokens.map(t => fetchTokenBalance(t.address, accounts[0]));
+    const rateQueries = projectRates.map(p => fetchProjectRate(p.address, p.rate));
+    const balances = await Promise.all(balanceQueries);
+    const rates = await Promise.all(rateQueries);
 
     const investments = tokens.map((t, i) => ({
       project: tokenizedProjects[i],
       token: t,
-      balance: Number(balances[i])
+      balance: Number(balances[i]),
+      rate: Number(rates[i])
     }));
     
     return investments.filter((i) => i.balance !== 0);

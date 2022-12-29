@@ -64,7 +64,7 @@ export function SimpleProjectInvestment() {
       </td>
       <td>
         <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-          <Tooltip label="-" withArrow>
+          <Tooltip label={`rate: ${investment.rate}`} withArrow>
             <Group>
               <Text color="violet.9">
                 <strong>{investment.balance}</strong>
@@ -73,7 +73,7 @@ export function SimpleProjectInvestment() {
             </Group>
           </Tooltip>
           <Text align="center">
-            (<strong>-</strong> USDC)
+            (<strong>{investment.balance / investment.rate}</strong> USDC)
           </Text>
         </Flex>
       </td>

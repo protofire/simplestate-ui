@@ -22,6 +22,12 @@ export interface IBooleanConfigs {
   allowWithdrawalOnPartialFunding: boolean;
 }
 
+export interface IProjectModules {
+  rateModel: string;
+  permissioningModel: string;
+  feeModel: string;
+}
+
 export interface IProjectMetadata {
   address: string;
   name: string;
@@ -31,6 +37,7 @@ export interface IProjectMetadata {
   financialTracking: IFinanctialTracking;
   token?: IProjectToken;
   booleanConfigs: IBooleanConfigs;
+  modules: IProjectModules;
   lastUpdate: number;
   numberOfUpdates: number;
   avgTimeBetweenUpdates: number;
