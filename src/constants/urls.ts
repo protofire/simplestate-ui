@@ -1,0 +1,1 @@
+export const simpleTokenImgURL = 'https://i.ibb.co/54ZpYn6/SSToken.png';

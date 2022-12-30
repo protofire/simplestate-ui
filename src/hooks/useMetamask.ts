@@ -5,6 +5,7 @@ import {
 } from '@ethersproject/providers';
 import { useState } from 'react';
 import { networks } from '../constants/networks';
+import { simpleTokenImgURL } from '../constants/urls';
 
 declare global {
   interface Window {
@@ -72,6 +73,26 @@ function useMetamask() {
     }
   }
 
+  const addToken = async (address: string, symbol: string) => {
+    const tokenDecimals = 6;
+    try {
+      const wasAdded = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address,
+            symbol,
+            decimals: tokenDecimals,
+            image: simpleTokenImgURL,
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   return { 
     signer,
@@ -80,7 +101,8 @@ function useMetamask() {
     connect,
     connectDefault,
     getAccounts,
-    sitchChainTo
+    sitchChainTo,
+    addToken
   }
 }
 

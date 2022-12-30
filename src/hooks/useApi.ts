@@ -14,7 +14,7 @@ export function useApi() {
   const factory = useContract('factory');
   const underlyingToken = useContract('underlyingToken');
 
-  const { signer, connect, accounts } = useMetamask();
+  const { signer, connect, accounts, addToken } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
   const [registryReady, setRegistryReady] = useState(false);
 
@@ -128,7 +128,7 @@ export function useApi() {
     return recipt.events;
   }, [factory.contract, signer]);
 
-  const investInProject = useCallback(async (ipAddress: string, amount: number) => {
+  const investInProject = useCallback(async (ipAddress: string, amount: number, token: IProjectToken) => {
     if (!signer) return;
     const parsedAmount = toDecimals(amount);
     const signedContract = await underlyingToken.sign(signer);
@@ -138,6 +138,8 @@ export function useApi() {
     const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
     const investTx: ContractTransaction = await ipContract?.functions.invest(parsedAmount);
     await investTx.wait();
+
+    addToken(token.address, token.symbol)
   }, [underlyingToken.contract, signer]);
 
 
