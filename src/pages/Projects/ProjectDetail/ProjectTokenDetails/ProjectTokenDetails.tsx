@@ -1,4 +1,3 @@
-
 import {
   Text,
   Group,
@@ -13,10 +12,18 @@ import { useEffect, useState } from "react";
 import { useMetamask } from "../../../../hooks/useMetamask";
 import { showNotification } from "@mantine/notifications";
 import { IProjectMetadata } from "../../../../types/projectMetadata";
-import { buildNotification, NotificationType } from "../../../../constants/notifications";
+import {
+  buildNotification,
+  NotificationType,
+} from "../../../../constants/notifications";
 import { useApi } from "../../../../hooks/useApi";
+import { State } from "../../../../constants/projectState";
 
-export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) {
+export function ProjectTokenDetails({
+  project,
+}: {
+  project: IProjectMetadata;
+}) {
   const { connectDefault, signer, accounts } = useMetamask();
   const { investInProject } = useApi();
 
@@ -40,13 +47,15 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
       await investInProject(project.address, investmentValue, project.token);
       const successNotification = buildNotification(
         NotificationType.INVEST_PROJECT_SUCCESS,
-        { investmentValue, name: project?.name });
+        { investmentValue, name: project?.name }
+      );
       showNotification(successNotification);
     } catch (err) {
       console.error(err);
       const errorNotification = buildNotification(
         NotificationType.INVEST_PROJECT_ERROR,
-        { error: err });
+        { error: err }
+      );
       showNotification(errorNotification);
     } finally {
       setLoading(false);
@@ -55,13 +64,13 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
 
   return (
     <>
-      <Grid bg={"gray.1"} p="md">
+      <Grid bg={"gray.1"} p="md" align="center">
         <Grid.Col span={3}>
           <Text color={"dimmed"} size={13} align="center">
             TOKEN
           </Text>
           <Text size={18} align="center">
-            <strong>{project.token ? project.token.symbol : ' - '}</strong>
+            <strong>{project.token ? project.token.symbol : " - "}</strong>
           </Text>
         </Grid.Col>
         <Grid.Col span={3}>
@@ -80,7 +89,7 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
                   placeholder="500 USDC"
                   type={"number"}
                   onChange={(e) => setInvestmentValue(Number(e.target.value))}
-                  disabled={loading}
+                  disabled={loading || project.state !== State.Initialized}
                   error={error}
                 />
                 <Button
@@ -89,11 +98,20 @@ export function ProjectTokenDetails({ project }: { project: IProjectMetadata }) 
                   radius={"lg"}
                   m="md"
                   onClick={invest}
-                  disabled={loading}
+                  disabled={loading || project.state !== State.Initialized}
                   leftIcon={loading && <Loader size={14} />}
                 >
                   Invertir
                 </Button>
+              </Group>
+              <Group>
+                {project.state !== State.Initialized ? (
+                  <Text size={"xs"} color="blue">
+                    Solo se permiten inversiones en proyectos inicializados.
+                  </Text>
+                ) : (
+                  <></>
+                )}
               </Group>
             </Input.Wrapper>
           </form>

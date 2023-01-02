@@ -10,7 +10,9 @@ export enum NotificationType {
   INVEST_PROJECT_SUCCESS,
   INVEST_PROJECT_ERROR,
   WITHDRAW_FUNDS_SUCCESS,
-  WITHDRAW_FUNDS_ERROR
+  WITHDRAW_FUNDS_ERROR,
+  DEPOSIT_REVENUE_SUCCESS,
+  DEPOSIT_REVENUE_ERROR
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -81,6 +83,29 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando retirar los fondos',
+        color: "red",
+        radius: "md",
+      }
+    }
+
+    case NotificationType.DEPOSIT_REVENUE_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 5000,
+        title: "Depósito exitoso",
+        icon: <IconCheck size={18} />,
+        message: 'Ganancia de venta depositada con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.DEPOSIT_REVENUE_ERROR: {
+      return {
+        id: "error",
+        autoClose: 5000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando depositar la ganancia',
         color: "red",
         radius: "md",
       }

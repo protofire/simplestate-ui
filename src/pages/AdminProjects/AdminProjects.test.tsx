@@ -2,6 +2,7 @@ import '@testing-library/react'
 import { render, screen } from '@testing-library/react';
 import { AdminProjects } from './AdminProjects';
 import { mockProjects } from '../../mock/projects';
+import React from 'react';
 
 jest.mock('../../hooks/useContract', () => {
   return {

@@ -30,7 +30,7 @@ const useStyles = createStyles(() => ({
 }));
 
 export function AdminProjects() {
-  const { fetchProjects, withdrawFunds } = useApi();
+  const { fetchProjects, withdrawFunds, depositSellingAmount } = useApi();
 
   const { classes } = useStyles();
 
@@ -41,7 +41,10 @@ export function AdminProjects() {
   const [selectedProject, setSelectedProject] = useState<IProjectMetadata>();
 
   const [amountToWithdraw, setAmountToWithdraw] = useState<number>();
-  const [loadingWithdraw, setLoadingWithdraw] = useState(false)
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false);
+
+  const [amountToDeposit, setAmountToDeposit] = useState<number>();
+  const [loadingDeposit, setLoadingDeposit] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -70,6 +73,22 @@ export function AdminProjects() {
       showNotification(errorNotification);
     } finally {
       setLoadingWithdraw(false); 
+    }
+  }
+
+  const deposit = async () => {
+    if (!selectedProject || !amountToDeposit) return;
+    try {
+      setLoadingDeposit(true);
+      await depositSellingAmount(selectedProject.address, amountToDeposit);
+      const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
+      showNotification(successNotification);
+    } catch(err) {
+      console.log(err);
+      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR);
+      showNotification(errorNotification);
+    } finally {
+      setLoadingDeposit(false); 
     }
   }
 
@@ -172,7 +191,7 @@ export function AdminProjects() {
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
-              onChange={(e) => setAmountToWithdraw(Number(e.target.value))}
+              onChange={(e: any) => setAmountToWithdraw(Number(e.target.value))}
             />
             <Button
               color={"teal"}
@@ -186,7 +205,7 @@ export function AdminProjects() {
           </SimpleGrid>
         </Input.Wrapper>
 
-        <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
+        {/* <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
           <SimpleGrid cols={2}>
             <Input
               icon={<IconArrowUp />}
@@ -206,7 +225,7 @@ export function AdminProjects() {
               Depositar Renta
             </Button>
           </SimpleGrid>
-        </Input.Wrapper>
+        </Input.Wrapper> */}
 
         <Input.Wrapper id="distribute-sell" label="Depositar venta (USDC)">
           <SimpleGrid cols={2}>
@@ -216,14 +235,15 @@ export function AdminProjects() {
               placeholder="Valor venta (USDC)"
               type={"number"}
               width={400}
-              disabled={!enableDepositSell}
+              disabled={!enableDepositSell || loadingDeposit}
+              onChange={(e: any) => setAmountToDeposit(Number(e.target.value))}
             />
             <Button
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
-              onClick={() => {}}
-              disabled={!enableDepositSell}
+              onClick={deposit}
+              disabled={!enableDepositSell || loadingDeposit}
             >
               Depositar Venta
             </Button>
