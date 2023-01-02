@@ -191,7 +191,7 @@ export function AdminProjects() {
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
-              onChange={(e) => setAmountToWithdraw(Number(e.target.value))}
+              onChange={(e: any) => setAmountToWithdraw(Number(e.target.value))}
             />
             <Button
               color={"teal"}
@@ -236,7 +236,7 @@ export function AdminProjects() {
               type={"number"}
               width={400}
               disabled={!enableDepositSell || loadingDeposit}
-              onChange={(e) => setAmountToDeposit(Number(e.target.value))}
+              onChange={(e: any) => setAmountToDeposit(Number(e.target.value))}
             />
             <Button
               color={"teal"}
