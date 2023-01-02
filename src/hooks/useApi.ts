@@ -165,5 +165,21 @@ export function useApi() {
     return investments.filter((i) => i.balance !== 0);
   }, [fetchProjects, accounts]);
 
-  return { fetchProjects, createProject, factoryReady, registryReady, investInProject, getInvestments }
+  const withdrawFunds = useCallback(async (ipAddress: string, amount: number) => {
+    if (!signer) return;
+    const parsedAmount = toDecimals(amount);
+    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const withdrawTx: ContractTransaction = await ipContract?.functions.wthdrawFundingCapital(parsedAmount);
+    await withdrawTx.wait();
+  }, [signer]);
+
+  return {
+    fetchProjects,
+    createProject,
+    factoryReady,
+    registryReady,
+    investInProject,
+    getInvestments,
+    withdrawFunds
+  }
 }

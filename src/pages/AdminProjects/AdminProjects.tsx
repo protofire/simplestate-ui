@@ -16,11 +16,12 @@ import {
 import { IconArrowDown, IconArrowUp, IconBuilding } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { State, projectStateLabels } from "../../constants/projectState";
-import { IProject } from "../../types/project";
 import * as Utils from "../../utils/utilities";
 import { CreateProjectForm } from "./CreateProjectForm/CreateProjectForm";
 import { useApi } from "../../hooks/useApi";
 import { IProjectMetadata } from "../../types/projectMetadata";
+import { buildNotification, NotificationType } from "../../constants/notifications";
+import { showNotification } from "@mantine/notifications";
 
 const useStyles = createStyles(() => ({
   group: {
@@ -29,7 +30,7 @@ const useStyles = createStyles(() => ({
 }));
 
 export function AdminProjects() {
-  const { fetchProjects, registryReady } = useApi();
+  const { fetchProjects, withdrawFunds } = useApi();
 
   const { classes } = useStyles();
 
@@ -38,6 +39,9 @@ export function AdminProjects() {
   const [loading, setLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
   const [selectedProject, setSelectedProject] = useState<IProjectMetadata>();
+
+  const [amountToWithdraw, setAmountToWithdraw] = useState<number>();
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false)
 
   useEffect(() => {
     setLoading(true);
@@ -52,6 +56,22 @@ export function AdminProjects() {
     if (!project) return;
     setSelectedProject(project);
   };
+
+  const withdwaw = async () => {
+    if (!selectedProject || !amountToWithdraw) return;
+    try {
+      setLoadingWithdraw(true);
+      await withdrawFunds(selectedProject.address, amountToWithdraw);
+      const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
+      showNotification(successNotification);
+    } catch(err) {
+      console.log(err);
+      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR);
+      showNotification(errorNotification);
+    } finally {
+      setLoadingWithdraw(false); 
+    }
+  }
 
   const enabledDepositRent = selectedProject?.state === State.Funded;
   const enableDepositSell = selectedProject?.state === State.Funded;
@@ -141,7 +161,7 @@ export function AdminProjects() {
         <Divider m={20} />
 
         <Group m={"md"}>
-          <Badge color={"teal"}>{`Depósito acumulado: ${0} USDC`}</Badge>
+          <Badge color={"teal"}>{`Depósito acumulado: ${selectedProject?.financialTracking.fundingRaised} USDC`}</Badge>
         </Group>
 
         <Input.Wrapper id="withdraw" label="Retirar Inversión">
@@ -152,12 +172,14 @@ export function AdminProjects() {
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
+              onChange={(e) => setAmountToWithdraw(Number(e.target.value))}
             />
             <Button
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
-              onClick={() => {}}
+              onClick={withdwaw}
+              disabled={loadingWithdraw}
             >
               Retirar Inversión
             </Button>

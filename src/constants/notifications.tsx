@@ -8,7 +8,9 @@ export enum NotificationType {
   CREATE_PROJECT_SUCCESS,
   CREATE_PROJECT_ERROR,
   INVEST_PROJECT_SUCCESS,
-  INVEST_PROJECT_ERROR
+  INVEST_PROJECT_ERROR,
+  WITHDRAW_FUNDS_SUCCESS,
+  WITHDRAW_FUNDS_ERROR
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -20,7 +22,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         autoClose: 5000,
         title: "Proyecto creado",
         message: 'El proyecto fue creado exitosamente',
-        color: 'green',
+        color: 'teal',
         radius: 'md'
       };
     }
@@ -57,6 +59,28 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.reason] ?? '',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_FUNDS_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 5000,
+        title: "Fondos retirados",
+        icon: <IconCheck size={18} />,
+        message: 'Fondos retirados con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_FUNDS_ERROR: {
+      return {
+        id: "error",
+        autoClose: 5000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando retirar los fondos',
         color: "red",
         radius: "md",
       }
