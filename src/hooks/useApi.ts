@@ -173,6 +173,14 @@ export function useApi() {
     await withdrawTx.wait();
   }, [signer]);
 
+  const depositSellingAmount = useCallback(async (ipAddress: string, amount: number) => {
+    if (!signer) return;
+    const parsedAmount = toDecimals(amount);
+    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const withdrawTx: ContractTransaction = await ipContract?.functions.depositSellingRevenue(parsedAmount);
+    await withdrawTx.wait();
+  }, [signer]);
+
   return {
     fetchProjects,
     createProject,
@@ -180,6 +188,7 @@ export function useApi() {
     registryReady,
     investInProject,
     getInvestments,
-    withdrawFunds
+    withdrawFunds,
+    depositSellingAmount
   }
 }

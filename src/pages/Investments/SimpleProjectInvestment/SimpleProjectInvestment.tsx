@@ -84,7 +84,7 @@ export function SimpleProjectInvestment() {
             </Text>
           </Flex>
         </td>
-        <td>
+        {/* <td>
           <Group position="right">
             <Text align="center" color="gray">
               {investment.project.state !== State.Funded ? (
@@ -109,7 +109,7 @@ export function SimpleProjectInvestment() {
               </Button>
             </Tooltip>
           </Group>
-        </td>
+        </td> */}
         <td>
           {investment.project.state < State.Finalized ? (
             <Tooltip label="Depositar fondos" withArrow>
@@ -159,7 +159,7 @@ export function SimpleProjectInvestment() {
             <th>Estado</th>
             <th>Token</th>
             <th>Balance</th>
-            <th>Renta disponible</th>
+            {/* <th>Renta disponible</th> */}
             <th>Acciones</th>
           </tr>
         </thead>
