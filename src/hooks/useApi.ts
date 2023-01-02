@@ -6,13 +6,15 @@ import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
 import { Investment } from "../types/investment";
 import { IProjectToken } from "../types/token";
+import { IFinanctialTracking, IProjectTargets } from "../types/projectMetadata";
+import { fromDecimals, toDecimals } from "../utils/utilities";
 
 export function useApi() {
   const registry = useContract('registry');
   const factory = useContract('factory');
   const underlyingToken = useContract('underlyingToken');
 
-  const { signer, connect, accounts } = useMetamask();
+  const { signer, connect, accounts, addToken } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
   const [registryReady, setRegistryReady] = useState(false);
 
@@ -73,12 +75,26 @@ export function useApi() {
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
       const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
 
+      const targetsParsed: IProjectTargets = {
+        fundingAmountTarget: fromDecimals(targets.fundingAmountTarget),
+        fundingTimeTarget: targets.fundingTimeTarget,
+        sellingAmountTarget: fromDecimals(targets.sellingAmountTarget),
+        sellingTimeTarget: targets.sellingTimeTarget,
+      }
+      const financtualTrackingParsed: IFinanctialTracking = {
+        accruedFees: fromDecimals(financialTracking.accruedFees),
+        cumulativeRedeemableAmount: fromDecimals(financialTracking.cumulativeRedeemableAmount),
+        fundingRaised: fromDecimals(financialTracking.fundingRaised),
+        fundingWithdrawed: fromDecimals(financialTracking.fundingWithdrawed),
+        redeemableAmount: fromDecimals(financialTracking.redeemableAmount),
+      }
+
       const projectMetadata: IProjectMetadata = {
         ...metadata,
         address,
         state,
-        targets,
-        financialTracking,
+        targets: targetsParsed,
+        financialTracking: financtualTrackingParsed,
         token,
         booleanConfigs,
         modules
@@ -101,9 +117,9 @@ export function useApi() {
     const signedContract = await factory.sign(signer);
     const tx: ContractTransaction = await signedContract?.functions.deployProject(
       name,
-      fundingAmount,
+      toDecimals(fundingAmount),
       fundingTime,
-      sellAmount,
+      toDecimals(sellAmount),
       sellTime,
       metadataURL,
       produceIncome
@@ -112,15 +128,18 @@ export function useApi() {
     return recipt.events;
   }, [factory.contract, signer]);
 
-  const investInProject = useCallback(async (ipAddress: string, amount: number) => {
+  const investInProject = useCallback(async (ipAddress: string, amount: number, token: IProjectToken) => {
     if (!signer) return;
+    const parsedAmount = toDecimals(amount);
     const signedContract = await underlyingToken.sign(signer);
-    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, amount);
-    const recipt = await approveTx.wait();
+    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, parsedAmount);
+    await approveTx.wait();
 
     const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
-    const investTx: ContractTransaction = await ipContract?.functions.invest(amount);
-    const reciptInvest = await investTx.wait();
+    const investTx: ContractTransaction = await ipContract?.functions.invest(parsedAmount);
+    await investTx.wait();
+
+    addToken(token.address, token.symbol)
   }, [underlyingToken.contract, signer]);
 
 
@@ -139,12 +158,28 @@ export function useApi() {
     const investments = tokens.map((t, i) => ({
       project: tokenizedProjects[i],
       token: t,
-      balance: Number(balances[i]),
+      balance: fromDecimals(Number(balances[i])),
       rate: Number(rates[i])
     }));
     
     return investments.filter((i) => i.balance !== 0);
   }, [fetchProjects, accounts]);
 
-  return { fetchProjects, createProject, factoryReady, registryReady, investInProject, getInvestments }
+  const withdrawFunds = useCallback(async (ipAddress: string, amount: number) => {
+    if (!signer) return;
+    const parsedAmount = toDecimals(amount);
+    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const withdrawTx: ContractTransaction = await ipContract?.functions.wthdrawFundingCapital(parsedAmount);
+    await withdrawTx.wait();
+  }, [signer]);
+
+  return {
+    fetchProjects,
+    createProject,
+    factoryReady,
+    registryReady,
+    investInProject,
+    getInvestments,
+    withdrawFunds
+  }
 }

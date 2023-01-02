@@ -1,14 +1,14 @@
 import { State } from "../constants/projectState";
 import { IProjectToken } from "./token";
 
-interface IProjectTargets {
+export interface IProjectTargets {
   fundingAmountTarget: number;
   fundingTimeTarget: number;
   sellingAmountTarget: number;
   sellingTimeTarget: number;
 }
 
-interface IFinanctialTracking {
+export interface IFinanctialTracking {
   fundingRaised: number;
   redeemableAmount: number;
   cumulativeRedeemableAmount: number;

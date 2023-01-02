@@ -40,11 +40,12 @@ export function ProjectTokenDetails({
     if (!investmentValue) return setError("Please set an investment value");
     if (!signer || accounts.length === 0)
       return setError("Please connect your wallet");
+    if (!project.token) return setError('Token not found');
     setError("");
     setLoading(true);
 
     try {
-      await investInProject(project.address, investmentValue);
+      await investInProject(project.address, investmentValue, project.token);
       const successNotification = buildNotification(
         NotificationType.INVEST_PROJECT_SUCCESS,
         { investmentValue, name: project?.name }
