@@ -6,7 +6,6 @@ import {
   Input,
   TextInput,
   Loader,
-  Tooltip,
 } from "@mantine/core";
 
 import { useEffect, useState } from "react";
