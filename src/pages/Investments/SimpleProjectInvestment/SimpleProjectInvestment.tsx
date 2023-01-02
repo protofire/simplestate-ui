@@ -21,6 +21,7 @@ import { useApi } from "../../../hooks/useApi";
 import { Investment } from "../../../types/investment";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
+import { profit } from "../../../utils/utilities";
 
 export function SimpleProjectInvestment() {
   const { getInvestments } = useApi();
@@ -51,89 +52,95 @@ export function SimpleProjectInvestment() {
     );
   }
 
-  const rows = investments.map((investment) => (
-    <tr key={investment.project.name}>
-      <td>{investment.project.name}</td>
-      <td>
-        <Badge color={colorsByState[investment.project.state]} radius="lg" variant="dot">
-          {projectStateLabels[investment.project.state]}
-        </Badge>
-      </td>
-      <td>
-        <img src={SSToken} width={26} /> {investment.token.symbol}
-      </td>
-      <td>
-        <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-          <Tooltip label={`rate: ${investment.rate}`} withArrow>
-            <Group>
-              <Text color="violet.9">
-                <strong>{investment.balance}</strong>
-              </Text>
-              <IconInfoCircle size={20} />
-            </Group>
-          </Tooltip>
-          <Text align="center">
-            (<strong>{investment.balance / investment.rate}</strong> USDC)
-          </Text>
-        </Flex>
-      </td>
-      <td>
-        <Group position="right">
-          <Text align="center" color="gray">
-            {investment.project.state !== State.Funded ? (
-              <span>
-                <strong>0</strong> USDC
-              </span>
-            ) : (
-              <Text color="green">
-                <strong>-</strong> USDC
-              </Text>
-            )}
-          </Text>
-          <Tooltip label="Retirar renta disponible" withArrow>
-            <Button
-              size="xs"
-              color={"teal"}
-              radius={"lg"}
-              compact
-              disabled={investment.project.state !== State.Funded}
-            >
-              Retirar
-            </Button>
-          </Tooltip>
-        </Group>
-      </td>
-      <td>
-        {investment.project.state < State.Finalized ? (
-          <Tooltip label="Depositar fondos" withArrow>
-            <Button
-              size="xs"
-              color={"teal"}
-              radius={"lg"}
-              variant="light"
-              onClick={() => setModalState({ open: true, project: investment.project })}
-              disabled={investment.project.state !== State.Initialized}
-            >
-              Invertir
-            </Button>
-          </Tooltip>
-        ) : (
-          <Tooltip label="Redimir fondos" withArrow>
-            <Button
-              size="xs"
-              color={"blue"}
-              radius={"lg"}
-              variant="light"
-              onClick={() => setModalState({ open: true, project: investment.project })}
-              disabled={investment.project.state !== State.Redeemable}
-            >
-              Redimir
-            </Button>
-          </Tooltip>
-        )}
-      </td>
-    </tr>
-  ));
+  const rows = investments.map((investment) => {
+    const { sellingAmountTarget, fundingAmountTarget } = investment.project.targets;
+    const profitRate = profit(sellingAmountTarget, fundingAmountTarget) / 100;
+    const underlyingBalance = investment.balance / investment.rate;
+    const totalUnderlyingBalance = underlyingBalance + underlyingBalance * profitRate;
+
+    return (
+      <tr key={investment.project.name}>
+        <td>{investment.project.name}</td>
+        <td>
+          <Badge color={colorsByState[investment.project.state]} radius="lg" variant="dot">
+            {projectStateLabels[investment.project.state]}
+          </Badge>
+        </td>
+        <td>
+          <img src={SSToken} width={26} /> {investment.token.symbol}
+        </td>
+        <td>
+          <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
+            <Tooltip label={`Rate: ${profitRate * 100} %`} withArrow>
+              <Group>
+                <Text color="violet.9">
+                  <strong>{investment.balance}</strong>
+                </Text>
+                <IconInfoCircle size={20} />
+              </Group>
+            </Tooltip>
+            <Text align="center">
+              (<strong>{totalUnderlyingBalance}</strong> USDC)
+            </Text>
+          </Flex>
+        </td>
+        <td>
+          <Group position="right">
+            <Text align="center" color="gray">
+              {investment.project.state !== State.Funded ? (
+                <span>
+                  <strong>0</strong> USDC
+                </span>
+              ) : (
+                <Text color="green">
+                  <strong>-</strong> USDC
+                </Text>
+              )}
+            </Text>
+            <Tooltip label="Retirar renta disponible" withArrow>
+              <Button
+                size="xs"
+                color={"teal"}
+                radius={"lg"}
+                compact
+                disabled={investment.project.state !== State.Funded}
+              >
+                Retirar
+              </Button>
+            </Tooltip>
+          </Group>
+        </td>
+        <td>
+          {investment.project.state < State.Finalized ? (
+            <Tooltip label="Depositar fondos" withArrow>
+              <Button
+                size="xs"
+                color={"teal"}
+                radius={"lg"}
+                variant="light"
+                onClick={() => setModalState({ open: true, project: investment.project })}
+                disabled={investment.project.state !== State.Initialized}
+              >
+                Invertir
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip label="Redimir fondos" withArrow>
+              <Button
+                size="xs"
+                color={"blue"}
+                radius={"lg"}
+                variant="light"
+                onClick={() => setModalState({ open: true, project: investment.project })}
+                disabled={investment.project.state !== State.Redeemable}
+              >
+                Redimir
+              </Button>
+            </Tooltip>
+          )}
+        </td>
+      </tr>)
+  });
 
   return (
     <>
