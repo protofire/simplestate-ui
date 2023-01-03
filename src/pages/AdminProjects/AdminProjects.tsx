@@ -81,11 +81,11 @@ export function AdminProjects() {
     try {
       setLoadingDeposit(true);
       await depositSellingAmount(selectedProject.address, amountToDeposit);
-      const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
+      const successNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_SUCCESS);
       showNotification(successNotification);
     } catch(err) {
       console.log(err);
-      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR);
+      const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR);
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 

@@ -131,7 +131,7 @@ export function useApi() {
   const investInProject = useCallback(async (ipAddress: string, amount: number, token: IProjectToken) => {
     if (!signer) return;
     const parsedAmount = toDecimals(amount);
-    const signedContract = await underlyingToken.sign(signer);
+    const signedContract = underlyingToken.sign(signer);
     const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, parsedAmount);
     await approveTx.wait();
 
@@ -176,10 +176,15 @@ export function useApi() {
   const depositSellingAmount = useCallback(async (ipAddress: string, amount: number) => {
     if (!signer) return;
     const parsedAmount = toDecimals(amount);
+
+    const signedContract = underlyingToken.sign(signer);
+    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, parsedAmount);
+    await approveTx.wait();
+
     const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
     const withdrawTx: ContractTransaction = await ipContract?.functions.depositSellingRevenue(parsedAmount);
     await withdrawTx.wait();
-  }, [signer]);
+  }, [signer, underlyingToken]);
 
   return {
     fetchProjects,

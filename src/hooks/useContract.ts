@@ -22,7 +22,7 @@ export function useContract(contractType: ContractType) {
     return initializedContract;
   }
 
-  const sign = useCallback(async (signer: JsonRpcSigner) => {
+  const sign = useCallback((signer: JsonRpcSigner) => {
     if (contract) {
       const signed = contract.connect(signer);
       return signed;
