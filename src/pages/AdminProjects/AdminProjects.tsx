@@ -68,8 +68,8 @@ export function AdminProjects() {
       const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
       showNotification(successNotification);
     } catch(err) {
-      console.log(err);
-      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR);
+      console.error(err);
+      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR, err);
       showNotification(errorNotification);
     } finally {
       setLoadingWithdraw(false); 
@@ -85,7 +85,7 @@ export function AdminProjects() {
       showNotification(successNotification);
     } catch(err) {
       console.log(err);
-      const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR);
+      const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR, err);
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 
@@ -132,7 +132,7 @@ export function AdminProjects() {
         />
       </Modal>
 
-      <Group style={{ display: selectedProject ? "block" : "none" }} m={"lg"}>
+      {selectedProject && <Group style={{ display: "block" }} m={"lg"}>
         <Text>
           {`Address: `}
           <strong>{selectedProject?.address ?? ' - '}</strong>
@@ -183,6 +183,15 @@ export function AdminProjects() {
           <Badge color={"teal"}>{`Depósito acumulado: ${selectedProject?.financialTracking.fundingRaised} USDC`}</Badge>
         </Group>
 
+        <Group m={"md"}>
+          <Badge color={"red"}>{`Fondos retirados: ${selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+        </Group>
+
+        <Group m={"md"}>
+          <Badge>{`Disponible para retiro: ${selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+        </Group>
+
+
         <Input.Wrapper id="withdraw" label="Retirar Inversión">
           <SimpleGrid cols={2}>
             <Input
@@ -191,9 +200,11 @@ export function AdminProjects() {
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
+              disabled={loadingWithdraw}
               onChange={(e: any) => setAmountToWithdraw(Number(e.target.value))}
             />
             <Button
+              leftIcon={loadingWithdraw && <Loader size={14} />}
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
@@ -239,6 +250,7 @@ export function AdminProjects() {
               onChange={(e: any) => setAmountToDeposit(Number(e.target.value))}
             />
             <Button
+              leftIcon={loadingDeposit && <Loader size={14} />}
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
@@ -249,7 +261,7 @@ export function AdminProjects() {
             </Button>
           </SimpleGrid>
         </Input.Wrapper>
-      </Group>
+      </Group>}
     </Container>
   );
 }
