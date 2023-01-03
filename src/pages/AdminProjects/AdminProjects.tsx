@@ -132,7 +132,7 @@ export function AdminProjects() {
         />
       </Modal>
 
-      <Group style={{ display: selectedProject ? "block" : "none" }} m={"lg"}>
+      {selectedProject && <Group style={{ display: "block" }} m={"lg"}>
         <Text>
           {`Address: `}
           <strong>{selectedProject?.address ?? ' - '}</strong>
@@ -182,6 +182,15 @@ export function AdminProjects() {
         <Group m={"md"}>
           <Badge color={"teal"}>{`Depósito acumulado: ${selectedProject?.financialTracking.fundingRaised} USDC`}</Badge>
         </Group>
+
+        <Group m={"md"}>
+          <Badge color={"red"}>{`Fondos retirados: ${selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+        </Group>
+
+        <Group m={"md"}>
+          <Badge>{`Disponible para retiro: ${selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+        </Group>
+
 
         <Input.Wrapper id="withdraw" label="Retirar Inversión">
           <SimpleGrid cols={2}>
@@ -249,7 +258,7 @@ export function AdminProjects() {
             </Button>
           </SimpleGrid>
         </Input.Wrapper>
-      </Group>
+      </Group>}
     </Container>
   );
 }
