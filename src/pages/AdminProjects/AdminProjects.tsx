@@ -200,9 +200,11 @@ export function AdminProjects() {
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
+              disabled={loadingWithdraw}
               onChange={(e: any) => setAmountToWithdraw(Number(e.target.value))}
             />
             <Button
+              leftIcon={loadingWithdraw && <Loader size={14} />}
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
@@ -248,6 +250,7 @@ export function AdminProjects() {
               onChange={(e: any) => setAmountToDeposit(Number(e.target.value))}
             />
             <Button
+              leftIcon={loadingDeposit && <Loader size={14} />}
               color={"teal"}
               radius={"lg"}
               style={{ maxWidth: "200px" }}
