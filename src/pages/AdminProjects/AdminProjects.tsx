@@ -68,8 +68,8 @@ export function AdminProjects() {
       const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
       showNotification(successNotification);
     } catch(err) {
-      console.log(err);
-      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR);
+      console.error(err);
+      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR, err);
       showNotification(errorNotification);
     } finally {
       setLoadingWithdraw(false); 
@@ -85,7 +85,7 @@ export function AdminProjects() {
       showNotification(successNotification);
     } catch(err) {
       console.log(err);
-      const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR);
+      const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR, err);
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 

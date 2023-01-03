@@ -33,7 +33,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         id: 'error',
         autoClose: 5000,
         title: "Error",
-        message: 'Ocurrió un error intentando crear el proyecto',
+        message: metamaskErrors[props.error.reason] ?? props.error.message ?? 'Ocurrió un error intentando crear el proyecto',
         color: 'red',
         radius: 'md'
       };
@@ -60,7 +60,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         autoClose: 5000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: metamaskErrors[props.error.reason] ?? '',
+        message: metamaskErrors[props.error.reason] ?? props.error.message ?? 'Ha ocurrido un error intentando realizar inversióm',
         color: "red",
         radius: "md",
       }
@@ -82,7 +82,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         autoClose: 5000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando retirar los fondos',
+        message: metamaskErrors[props.error.reason] ?? props.error.message ?? 'Ha ocurrido un error intentando retirar los fondos',
         color: "red",
         radius: "md",
       }
@@ -105,7 +105,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         autoClose: 5000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando depositar la ganancia',
+        message: metamaskErrors[props.error.message] ?? props.error.message ?? 'Ha ocurrido un error intentando depositar la ganancia',
         color: "red",
         radius: "md",
       }
