@@ -24,7 +24,7 @@ import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
 import { profit } from "../../../utils/utilities";
 
 export function SimpleProjectInvestment() {
-  const { getInvestments } = useApi();
+  const { getInvestments, redeem } = useApi();
 
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -34,6 +34,9 @@ export function SimpleProjectInvestment() {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [loadingRedeem, setLoadingRedeem] = useState(false);
+  const [updating, setUpdating] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     getInvestments().then((investments) => {
@@ -42,7 +45,7 @@ export function SimpleProjectInvestment() {
         setLoading(false);
       }
     });
-  }, [getInvestments]);
+  }, [getInvestments, updating]);
 
   if (loading) {
     return (
@@ -50,6 +53,22 @@ export function SimpleProjectInvestment() {
         <Loader color="teal" size="lg" variant="bars" />
       </Center>
     );
+  }
+
+  const reset = () => {
+    setUpdating(u => !u);
+  }
+
+  const redeemTokens = async (amount: number, investment: Investment) => {
+    try {
+      setLoadingRedeem(true);
+      await redeem(amount, investment.project.address, investment.token.address);
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoadingRedeem(false);
+      reset();
+    }
   }
 
   const rows = investments.map((investment) => {
@@ -111,7 +130,7 @@ export function SimpleProjectInvestment() {
           </Group>
         </td> */}
         <td>
-          {investment.project.state < State.Finalized ? (
+          {investment.project.state < State.Closed ? (
             <Tooltip label="Depositar fondos" withArrow>
               <Button
                 size="xs"
@@ -127,12 +146,13 @@ export function SimpleProjectInvestment() {
           ) : (
             <Tooltip label="Redimir fondos" withArrow>
               <Button
+                leftIcon={loadingRedeem && <Loader size={14} />}
                 size="xs"
                 color={"blue"}
                 radius={"lg"}
                 variant="light"
-                onClick={() => setModalState({ open: true, project: investment.project })}
-                disabled={investment.project.state !== State.Redeemable}
+                onClick={() => redeemTokens(totalUnderlyingBalance, investment)}
+                disabled={investment.project.state !== State.Closed || loadingRedeem}
               >
                 Redimir
               </Button>

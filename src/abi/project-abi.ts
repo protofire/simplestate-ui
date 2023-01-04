@@ -898,13 +898,7 @@ export default [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
+		"inputs": [],
 		"name": "redeem",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -944,6 +938,19 @@ export default [
 		"name": "revokeRole",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "roles",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

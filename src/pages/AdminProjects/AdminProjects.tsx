@@ -37,7 +37,7 @@ export function AdminProjects() {
   const [open, setOpen] = useState(false);
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   const [loading, setLoading] = useState(false);
-  const [projectCreated, setProjectCreated] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [selectedProject, setSelectedProject] = useState<IProjectMetadata>();
 
   const [amountToWithdraw, setAmountToWithdraw] = useState<number>();
@@ -52,7 +52,12 @@ export function AdminProjects() {
       setProjects(p);
       setLoading(false);
     });
-  }, [fetchProjects, projectCreated]);
+  }, [fetchProjects, updating]);
+
+  const reset = () => {
+    setUpdating(u => !u);
+    setSelectedProject(undefined);
+  }
 
   const onProjectSelected = (address: string) => {
     const project:IProjectMetadata | undefined = projects.find((p) => p.address === address);
@@ -72,7 +77,8 @@ export function AdminProjects() {
       const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR, err);
       showNotification(errorNotification);
     } finally {
-      setLoadingWithdraw(false); 
+      setLoadingWithdraw(false);
+      reset();
     }
   }
 
@@ -89,6 +95,7 @@ export function AdminProjects() {
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 
+      reset();
     }
   }
 
@@ -128,7 +135,7 @@ export function AdminProjects() {
       >
         <CreateProjectForm
           close={() => setOpen(false)}
-          onCreate={() => setProjectCreated(true)}
+          onCreate={() => reset()}
         />
       </Modal>
 
@@ -136,6 +143,10 @@ export function AdminProjects() {
         <Text>
           {`Address: `}
           <strong>{selectedProject?.address ?? ' - '}</strong>
+        </Text>
+        <Text>
+          {`Admin: `}
+          <strong>{selectedProject?.roles.admin ?? ' - '}</strong>
         </Text>
         <Text>
           {`Meta de financiamiento: `}

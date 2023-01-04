@@ -62,14 +62,15 @@ export function useApi() {
     for (let i = size - 1; i >= 0; i--) {
       const [address] = await functions.keys(i);
       const projectContract = initContract(address, 'project');
-      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs, modules] = await Promise.all([
+      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs, modules, roles] = await Promise.all([
         projectContract?.functions.metadata(),
         projectContract?.functions.state(),
         projectContract?.functions.targets(),
         projectContract?.functions.financialTracking(),
         projectContract?.functions.tokens(),
         projectContract?.functions.booleanConfigs(),
-        projectContract?.functions.modules()
+        projectContract?.functions.modules(),
+        projectContract?.functions.roles()
       ]);
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
@@ -97,7 +98,8 @@ export function useApi() {
         financialTracking: financtualTrackingParsed,
         token,
         booleanConfigs,
-        modules
+        modules,
+        roles
       };
       projectList.push(projectMetadata);
     }
@@ -186,6 +188,19 @@ export function useApi() {
     await withdrawTx.wait();
   }, [signer, underlyingToken]);
 
+  const redeem = useCallback(async (amount: number, ipAddress: string, ipTokenAddress: string) => {
+    if (!signer || !underlyingToken) return;
+    const parsedAmount = toDecimals(amount);
+
+    const contract = underlyingToken.initContract(ipTokenAddress, 'ipToken', signer);
+    const allowTx: ContractTransaction = await contract?.functions.increaseAllowance(ipAddress, parsedAmount);
+    await allowTx.wait();
+
+    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const redeemTx: ContractTransaction = await ipContract?.functions.redeem();
+    await redeemTx.wait();
+  }, [signer, underlyingToken]);
+
   return {
     fetchProjects,
     createProject,
@@ -194,6 +209,7 @@ export function useApi() {
     investInProject,
     getInvestments,
     withdrawFunds,
-    depositSellingAmount
+    depositSellingAmount,
+    redeem
   }
 }

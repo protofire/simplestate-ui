@@ -28,6 +28,10 @@ export interface IProjectModules {
   feeModel: string;
 }
 
+export interface IProjectRoles {
+  admin: string;
+}
+
 export interface IProjectMetadata {
   address: string;
   name: string;
@@ -45,4 +49,5 @@ export interface IProjectMetadata {
   unitOfAccount: "USDC";
   feeModel: "listing";
   valuationModel: "rate";
+  roles: IProjectRoles;
 }
