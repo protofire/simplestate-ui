@@ -12,7 +12,9 @@ export enum NotificationType {
   WITHDRAW_FUNDS_SUCCESS,
   WITHDRAW_FUNDS_ERROR,
   DEPOSIT_REVENUE_SUCCESS,
-  DEPOSIT_REVENUE_ERROR
+  DEPOSIT_REVENUE_ERROR,
+  REDEEM_TOKENS_SUCCESS,
+  REDEEM_TOKENS_ERROR
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -106,6 +108,28 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando depositar la ganancia',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.REDEEM_TOKENS_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 5000,
+        title: "Depósito exitoso",
+        icon: <IconCheck size={18} />,
+        message: 'Tokens redimidos con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.REDEEM_TOKENS_ERROR: {
+      return {
+        id: "error",
+        autoClose: 5000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando redimir tus tokens',
         color: "red",
         radius: "md",
       }

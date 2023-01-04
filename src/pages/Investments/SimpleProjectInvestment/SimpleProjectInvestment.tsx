@@ -22,6 +22,8 @@ import { Investment } from "../../../types/investment";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
 import { profit } from "../../../utils/utilities";
+import { buildNotification, NotificationType } from "../../../constants/notifications";
+import { showNotification } from "@mantine/notifications";
 
 export function SimpleProjectInvestment() {
   const { getInvestments, redeem } = useApi();
@@ -63,11 +65,15 @@ export function SimpleProjectInvestment() {
     try {
       setLoadingRedeem(true);
       await redeem(amount, investment.project.address, investment.token.address);
+      const successNotification = buildNotification(NotificationType.REDEEM_TOKENS_SUCCESS);
+      showNotification(successNotification);
+      reset();
     } catch (err) {
-      console.error(err)
+      console.error(err);
+      const errorNotification = buildNotification(NotificationType.REDEEM_TOKENS_ERROR, err);
+      showNotification(errorNotification);
     } finally {
       setLoadingRedeem(false);
-      reset();
     }
   }
 
