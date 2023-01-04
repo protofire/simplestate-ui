@@ -136,21 +136,14 @@ export function AdminProjects() {
         <Text>
           {`Address: `}
           <strong>{selectedProject?.address ?? ' - '}</strong>
-          {/* <strong>{selectedProject?.owner}</strong> */}
         </Text>
         <Text>
-          {`Dueño del proyecto (owner): `}
-          <strong> -</strong>
-          {/* <strong>{selectedProject?.owner}</strong> */}
+          {`Meta de financiamiento: `}
+          <strong>{`${selectedProject?.targets.fundingAmountTarget} USDC`?? ' - '}</strong>
         </Text>
         <Text>
-          {`Depositante de ingresos (Income depositor): `}
-          <strong> -</strong>
-          {/* <strong>{selectedProject?.incomeDepositor}</strong> */}
-        </Text>
-        <Text>
-          {`Cantidad de tokens en circulación: `}
-          <strong> -</strong>
+          {`Meta de Venta: `}
+          <strong>{`${selectedProject?.targets.sellingAmountTarget} USDC`?? ' - '}</strong>
         </Text>
         <Text>
           {`Tasa de retorno: `}
