@@ -14,7 +14,8 @@ export enum NotificationType {
   DEPOSIT_REVENUE_SUCCESS,
   DEPOSIT_REVENUE_ERROR,
   REDEEM_TOKENS_SUCCESS,
-  REDEEM_TOKENS_ERROR
+  REDEEM_TOKENS_ERROR,
+  IMPORT_TOKEN_SUCCESS
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -131,6 +132,17 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando redimir tus tokens',
         color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.IMPORT_TOKEN_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Token agregado",
+        icon: <IconCheck size={18} />,
+        message: 'Se ha agregado un nuevo token a tu wallet de Metamask.',
+        color: "teal",
         radius: "md",
       }
     }
