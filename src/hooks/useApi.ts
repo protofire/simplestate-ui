@@ -167,10 +167,16 @@ export function useApi() {
     return investments.filter((i) => i.balance !== 0);
   }, [fetchProjects, accounts]);
 
-  const withdrawFunds = useCallback(async (ipAddress: string, amount: number) => {
+  const withdrawFunds = useCallback(async (project: IProjectMetadata, amount: number) => {
     if (!signer) return;
+    const signerAddress = await signer.getAddress();
+    if (signerAddress != project.roles.admin) throw { reason: 'Only the admin can withdraw the funds' };
+
+    const allowed = project.state === State.Funded || (project.state === State.Initialized && project.booleanConfigs.allowPartialSell);
+    if (!allowed) throw { reason: 'Project state not allowed' };
+
     const parsedAmount = toDecimals(amount);
-    const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
+    const ipContract = underlyingToken.initContract(project.address, 'project', signer);
     const withdrawTx: ContractTransaction = await ipContract?.functions.wthdrawFundingCapital(parsedAmount);
     await withdrawTx.wait();
   }, [signer]);

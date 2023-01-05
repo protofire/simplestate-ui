@@ -12,6 +12,7 @@ import {
   Divider,
   SimpleGrid,
   Badge,
+  TextInput,
 } from "@mantine/core";
 import { IconArrowDown, IconArrowUp, IconBuilding } from "@tabler/icons";
 import { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ import { useApi } from "../../hooks/useApi";
 import { IProjectMetadata } from "../../types/projectMetadata";
 import { buildNotification, NotificationType } from "../../constants/notifications";
 import { showNotification } from "@mantine/notifications";
+import { positiveNumberValidation } from "../../utils/validations";
 
 const useStyles = createStyles(() => ({
   group: {
@@ -42,6 +44,7 @@ export function AdminProjects() {
 
   const [amountToWithdraw, setAmountToWithdraw] = useState<number>();
   const [loadingWithdraw, setLoadingWithdraw] = useState(false);
+  const [withdrawError, setWithdrawError] = useState("");
 
   const [amountToDeposit, setAmountToDeposit] = useState<number>();
   const [loadingDeposit, setLoadingDeposit] = useState(false);
@@ -66,19 +69,25 @@ export function AdminProjects() {
   };
 
   const withdwaw = async () => {
-    if (!selectedProject || !amountToWithdraw) return;
+    if (!selectedProject || amountToWithdraw === undefined) return;
+    const error = positiveNumberValidation(amountToWithdraw.toString());
+    if (error) return setWithdrawError(error);
+    const available = selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed;
+    if(amountToWithdraw > available) return setWithdrawError('El monto excede el monto disponible para retiro.');
+
+    setWithdrawError('');
     try {
       setLoadingWithdraw(true);
-      await withdrawFunds(selectedProject.address, amountToWithdraw);
+      await withdrawFunds(selectedProject, amountToWithdraw);
       const successNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_SUCCESS);
       showNotification(successNotification);
+      reset();
     } catch(err) {
       console.error(err);
-      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR, err);
+      const errorNotification = buildNotification(NotificationType.WITHDRAW_FUNDS_ERROR, {error: err});
       showNotification(errorNotification);
     } finally {
       setLoadingWithdraw(false);
-      reset();
     }
   }
 
@@ -101,6 +110,7 @@ export function AdminProjects() {
 
   const enabledDepositRent = selectedProject?.state === State.Funded;
   const enableDepositSell = selectedProject?.state === State.Funded;
+  const amountAvailable = selectedProject ? selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed : 0;
 
   return (
     <Container>
@@ -192,20 +202,21 @@ export function AdminProjects() {
         </Group>
 
         <Group m={"md"}>
-          <Badge>{`Disponible para retiro: ${selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+          <Badge>{`Disponible para retiro: ${amountAvailable} USDC`}</Badge>
         </Group>
 
 
         <Input.Wrapper id="withdraw" label="Retirar Inversión">
           <SimpleGrid cols={2}>
-            <Input
+            <TextInput
               icon={<IconArrowDown />}
               id="withdraw"
               placeholder="Cantidad a retirar (USDC)"
               type={"number"}
               width={400}
-              disabled={loadingWithdraw}
+              disabled={loadingWithdraw || amountAvailable === 0}
               onChange={(e: any) => setAmountToWithdraw(Number(e.target.value))}
+              error={withdrawError}
             />
             <Button
               leftIcon={loadingWithdraw && <Loader size={14} />}
@@ -213,7 +224,7 @@ export function AdminProjects() {
               radius={"lg"}
               style={{ maxWidth: "200px" }}
               onClick={withdwaw}
-              disabled={loadingWithdraw}
+              disabled={loadingWithdraw || amountAvailable === 0}
             >
               Retirar Inversión
             </Button>
