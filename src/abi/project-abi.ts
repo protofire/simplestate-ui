@@ -63,11 +63,6 @@ export default [
 	},
 	{
 		"inputs": [],
-		"name": "NoSupply",
-		"type": "error"
-	},
-	{
-		"inputs": [],
 		"name": "PartialSellNotAllowed",
 		"type": "error"
 	},
@@ -692,58 +687,7 @@ export default [
 	},
 	{
 		"inputs": [],
-		"name": "getCurrentRedeemableRate",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "getProjectId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_account",
-				"type": "address"
-			}
-		],
-		"name": "getProjectParticipation",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_account",
-				"type": "address"
-			}
-		],
-		"name": "getRedeemableAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1159,6 +1103,19 @@ export default [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_offchainMetadataLink",
+				"type": "string"
+			}
+		],
+		"name": "updateMetadata",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
