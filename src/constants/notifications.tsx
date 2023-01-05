@@ -23,7 +23,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.CREATE_PROJECT_SUCCESS: {
       return {
         id: 'success',
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Proyecto creado",
         message: 'El proyecto fue creado exitosamente',
         color: 'teal',
@@ -33,7 +33,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.CREATE_PROJECT_ERROR: {
       return {
         id: 'error',
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Error",
         message: metamaskErrors[props.error.reason] ?? 'Ocurrió un error intentando crear el proyecto',
         color: 'red',
@@ -43,7 +43,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.INVEST_PROJECT_SUCCESS: {
       return {
         id: "success",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Inversion realizada",
         icon: <IconCheck size={18} />,
         message: (
@@ -59,10 +59,10 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.INVEST_PROJECT_ERROR: {
       return {
         id: "error",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando realizar inversióm',
+        message: 'Es posible que la cuenta desde la que intentas invertir no esté en la whitelist o no cuente con suficientes fondos en USDC.',
         color: "red",
         radius: "md",
       }
@@ -70,7 +70,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.WITHDRAW_FUNDS_SUCCESS: {
       return {
         id: "success",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Fondos retirados",
         icon: <IconCheck size={18} />,
         message: 'Fondos retirados con éxito',
@@ -81,7 +81,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.WITHDRAW_FUNDS_ERROR: {
       return {
         id: "error",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.reason] ?? 'Ha ocurrido un error intentando retirar los fondos',
@@ -93,7 +93,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.DEPOSIT_REVENUE_SUCCESS: {
       return {
         id: "success",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Depósito exitoso",
         icon: <IconCheck size={18} />,
         message: 'Ganancia de venta depositada con éxito',
@@ -104,7 +104,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.DEPOSIT_REVENUE_ERROR: {
       return {
         id: "error",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando depositar la ganancia',
@@ -115,7 +115,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.REDEEM_TOKENS_SUCCESS: {
       return {
         id: "success",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Depósito exitoso",
         icon: <IconCheck size={18} />,
         message: 'Tokens redimidos con éxito',
@@ -126,7 +126,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
     case NotificationType.REDEEM_TOKENS_ERROR: {
       return {
         id: "error",
-        autoClose: 5000,
+        autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando redimir tus tokens',
