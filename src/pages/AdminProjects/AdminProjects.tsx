@@ -49,6 +49,10 @@ export function AdminProjects() {
   const [amountToDeposit, setAmountToDeposit] = useState<number>();
   const [loadingDeposit, setLoadingDeposit] = useState(false);
 
+  const enabledDepositRent = selectedProject?.state === State.Funded;
+  const enableDepositSell = selectedProject?.state === State.Funded;
+  const amountAvailable = selectedProject ? selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed : 0;
+
   useEffect(() => {
     setLoading(true);
     fetchProjects().then((p) => {
@@ -93,6 +97,16 @@ export function AdminProjects() {
 
   const deposit = async () => {
     if (!selectedProject || !amountToDeposit) return;
+
+    if (amountAvailable > 0) {
+      var isConfirmed = confirm(
+`Todavía tenés ${amountAvailable} USDC para retirar.
+Una vez que deposites la venta no podrás retirar este dinero, confirmas el depósito?`
+      );
+      if (!isConfirmed) return;
+    }
+    
+
     try {
       setLoadingDeposit(true);
       await depositSellingAmount(selectedProject.address, amountToDeposit);
@@ -107,10 +121,6 @@ export function AdminProjects() {
       reset();
     }
   }
-
-  const enabledDepositRent = selectedProject?.state === State.Funded;
-  const enableDepositSell = selectedProject?.state === State.Funded;
-  const amountAvailable = selectedProject ? selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed : 0;
 
   return (
     <Container>
@@ -175,10 +185,6 @@ export function AdminProjects() {
             ).toFixed(2)}{" "}
             %
           </strong>
-        </Text>
-        <Text>
-          {`Tasa de interes (Interest rate): `}
-          <strong> -%</strong>
         </Text>
         <Text>
           {`Unidad de cuenta (Unit of account): `}
