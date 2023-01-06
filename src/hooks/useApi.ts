@@ -169,7 +169,10 @@ export function useApi() {
     const signerAddress = await signer.getAddress();
     if (signerAddress != project.roles.admin) throw { reason: 'Only the admin can withdraw the funds' };
 
-    const allowed = project.state === State.Funded || (project.state === State.Initialized && project.booleanConfigs.allowPartialSell);
+    console.log('project');
+    console.log(project);
+
+    const allowed = project.state === State.Funded || (project.state === State.Initialized && project.booleanConfigs.allowWithdrawalOnPartialFunding);
     if (!allowed) throw { reason: 'Project state not allowed' };
 
     const parsedAmount = toDecimals(amount);
