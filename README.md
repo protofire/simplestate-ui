@@ -12,10 +12,12 @@ yarn install
 
 > You must also create an Alchemy account and configure a new project for the Eth Goerli testing Netwrork.
 
-Create an `.env` file at the root folder of the project and set the following.
+Create an `.env` file at the root folder of the project and set the following variables
 
 ```sh
-VITE_CONTRACT_ADDRESS='0x...' # the contract you want to interact with.
+VITE_REGISTRY_CONTRACT_ADDRESS='0xc7eA5Db540ef3Ec8feae99dBa7051f2014c731FC'
+VITE_FACTORY_CONTRACT_ADDRESS='0x09dFE97c54A13677e6D8dAE8c2a63707E9a4dA56'
+VITE_UNDERLYING_TOKEN_ADDRESS='0xD87Ba7A50B2E7E660f678A895E4B72E7CB4CCd9C' # USDC
 VITE_ALCHEMY_API_KEY='...'    # the API key for your Alchemy account.
 ```
 
@@ -24,3 +26,12 @@ Run in local mode
 ```sh
 yarn dev
 ```
+
+### Project tooling + structure
+
+We use `vite` as the react framework following the standard structure for React applications. The UI library is `mantine` and for smart contracts interactions we use `ethers.js` library.
+
+The Frontend interacts directly with the smart contracts (without any backend layer).
+
+Under `pages/` folder, each sub-folder represents one tab (see UI) and its corresponding sub-components.
+Under `hooks/` folder, we have the scripts corresponding to the metamask connection (`useMetamask`), the contracts setup (`useContract`) and the contracts interaction for performing operations on-chain (`useApi`).
