@@ -48,6 +48,7 @@ export function AdminProjects() {
 
   const [amountToDeposit, setAmountToDeposit] = useState<number>();
   const [loadingDeposit, setLoadingDeposit] = useState(false);
+  const [depositError, setDepositError] = useState("");
 
   const enabledDepositRent = selectedProject?.state === State.Funded;
   const enableDepositSell = selectedProject?.state === State.Funded;
@@ -105,20 +106,25 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
       );
       if (!isConfirmed) return;
     }
-    
 
+    if (amountToDeposit !== selectedProject.targets.sellingAmountTarget) {
+      return setDepositError('El monto a depositar debe ser igual al precio de venta');
+    }
+
+    setDepositError('')
+  
     try {
       setLoadingDeposit(true);
       await depositSellingAmount(selectedProject.address, amountToDeposit);
       const successNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_SUCCESS);
       showNotification(successNotification);
+      reset();
     } catch(err) {
       console.log(err);
       const errorNotification = buildNotification(NotificationType.DEPOSIT_REVENUE_ERROR, err);
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 
-      reset();
     }
   }
 
@@ -261,7 +267,7 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
 
         <Input.Wrapper id="distribute-sell" label="Depositar venta (USDC)">
           <SimpleGrid cols={2}>
-            <Input
+            <TextInput
               icon={<IconArrowUp />}
               id="distribute-sell"
               placeholder="Valor venta (USDC)"
@@ -269,6 +275,7 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
               width={400}
               disabled={!enableDepositSell || loadingDeposit}
               onChange={(e: any) => setAmountToDeposit(Number(e.target.value))}
+              error={depositError}
             />
             <Button
               leftIcon={loadingDeposit && <Loader size={14} />}

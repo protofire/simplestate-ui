@@ -103,12 +103,16 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
       }
     }
     case NotificationType.DEPOSIT_REVENUE_ERROR: {
+
+      if ((props.error.message as string).includes('AccessControl')) {
+        props.error.message = 'AccessControl';
+      }
       return {
         id: "error",
         autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando depositar la ganancia',
+        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando depositar la ganancia, puede que no tengas fondos suficientes o que no tengas el rol autorizado para esta operación',
         color: "red",
         radius: "md",
       }
