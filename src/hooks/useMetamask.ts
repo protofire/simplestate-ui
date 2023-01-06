@@ -6,6 +6,8 @@ import {
 import { useState } from 'react';
 import { networks } from '../constants/networks';
 import { simpleTokenImgURL } from '../constants/urls';
+import { NotificationType, buildNotification } from '../constants/notifications';
+import { showNotification } from '@mantine/notifications';
 
 declare global {
   interface Window {
@@ -88,6 +90,10 @@ function useMetamask() {
           },
         },
       });
+      if (wasAdded) {
+        const notification = buildNotification(NotificationType.IMPORT_TOKEN_SUCCESS);
+        showNotification(notification)
+      }
     } catch (error) {
       console.error(error);
     }
