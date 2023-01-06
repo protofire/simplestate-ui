@@ -30,13 +30,14 @@ export function useApi() {
     setRegistryReady(!!registry.contract);
   }, [registry.contract]);
 
-  const fetchToken = async (address: string) => {
+  const fetchToken = async (address: string): Promise<IProjectToken> => {
     const token = registry.initContract(address, 'ipToken');
-    const [[symbol], [name]] = await Promise.all([
+    const [[symbol], [name], [supply]] = await Promise.all([
       token.functions.symbol(),
-      token.functions.name()
+      token.functions.name(),
+      token.functions.totalSupply()
     ]);
-    return { symbol, name, address };
+    return { symbol, name, address, supply: fromDecimals(supply) };
   }
 
   const fetchTokenBalance = async (token: string, account: string) => {
@@ -150,18 +151,14 @@ export function useApi() {
     const projects = await fetchProjects();
     const tokenizedProjects = projects.filter(p => !!p.token);
     const tokens = tokenizedProjects.map(p => p.token!);
-    const projectRates = tokenizedProjects.map(p => ({ address: p.address, rate: p.modules.rateModel }));
 
     const balanceQueries = tokens.map(t => fetchTokenBalance(t.address, accounts[0]));
-    const rateQueries = projectRates.map(p => fetchProjectRate(p.address, p.rate));
     const balances = await Promise.all(balanceQueries);
-    const rates = await Promise.all(rateQueries);
 
     const investments = tokens.map((t, i) => ({
       project: tokenizedProjects[i],
       token: t,
       balance: fromDecimals(Number(balances[i])),
-      rate: Number(rates[i])
     }));
     
     return investments.filter((i) => i.balance !== 0);

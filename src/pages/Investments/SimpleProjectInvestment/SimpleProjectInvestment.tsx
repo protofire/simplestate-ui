@@ -78,10 +78,9 @@ export function SimpleProjectInvestment() {
   }
 
   const rows = investments.map((investment) => {
-    const { sellingAmountTarget, fundingAmountTarget } = investment.project.targets;
-    const profitRate = profit(sellingAmountTarget, fundingAmountTarget) / 100;
-    const underlyingBalance = investment.balance / investment.rate;
-    const totalUnderlyingBalance = underlyingBalance + underlyingBalance * profitRate;
+    const { sellingAmountTarget } = investment.project.targets;
+    const state = investment.project.state;
+    const totalUnderlyingBalance = investment.balance * sellingAmountTarget / investment.token.supply;
 
     return (
       <tr key={investment.project.name}>
@@ -96,7 +95,7 @@ export function SimpleProjectInvestment() {
         </td>
         <td>
           <Flex justify="" align="center" direction="row" wrap="wrap" gap={"xs"}>
-            <Tooltip label={`Rate: ${profitRate * 100} %`} withArrow>
+            <Tooltip label={`Monto a redimir una vez finalizado el período`} withArrow>
               <Group>
                 <Text color="violet.9">
                   <strong>{investment.balance}</strong>
@@ -105,7 +104,7 @@ export function SimpleProjectInvestment() {
               </Group>
             </Tooltip>
             <Text align="center">
-              (<strong>{totalUnderlyingBalance}</strong> USDC)
+              (<strong>{state >= State.Funded ? totalUnderlyingBalance : '-'}</strong> USDC)
             </Text>
           </Flex>
         </td>
