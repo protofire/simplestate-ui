@@ -265,6 +265,10 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
           </SimpleGrid>
         </Input.Wrapper> */}
 
+        <Group m={"md"}>
+          <Badge>{`Venta depositada acumulada: ${selectedProject?.financialTracking.cumulativeRedeemableAmount} USDC`}</Badge>
+        </Group>
+
         <Input.Wrapper id="distribute-sell" label="Depositar venta (USDC)">
           <SimpleGrid cols={2}>
             <TextInput
