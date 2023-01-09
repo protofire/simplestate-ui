@@ -114,10 +114,11 @@ export function useApi() {
     sellAmount: number, 
     sellTime: number,
     metadataURL: string,
-    produceIncome: boolean
+    produceIncome: boolean,
+    allowPartialSell: boolean
   ): Promise<Event[] | undefined> => {
     if (!signer) return;
-    const signedContract = await factory.sign(signer);
+    const signedContract = factory.sign(signer);
     const tx: ContractTransaction = await signedContract?.functions.deployProject(
       name,
       toDecimals(fundingAmount),
@@ -125,7 +126,8 @@ export function useApi() {
       toDecimals(sellAmount),
       sellTime,
       metadataURL,
-      produceIncome
+      produceIncome,
+      allowPartialSell
     );
     const recipt = await tx.wait();
     return recipt.events;

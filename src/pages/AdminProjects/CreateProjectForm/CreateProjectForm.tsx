@@ -107,7 +107,8 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         sellAmount,
         sellTime,
         form.values.metadataURL,
-        form.values.produceIncome
+        form.values.produceIncome,
+        form.values.allowPartialSell
       );
       const successNotification = buildNotification(NotificationType.CREATE_PROJECT_SUCCESS);
       showNotification(successNotification);

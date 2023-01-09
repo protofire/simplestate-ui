@@ -107,7 +107,13 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
       if (!isConfirmed) return;
     }
 
-    if (amountToDeposit !== selectedProject.targets.sellingAmountTarget) {
+    if (selectedProject.booleanConfigs.allowPartialSell && 
+      (amountToDeposit < 0 || amountToDeposit > selectedProject.targets.sellingAmountTarget)) {
+        return setDepositError('Monto inválido');
+    }
+
+    if (!selectedProject.booleanConfigs.allowPartialSell && 
+        amountToDeposit !== selectedProject.targets.sellingAmountTarget) {
       return setDepositError('El monto a depositar debe ser igual al precio de venta');
     }
 
