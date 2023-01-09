@@ -104,7 +104,7 @@ export function SimpleProjectInvestment() {
               </Group>
             </Tooltip>
             <Text align="center">
-              (<strong>{state >= State.Funded ? totalUnderlyingBalance : '-'}</strong> USDC)
+              (<strong>{state >= State.Funded ? totalUnderlyingBalance.toFixed(2) : '-'}</strong> USDC)
             </Text>
           </Flex>
         </td>

@@ -10,9 +10,14 @@ export function raisedRate(raised: number, fundingAmount: number): number {
 }
 
 export function toDecimals(value: number)  {
-  return value * Math.pow(10, 6)
+  const result = value * Math.pow(10, 6);
+  return Math.trunc(result);
 };
 
 export function fromDecimals(value: number)  {
   return value / Math.pow(10, 6)
 };
+
+export function truncToTwoDecimals(value: number) {
+  return value.toFixed(2);
+}
