@@ -40,6 +40,11 @@ export default [
 				"internalType": "bool",
 				"name": "_produceIncome",
 				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "_allowPartialSell",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "nonpayable",

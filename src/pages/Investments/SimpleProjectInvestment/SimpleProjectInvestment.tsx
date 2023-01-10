@@ -82,6 +82,9 @@ export function SimpleProjectInvestment() {
     const state = investment.project.state;
     const totalUnderlyingBalance = investment.balance * sellingAmountTarget / investment.token.supply;
 
+    const allowInvest = investment.project.state === State.Initialized;
+    const allowRedeem = (state === State.Funded && investment.project.booleanConfigs.allowPartialSell) || state === State.Closed;
+
     return (
       <tr key={investment.project.name}>
         <td>{investment.project.name}</td>
@@ -135,7 +138,7 @@ export function SimpleProjectInvestment() {
           </Group>
         </td> */}
         <td>
-          {investment.project.state < State.Closed ? (
+          {allowInvest && 
             <Tooltip label="Depositar fondos" withArrow>
               <Button
                 size="xs"
@@ -143,12 +146,11 @@ export function SimpleProjectInvestment() {
                 radius={"lg"}
                 variant="light"
                 onClick={() => setModalState({ open: true, project: investment.project })}
-                disabled={investment.project.state !== State.Initialized}
               >
                 Invertir
               </Button>
-            </Tooltip>
-          ) : (
+            </Tooltip>}
+          {allowRedeem && 
             <Tooltip label="Redimir fondos" withArrow>
               <Button
                 leftIcon={loadingRedeem && <Loader size={14} />}
@@ -157,12 +159,12 @@ export function SimpleProjectInvestment() {
                 radius={"lg"}
                 variant="light"
                 onClick={() => redeemTokens(totalUnderlyingBalance, investment)}
-                disabled={investment.project.state !== State.Closed || loadingRedeem}
+                disabled={loadingRedeem}
               >
                 Redimir
               </Button>
             </Tooltip>
-          )}
+          }
         </td>
       </tr>)
   });
