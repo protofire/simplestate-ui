@@ -68,8 +68,6 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
     validate: {
       name: (value) => requiredValidation(value),
       owner: (value) => addressValidation(value),
-      incomeDepositor: (value) => addressValidation(value),
-      maxSupply: (value) => positiveIntegerValidation(value),
       fundingAmount: (value) => positiveIntegerValidation(value),
       fundingTime: (value) => positiveIntegerValidation(value),
       sellAmount: (value) => positiveIntegerValidation(value),
