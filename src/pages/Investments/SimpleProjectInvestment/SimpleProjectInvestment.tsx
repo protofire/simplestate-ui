@@ -21,12 +21,11 @@ import { useApi } from "../../../hooks/useApi";
 import { Investment } from "../../../types/investment";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectDetail } from "../../Projects/ProjectDetail/ProjectDetail";
-import { profit } from "../../../utils/utilities";
 import { buildNotification, NotificationType } from "../../../constants/notifications";
 import { showNotification } from "@mantine/notifications";
 
 export function SimpleProjectInvestment() {
-  const { getInvestments, redeem } = useApi();
+  const { getInvestments, redeem, getClaimableRent } = useApi();
 
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -48,6 +47,14 @@ export function SimpleProjectInvestment() {
       }
     });
   }, [getInvestments, updating]);
+
+  useEffect(() => {
+    if (investments.length === 0) return;
+    const rentInvestments = investments.filter(i => i.project.booleanConfigs.produceIncome);
+    Promise.all(rentInvestments.map(i => getClaimableRent(i.project.address))).then((c) => {
+      console.log('claimable rent', c);
+    });
+  }, [getClaimableRent, investments]);
 
   if (loading) {
     return (
@@ -84,6 +91,11 @@ export function SimpleProjectInvestment() {
 
     const allowInvest = investment.project.state === State.Initialized;
     const allowRedeem = (state === State.Funded && investment.project.booleanConfigs.allowPartialSell) || state === State.Closed;
+    const produceIncome = investment.project.booleanConfigs.produceIncome;
+
+    if(produceIncome) {
+      getClaimableRent(investment.project.address)
+    }
 
     return (
       <tr key={investment.project.name}>

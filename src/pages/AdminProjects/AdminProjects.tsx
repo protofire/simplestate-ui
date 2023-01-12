@@ -32,7 +32,7 @@ const useStyles = createStyles(() => ({
 }));
 
 export function AdminProjects() {
-  const { fetchProjects, withdrawFunds, depositSellingAmount } = useApi();
+  const { fetchProjects, withdrawFunds, depositSellingAmount, depositRentAmount } = useApi();
 
   const { classes } = useStyles();
 
@@ -49,6 +49,12 @@ export function AdminProjects() {
   const [amountToDeposit, setAmountToDeposit] = useState<number>();
   const [loadingDeposit, setLoadingDeposit] = useState(false);
   const [depositError, setDepositError] = useState("");
+
+  const [rentToDeposit, setRentToDeposit] = useState<number>();
+  const [loadingDepositRent, setLoadingDepositRent] = useState(false);
+  const [depositRentError, setDepositRentError] = useState("");
+
+
 
   const enabledDepositRent = selectedProject?.state === State.Funded;
   const enableDepositSell = selectedProject?.state === State.Funded;
@@ -131,6 +137,23 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
       showNotification(errorNotification);
     } finally {
       setLoadingDeposit(false); 
+    }
+  }
+
+  const depositRent = async () => {
+    if (!selectedProject || !rentToDeposit) return;
+    try {
+      setLoadingDepositRent(true);
+      await depositRentAmount(selectedProject.address, rentToDeposit);
+      const successNotification = buildNotification(NotificationType.DEPOSIT_RENT_SUCCESS);
+      showNotification(successNotification);
+      reset();
+    } catch(err) {
+      console.log(err);
+      const errorNotification = buildNotification(NotificationType.DEPOSIT_RENT_ERROR, err);
+      showNotification(errorNotification);
+    } finally {
+      setLoadingDepositRent(false); 
     }
   }
 
@@ -248,28 +271,32 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
             </Button>
           </SimpleGrid>
         </Input.Wrapper>
-
-        {/* <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
-          <SimpleGrid cols={2}>
-            <Input
-              icon={<IconArrowUp />}
-              id="distribute-rent"
-              placeholder="Valor renta (USDC)"
-              type={"number"}
-              width={400}
-              disabled={!enabledDepositRent}
-            />
-            <Button
-              color={"teal"}
-              radius={"lg"}
-              style={{ maxWidth: "200px" }}
-              onClick={() => {}}
-              disabled={!enabledDepositRent}
-            >
-              Depositar Renta
-            </Button>
-          </SimpleGrid>
-        </Input.Wrapper> */}
+        {selectedProject.booleanConfigs.produceIncome && 
+          <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
+            <SimpleGrid cols={2}>
+              <TextInput
+                icon={<IconArrowUp />}
+                id="distribute-rent"
+                placeholder="Valor renta (USDC)"
+                type={"number"}
+                width={400}
+                onChange={(e: any) => setRentToDeposit(Number(e.target.value))}
+                disabled={!enabledDepositRent|| loadingDepositRent}
+                error={depositRentError}
+              />
+              <Button
+              leftIcon={loadingDepositRent && <Loader size={14} />}
+                color={"teal"}
+                radius={"lg"}
+                style={{ maxWidth: "200px" }}
+                onClick={depositRent}
+                disabled={!enabledDepositRent || loadingDepositRent}
+              >
+                Depositar Renta
+              </Button>
+            </SimpleGrid>
+          </Input.Wrapper>
+        }
 
         <Group m={"md"}>
           <Badge>{`Venta depositada acumulada: ${selectedProject?.financialTracking.cumulativeRedeemableAmount} USDC`}</Badge>

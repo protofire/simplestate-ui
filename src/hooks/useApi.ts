@@ -13,6 +13,7 @@ export function useApi() {
   const registry = useContract('registry');
   const factory = useContract('factory');
   const underlyingToken = useContract('underlyingToken');
+  const rent = useContract('rent');
 
   const { signer, connect, accounts, addToken } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
@@ -137,11 +138,13 @@ export function useApi() {
     if (!signer) return;
     const parsedAmount = toDecimals(amount);
     const signedContract = underlyingToken.sign(signer);
-    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, parsedAmount);
-    await approveTx.wait();
 
+    const approveTx: ContractTransaction = await signedContract?.functions.approve(ipAddress, parsedAmount);
+
+    await approveTx.wait();
     const ipContract = underlyingToken.initContract(ipAddress, 'project', signer);
     const investTx: ContractTransaction = await ipContract?.functions.invest(parsedAmount);
+
     await investTx.wait();
 
     addToken(token.address, token.symbol)
@@ -170,9 +173,6 @@ export function useApi() {
     if (!signer) return;
     const signerAddress = await signer.getAddress();
     if (signerAddress != project.roles.admin) throw { reason: 'Only the admin can withdraw the funds' };
-
-    console.log('project');
-    console.log(project);
 
     const allowed = project.state === State.Funded || (project.state === State.Initialized && project.booleanConfigs.allowWithdrawalOnPartialFunding);
     if (!allowed) throw { reason: 'Project state not allowed' };
@@ -209,6 +209,25 @@ export function useApi() {
     await redeemTx.wait();
   }, [signer, underlyingToken]);
 
+  const getClaimableRent = useCallback(async (ipAddress: string) => {
+    if (!accounts[0] || !rent) return;
+    const [claimableAmount] = await rent.contract?.functions.getCurrentClaimableAmount(ipAddress, accounts[0]);
+    return Number(claimableAmount);
+  }, [rent, accounts]);
+
+  const depositRentAmount = useCallback(async (ipAddress: string, amount: number) => {
+    if (!signer || !rent || !underlyingToken) return;
+    const parsedAmount = toDecimals(amount);
+
+    const signedUnderlyingTokenContract = underlyingToken.sign(signer);
+    const approveTx: ContractTransaction = await signedUnderlyingTokenContract?.functions.approve(rent.contract?.address, parsedAmount);
+    await approveTx.wait();
+
+    const signedContract = rent.sign(signer);
+    const depositTx: ContractTransaction = await signedContract?.functions.depositIncomeDistribution(ipAddress, parsedAmount);
+    await depositTx.wait();
+  }, [rent, signer, underlyingToken]);
+
   return {
     fetchProjects,
     createProject,
@@ -218,6 +237,8 @@ export function useApi() {
     getInvestments,
     withdrawFunds,
     depositSellingAmount,
+    getClaimableRent,
+    depositRentAmount,
     redeem
   }
 }

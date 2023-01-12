@@ -8,6 +8,11 @@ export default [
 			},
 			{
 				"internalType": "address",
+				"name": "_ipRentIncome",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
 				"name": "_feeModel",
 				"type": "address"
 			},
@@ -147,6 +152,19 @@ export default [
 	{
 		"inputs": [],
 		"name": "ipRegistry",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ipRentIncome",
 		"outputs": [
 			{
 				"internalType": "address",

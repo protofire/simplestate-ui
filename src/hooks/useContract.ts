@@ -10,14 +10,13 @@ export function useContract(contractType: ContractType) {
   useEffect(() => {
     const { address, abi } = getContractMetadata(contractType);
     const contract = new ethers.Contract(address, abi, provider);
-    contract.deployed().then((c) => {
-      setContract(c);
-    });
+    setContract(contract);
   }, []);
 
   const initContract = (address: string, contractType: ContractType, signer?: JsonRpcSigner) => {
     const { abi } = getContractMetadata(contractType);
     const initializedContract = new ethers.Contract(address, abi, provider);
+
     if (signer) return initializedContract.connect(signer);
     return initializedContract;
   }

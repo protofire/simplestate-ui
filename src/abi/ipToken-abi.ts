@@ -26,11 +26,6 @@ export default [
 		"type": "constructor"
 	},
 	{
-		"inputs": [],
-		"name": "NotAuthorized",
-		"type": "error"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -173,6 +168,19 @@ export default [
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "Snapshot",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "from",
@@ -247,6 +255,19 @@ export default [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "SNAPSHOT_TAKER_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -303,6 +324,30 @@ export default [
 			}
 		],
 		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "snapshotId",
+				"type": "uint256"
+			}
+		],
+		"name": "balanceOfAt",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -599,6 +644,19 @@ export default [
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_snapshotTaker",
+				"type": "address"
+			}
+		],
+		"name": "setSnapshotTaker",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -630,7 +688,39 @@ export default [
 	},
 	{
 		"inputs": [],
+		"name": "takeSnapshot",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "snapshotId",
+				"type": "uint256"
+			}
+		],
+		"name": "totalSupplyAt",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -701,4 +791,4 @@ export default [
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-];
+]

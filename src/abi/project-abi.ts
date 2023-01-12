@@ -645,19 +645,6 @@ export default [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_clearer",
-				"type": "address"
-			}
-		],
-		"name": "extractRemainingFunds",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "financialTracking",
 		"outputs": [
@@ -684,6 +671,11 @@ export default [
 			{
 				"internalType": "uint256",
 				"name": "fundingWithdrawed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "initialSupply",
 				"type": "uint256"
 			}
 		],
