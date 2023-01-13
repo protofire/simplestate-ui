@@ -238,6 +238,19 @@ export default [
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_ipRentIncome",
+				"type": "address"
+			}
+		],
+		"name": "setRentIncome",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
 			}

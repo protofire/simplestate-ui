@@ -160,10 +160,14 @@ export function useApi() {
     const balanceQueries = tokens.map(t => fetchTokenBalance(t.address, accounts[0]));
     const balances = await Promise.all(balanceQueries);
 
-    const investments = tokens.map((t, i) => ({
+    const rentQueries = tokenizedProjects.map(p => p.booleanConfigs.produceIncome ? getClaimableRent(p) : 0);
+    const rents = await Promise.all(rentQueries);
+
+    const investments = tokens.map((t, i) : Investment => ({
       project: tokenizedProjects[i],
       token: t,
       balance: fromDecimals(Number(balances[i])),
+      claimableRent: fromDecimals(Number(rents[i]))
     }));
     
     return investments.filter((i) => i.balance !== 0);
@@ -209,11 +213,11 @@ export function useApi() {
     await redeemTx.wait();
   }, [signer, underlyingToken]);
 
-  const getClaimableRent = useCallback(async (ipAddress: string) => {
-    if (!accounts[0] || !rent) return;
-    const [claimableAmount] = await rent.contract?.functions.getCurrentClaimableAmount(ipAddress, accounts[0]);
+  const getClaimableRent = async (project: IProjectMetadata): Promise<number> => {
+    if (!accounts[0] || !rent || !project.booleanConfigs.produceIncome) return 0;
+    const claimableAmount = await rent.contract?.functions.getCurrentClaimableAmount(project.address, accounts[0]);
     return Number(claimableAmount);
-  }, [rent, accounts]);
+  }
 
   const depositRentAmount = useCallback(async (ipAddress: string, amount: number) => {
     if (!signer || !rent || !underlyingToken) return;
@@ -237,7 +241,6 @@ export function useApi() {
     getInvestments,
     withdrawFunds,
     depositSellingAmount,
-    getClaimableRent,
     depositRentAmount,
     redeem
   }

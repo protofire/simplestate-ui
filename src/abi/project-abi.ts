@@ -784,6 +784,19 @@ export default [
 	},
 	{
 		"inputs": [],
+		"name": "ipRentIncome",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "metadata",
 		"outputs": [
 			{
@@ -981,6 +994,19 @@ export default [
 			}
 		],
 		"name": "setRateModel",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_rentIncome",
+				"type": "address"
+			}
+		],
+		"name": "setRentIncome",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

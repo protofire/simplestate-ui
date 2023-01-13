@@ -25,7 +25,7 @@ import { buildNotification, NotificationType } from "../../../constants/notifica
 import { showNotification } from "@mantine/notifications";
 
 export function SimpleProjectInvestment() {
-  const { getInvestments, redeem, getClaimableRent } = useApi();
+  const { getInvestments, redeem } = useApi();
 
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -47,14 +47,6 @@ export function SimpleProjectInvestment() {
       }
     });
   }, [getInvestments, updating]);
-
-  useEffect(() => {
-    if (investments.length === 0) return;
-    const rentInvestments = investments.filter(i => i.project.booleanConfigs.produceIncome);
-    Promise.all(rentInvestments.map(i => getClaimableRent(i.project.address))).then((c) => {
-      console.log('claimable rent', c);
-    });
-  }, [getClaimableRent, investments]);
 
   if (loading) {
     return (
@@ -93,10 +85,6 @@ export function SimpleProjectInvestment() {
     const allowRedeem = (state === State.Funded && investment.project.booleanConfigs.allowPartialSell) || state === State.Closed;
     const produceIncome = investment.project.booleanConfigs.produceIncome;
 
-    if(produceIncome) {
-      getClaimableRent(investment.project.address)
-    }
-
     return (
       <tr key={investment.project.name}>
         <td>{investment.project.name}</td>
@@ -123,18 +111,12 @@ export function SimpleProjectInvestment() {
             </Text>
           </Flex>
         </td>
-        {/* <td>
+        {produceIncome && <td>
           <Group position="right">
             <Text align="center" color="gray">
-              {investment.project.state !== State.Funded ? (
-                <span>
-                  <strong>0</strong> USDC
-                </span>
-              ) : (
-                <Text color="green">
-                  <strong>-</strong> USDC
-                </Text>
-              )}
+              {<Text color="green">
+                <strong>{investment.claimableRent}</strong> USDC
+              </Text>}
             </Text>
             <Tooltip label="Retirar renta disponible" withArrow>
               <Button
@@ -142,13 +124,13 @@ export function SimpleProjectInvestment() {
                 color={"teal"}
                 radius={"lg"}
                 compact
-                disabled={investment.project.state !== State.Funded}
+                disabled={investment.claimableRent === 0}
               >
                 Retirar
               </Button>
             </Tooltip>
           </Group>
-        </td> */}
+        </td>}
         <td>
           {allowInvest && 
             <Tooltip label="Depositar fondos" withArrow>

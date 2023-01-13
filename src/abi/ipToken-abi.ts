@@ -644,19 +644,6 @@ export default [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_snapshotTaker",
-				"type": "address"
-			}
-		],
-		"name": "setSnapshotTaker",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
