@@ -17,7 +17,9 @@ export enum NotificationType {
   REDEEM_TOKENS_ERROR,
   IMPORT_TOKEN_SUCCESS,
   DEPOSIT_RENT_SUCCESS,
-  DEPOSIT_RENT_ERROR
+  DEPOSIT_RENT_ERROR,
+  CLAIM_RENT_SUCCESS,
+  CLAIM_RENT_ERROR
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -170,6 +172,28 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando depositar la renta',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.CLAIM_RENT_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Retiro exitoso",
+        icon: <IconCheck size={18} />,
+        message: 'Renta retirada con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.CLAIM_RENT_ERROR: {
+      return {
+        id: "error",
+        autoClose: 10000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando retirar la renta',
         color: "red",
         radius: "md",
       }

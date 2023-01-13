@@ -25,7 +25,7 @@ import { buildNotification, NotificationType } from "../../../constants/notifica
 import { showNotification } from "@mantine/notifications";
 
 export function SimpleProjectInvestment() {
-  const { getInvestments, redeem } = useApi();
+  const { getInvestments, redeem, claimRent } = useApi();
 
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -37,6 +37,9 @@ export function SimpleProjectInvestment() {
 
   const [loadingRedeem, setLoadingRedeem] = useState(false);
   const [updating, setUpdating] = useState(false);
+
+  const [loadingClaim, setLoadingClaim] = useState(false);
+
 
   useEffect(() => {
     setLoading(true);
@@ -73,6 +76,22 @@ export function SimpleProjectInvestment() {
       showNotification(errorNotification);
     } finally {
       setLoadingRedeem(false);
+    }
+  }
+
+  const claim = async (investment: Investment) => {
+    setLoadingClaim(true);
+    try {
+      await claimRent(investment.project.address);      
+      const successNotification = buildNotification(NotificationType.CLAIM_RENT_SUCCESS);
+      showNotification(successNotification);
+      reset();
+    } catch (err) {
+      console.log(err);
+      const errorNotification = buildNotification(NotificationType.CLAIM_RENT_ERROR, err);
+      showNotification(errorNotification);
+    } finally {
+      setLoadingClaim(false);
     }
   }
 
@@ -120,11 +139,13 @@ export function SimpleProjectInvestment() {
             </Text>
             <Tooltip label="Retirar renta disponible" withArrow>
               <Button
+                leftIcon={loadingClaim && <Loader size={12} />}
                 size="xs"
                 color={"teal"}
                 radius={"lg"}
                 compact
-                disabled={investment.claimableRent === 0}
+                disabled={investment.claimableRent === 0 || loadingClaim}
+                onClick={() => claim(investment)}
               >
                 Retirar
               </Button>

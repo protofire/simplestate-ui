@@ -232,6 +232,14 @@ export function useApi() {
     await depositTx.wait();
   }, [rent, signer, underlyingToken]);
 
+  const claimRent = useCallback(async (ipAddress: string) => {
+    if (!signer || !rent) return;
+    const signerAddress = await signer.getAddress();
+    const signedContract = rent.sign(signer);
+    const depositTx: ContractTransaction = await signedContract?.functions.claimAll(ipAddress, signerAddress);
+    await depositTx.wait();
+  }, [rent, signer]);
+
   return {
     fetchProjects,
     createProject,
@@ -242,6 +250,7 @@ export function useApi() {
     withdrawFunds,
     depositSellingAmount,
     depositRentAmount,
+    claimRent,
     redeem
   }
 }
