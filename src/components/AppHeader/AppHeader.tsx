@@ -1,6 +1,6 @@
 import { Header, Button, createStyles, Container, Badge, Tooltip } from "@mantine/core";
 import logo from '../../assets/simple-state-logo.png';
-import { networkEnum } from "../../constants/networks";
+import { networkEnum, networks } from "../../constants/networks";
 import { useMetamask } from "../../hooks/useMetamask";
 import { useEffect } from "react";
 import { Network } from '@ethersproject/providers';
@@ -13,6 +13,8 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'space-between'
   }
 }));
+
+const defaultNetwork = networkEnum.MUMBAI;
 
 export function AppHeader() {
   const { connect, connectDefault, accounts, network, sitchChainTo } = useMetamask();
@@ -46,8 +48,8 @@ interface ISessionInfoProps {
 function SessionInfo({ accounts, network, sitchChainTo } : ISessionInfoProps) {
 
   const switchChain = () => {
-    if (network?.chainId !== networkEnum.GOERLI) {
-      sitchChainTo(networkEnum.GOERLI);
+    if (network?.chainId !== defaultNetwork) {
+      sitchChainTo(defaultNetwork);
     }
   }
 
@@ -55,16 +57,16 @@ function SessionInfo({ accounts, network, sitchChainTo } : ISessionInfoProps) {
     <div>
       {accounts[0]} 
       <Tooltip
-        disabled={network?.chainId === networkEnum.GOERLI}
+        disabled={network?.chainId === defaultNetwork}
         multiline
         withArrow
         transition="fade"
         transitionDuration={200}
-        label={"Red incorrecta, conéctate a la red de test Goerli"}
+        label={`Red incorrecta, conéctate a la red de test ${networks[defaultNetwork]}`}
       >
         <Badge
           onClick={switchChain}
-          color={network?.chainId === networkEnum.GOERLI ? 'teal' : 'red'}
+          color={network?.chainId === defaultNetwork ? 'teal' : 'red'}
         >{network?.name ?? 'Invalid network'}</Badge>
       </Tooltip>
     </div>

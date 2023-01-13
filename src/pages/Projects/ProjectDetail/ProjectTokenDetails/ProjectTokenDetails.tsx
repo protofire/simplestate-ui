@@ -39,11 +39,11 @@ export function ProjectTokenDetails({
   }, []);
 
   const invest = async () => {
-    if (!investmentValue) return setError("Please set an investment value");
+    if (!investmentValue) return setError("Por favor, ingresa un monto válido");
     if (investmentValue + project.financialTracking.fundingRaised > fundingAmountTarget) return setError("Ingrese un monto inferior a la meta de financiamiento.")
     if (!signer || accounts.length === 0)
-      return setError("Please connect your wallet");
-    if (!project.token) return setError('Token not found');
+      return setError("Por favor, conecta tu wallet");
+    if (!project.token) return setError('Token no encontrado');
     setError("");
     setLoading(true);
 

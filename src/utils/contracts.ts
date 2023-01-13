@@ -48,4 +48,4 @@ export function getContractMetadata(contractType: ContractType): IContractMetada
 	return contractMetadata[contractType]
 }
 
-export const provider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`);
+export const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`);
