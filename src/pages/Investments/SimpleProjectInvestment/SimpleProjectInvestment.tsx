@@ -174,7 +174,7 @@ export function SimpleProjectInvestment() {
                 radius={"lg"}
                 variant="light"
                 onClick={() => redeemTokens(totalUnderlyingBalance, investment)}
-                disabled={loadingRedeem}
+                disabled={loadingRedeem || (!!investment.claimableRent && investment.claimableRent > 0)}
               >
                 Redimir
               </Button>
