@@ -63,10 +63,10 @@ export function SimpleProjectInvestment() {
     setUpdating(u => !u);
   }
 
-  const redeemTokens = async (amount: number, investment: Investment) => {
+  const redeemTokens = async (investment: Investment) => {
     try {
       setLoadingRedeemAddress(investment.project.address);
-      await redeem(amount, investment.project.address, investment.token.address);
+      await redeem(investment.balance, investment.project.address, investment.token.address);
       const successNotification = buildNotification(NotificationType.REDEEM_TOKENS_SUCCESS);
       showNotification(successNotification);
       reset();
@@ -176,7 +176,7 @@ export function SimpleProjectInvestment() {
                 color={"blue"}
                 radius={"lg"}
                 variant="light"
-                onClick={() => redeemTokens(totalUnderlyingBalance, investment)}
+                onClick={() => redeemTokens(investment)}
                 disabled={loadingRedeem || (!!investment.claimableRent && investment.claimableRent > 0)}
               >
                 Redimir
