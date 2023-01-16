@@ -201,7 +201,7 @@ export function SimpleProjectInvestment() {
             <th>Estado</th>
             <th>Token</th>
             <th>Balance</th>
-            {/* <th>Renta disponible</th> */}
+            <th>Renta disponible</th>
             <th>Acciones</th>
           </tr>
         </thead>
