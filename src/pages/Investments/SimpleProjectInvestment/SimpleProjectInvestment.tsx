@@ -137,7 +137,7 @@ export function SimpleProjectInvestment() {
           <Group position="right">
             <Text align="center" color="gray">
               {<Text color="green">
-                <strong>{investment.claimableRent}</strong> USDC
+                <strong>{investment.claimableRent?.toFixed(2)}</strong> USDC
               </Text>}
             </Text>
             <Tooltip label="Retirar renta disponible" withArrow>
