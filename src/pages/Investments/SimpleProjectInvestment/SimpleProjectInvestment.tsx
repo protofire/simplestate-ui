@@ -35,10 +35,10 @@ export function SimpleProjectInvestment() {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const [loadingRedeem, setLoadingRedeem] = useState(false);
+  const [loadingRedeemAddress, setLoadingRedeemAddress] = useState('');
   const [updating, setUpdating] = useState(false);
 
-  const [loadingClaim, setLoadingClaim] = useState(false);
+  const [loadingClaimAddress, setLoadingClaimAddress] = useState('');
 
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function SimpleProjectInvestment() {
 
   const redeemTokens = async (amount: number, investment: Investment) => {
     try {
-      setLoadingRedeem(true);
+      setLoadingRedeemAddress(investment.project.address);
       await redeem(amount, investment.project.address, investment.token.address);
       const successNotification = buildNotification(NotificationType.REDEEM_TOKENS_SUCCESS);
       showNotification(successNotification);
@@ -75,12 +75,12 @@ export function SimpleProjectInvestment() {
       const errorNotification = buildNotification(NotificationType.REDEEM_TOKENS_ERROR, err);
       showNotification(errorNotification);
     } finally {
-      setLoadingRedeem(false);
+      setLoadingRedeemAddress('');
     }
   }
 
   const claim = async (investment: Investment) => {
-    setLoadingClaim(true);
+    setLoadingClaimAddress(investment.project.address);
     try {
       await claimRent(investment.project.address);      
       const successNotification = buildNotification(NotificationType.CLAIM_RENT_SUCCESS);
@@ -91,7 +91,7 @@ export function SimpleProjectInvestment() {
       const errorNotification = buildNotification(NotificationType.CLAIM_RENT_ERROR, err);
       showNotification(errorNotification);
     } finally {
-      setLoadingClaim(false);
+      setLoadingClaimAddress('');
     }
   }
 
@@ -103,6 +103,9 @@ export function SimpleProjectInvestment() {
     const allowInvest = investment.project.state === State.Initialized;
     const allowRedeem = (state === State.Funded && investment.project.booleanConfigs.allowPartialSell) || state === State.Closed;
     const produceIncome = investment.project.booleanConfigs.produceIncome;
+
+    const loadingClaim = loadingClaimAddress === investment.project.address;
+    const loadingRedeem = loadingRedeemAddress === investment.project.address;
 
     return (
       <tr key={investment.project.name}>
