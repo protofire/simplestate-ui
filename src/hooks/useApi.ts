@@ -240,6 +240,13 @@ export function useApi() {
     await depositTx.wait();
   }, [rent, signer]);
 
+  const getAccumulatedRent = useCallback(async (ipAddress: string): Promise<number> => {
+    if (!signer || !rent) return 0;
+    const signedContract = rent.sign(signer);
+    const [produceIncome, lastEpoch, totalDeposited, totalClaimed] = await signedContract?.functions.projectsIcomeDistribution(ipAddress);
+    return fromDecimals(Number(totalDeposited));
+  }, [rent, signer]);
+
   return {
     fetchProjects,
     createProject,
@@ -251,6 +258,7 @@ export function useApi() {
     depositSellingAmount,
     depositRentAmount,
     claimRent,
+    getAccumulatedRent,
     redeem
   }
 }
