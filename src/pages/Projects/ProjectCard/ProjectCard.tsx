@@ -79,9 +79,9 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
           {project.booleanConfigs.produceIncome ? "Renta Mensual" : "Renta Final"}
         </Title>
         <Text color={"dimmed"} size={14} align="center">
-          {/* {project.produceIncome
-            ? `Cobras en ${project.unitOfAccount ?? "USDC"} al final del plazo` : */
-            `Cobras en ${project.unitOfAccount ?? "USDC"} todos los meses`}
+          {project.booleanConfigs.produceIncome
+            ? `Cobras en ${project.unitOfAccount ?? "USDC"} todos los meses`
+            : `Cobras en ${project.unitOfAccount ?? "USDC"} al finalizar el período`}
         </Text>
       </Card.Section>
 
@@ -117,7 +117,7 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
         <Text color={"dimmed"} size={12}>{`${Utils.raisedRate(
           Number(fundingRaised),
           Number(fundingAmountTarget)
-        )}% invertido`}</Text>
+        ).toFixed(2)}% invertido`}</Text>
         <Slider
           my={10}
           thumbChildren={null}
