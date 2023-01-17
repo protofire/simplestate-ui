@@ -1,100 +1,143 @@
-import { IProject } from "../types/project";
+import { State } from "../constants/projectState";
+import { IProjectMetadata } from "../types/projectMetadata";
 
-export const mockProjects: IProject[] = [
+export const mockProjects: IProjectMetadata[] = [
   {
-    allowPartialSell: false,
-    financtialMetadata: {
-      foundingAmount: 10000,
-      foundingTime: 90,
-      raised: 6000,
-      sellAmount: 12000,
-      sellTime: 12,
+    name: 'Mock 0',
+    address: '0xmock',
+    avgTimeBetweenUpdates: 10,
+    booleanConfigs: {
+      allowPartialSell: false,
+      allowWithdrawalOnPartialFunding: true,
+      produceIncome: true,
     },
-    feeModel: "listing",
-    incomeDepositor: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    maxSupply: 5000,
-    metadataURL:
+    financialTracking: {
+      accruedFees: 0,
+      cumulativeRedeemableAmount: 10,
+      fundingRaised: 1000,
+      fundingWithdrawed: 500,
+      redeemableAmount: 500
+    },
+    modules: {
+      feeModel: "0xmock",
+      permissioningModel: "0xmock",
+      rateModel: "0xmock",
+    },
+    token: {
+      address: '0xmock',
+      name: 'SimpleToken 0',
+      supply: 1000,
+      symbol: 'SIP 0'
+    },
+    targets: {
+      fundingAmountTarget: 1000,
+      fundingTimeTarget: 1000,
+      sellingAmountTarget: 1500,
+      sellingTimeTarget: 1500
+    },
+    state: State.Finalized,
+    offchainLink:
       "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80",
-    name: "Rosario - Puerto Norte",
-    owner: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    permissioningModel: "blacklist",
-    produceIncome: false,
-    state: "initialized",
-    unitOfAccount: "USDC",
-    valuationModel: "rate",
-    redeemableAmount: 1,
-    id: 1,
+    roles: {
+      admin: '0xmock',
+    },
+    valuationModel: 'rate',
+    feeModel: 'listing',
+    lastUpdate: 100,
+    numberOfUpdates: 0,
+    permissioningModel: 'Whitelist',
+    unitOfAccount: 'USDC'
   },
   {
-    allowPartialSell: false,
-    financtialMetadata: {
-      foundingAmount: 10000,
-      foundingTime: 90,
-      raised: 10000,
-      sellAmount: 12000,
-      sellTime: 12,
+    name: 'Mock 1',
+    address: '0xmock',
+    avgTimeBetweenUpdates: 10,
+    booleanConfigs: {
+      allowPartialSell: false,
+      allowWithdrawalOnPartialFunding: true,
+      produceIncome: false,
     },
-    feeModel: "listing",
-    incomeDepositor: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    maxSupply: 5000,
-    metadataURL:
-      "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80",
-    name: "Rosario - Puerto Sur",
-    owner: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    permissioningModel: "blacklist",
-    produceIncome: false,
-    state: "funded",
-    unitOfAccount: "USDC",
-    valuationModel: "rate",
-    redeemableAmount: 1,
-    id: 22,
-  },
-  {
-    allowPartialSell: false,
-    financtialMetadata: {
-      foundingAmount: 10000,
-      foundingTime: 90,
-      raised: 10000,
-      sellAmount: 12000,
-      sellTime: 12,
+    financialTracking: {
+      accruedFees: 0,
+      cumulativeRedeemableAmount: 10,
+      fundingRaised: 1000,
+      fundingWithdrawed: 500,
+      redeemableAmount: 500
     },
-    feeModel: "listing",
-    incomeDepositor: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    maxSupply: 5000,
-    metadataURL:
-      "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80",
-    name: "Puerto Amarras",
-    owner: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    permissioningModel: "blacklist",
-    produceIncome: false,
-    state: "finished",
-    unitOfAccount: "USDC",
-    valuationModel: "rate",
-    redeemableAmount: 0,
-    id: 16,
-  },
-  {
-    allowPartialSell: false,
-    financtialMetadata: {
-      foundingAmount: 10000,
-      foundingTime: 90,
-      raised: 10000,
-      sellAmount: 12000,
-      sellTime: 12,
+    modules: {
+      feeModel: "0xmock",
+      permissioningModel: "0xmock",
+      rateModel: "0xmock",
     },
-    feeModel: "listing",
-    incomeDepositor: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    maxSupply: 5000,
-    metadataURL:
+    token: {
+      address: '0xmock',
+      name: 'SimpleToken 0',
+      supply: 1000,
+      symbol: 'SIP 0'
+    },
+    targets: {
+      fundingAmountTarget: 1000,
+      fundingTimeTarget: 1000,
+      sellingAmountTarget: 1500,
+      sellingTimeTarget: 1500
+    },
+    state: State.Finalized,
+    offchainLink:
       "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80",
-    name: "Torres del Este",
-    owner: "0x566bF04539C9Bf5eF1fa99d83e29453AD87bcA45",
-    permissioningModel: "blacklist",
-    produceIncome: false,
-    state: "finished",
-    unitOfAccount: "USDC",
-    valuationModel: "rate",
-    redeemableAmount: 1,
-    id: 14,
+    roles: {
+      admin: '0xmock',
+    },
+    valuationModel: 'rate',
+    feeModel: 'listing',
+    lastUpdate: 100,
+    numberOfUpdates: 0,
+    permissioningModel: 'Whitelist',
+    unitOfAccount: 'USDC'
   },
+   {
+    name: 'Mock 2',
+    address: '0xmock',
+    avgTimeBetweenUpdates: 10,
+    booleanConfigs: {
+      allowPartialSell: false,
+      allowWithdrawalOnPartialFunding: true,
+      produceIncome: true,
+    },
+    financialTracking: {
+      accruedFees: 0,
+      cumulativeRedeemableAmount: 10,
+      fundingRaised: 1000,
+      fundingWithdrawed: 500,
+      redeemableAmount: 500
+    },
+    modules: {
+      feeModel: "0xmock",
+      permissioningModel: "0xmock",
+      rateModel: "0xmock",
+    },
+    token: {
+      address: '0xmock',
+      name: 'SimpleToken 0',
+      supply: 1000,
+      symbol: 'SIP 0'
+    },
+    targets: {
+      fundingAmountTarget: 1000,
+      fundingTimeTarget: 1000,
+      sellingAmountTarget: 1500,
+      sellingTimeTarget: 1500
+    },
+    state: State.Finalized,
+    offchainLink:
+      "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80",
+    roles: {
+      admin: '0xmock',
+    },
+    valuationModel: 'rate',
+    feeModel: 'listing',
+    lastUpdate: 100,
+    numberOfUpdates: 0,
+    permissioningModel: 'Whitelist',
+    unitOfAccount: 'USDC'
+  }
 ];

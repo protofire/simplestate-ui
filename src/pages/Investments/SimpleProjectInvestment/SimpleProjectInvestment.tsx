@@ -133,8 +133,8 @@ export function SimpleProjectInvestment() {
             </Text>
           </Flex>
         </td>
-        {produceIncome && <td>
-          <Group position="right">
+        <td>
+          <Group position="right" style={{visibility: produceIncome ? 'visible': 'hidden'}}>
             <Text align="center" color="gray">
               {<Text color="green">
                 <strong>{investment.claimableRent?.toFixed(2)}</strong> USDC
@@ -154,7 +154,7 @@ export function SimpleProjectInvestment() {
               </Button>
             </Tooltip>
           </Group>
-        </td>}
+        </td>
         <td>
           {allowInvest && 
             <Tooltip label="Depositar fondos" withArrow>
