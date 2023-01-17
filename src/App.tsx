@@ -39,15 +39,6 @@ export default function App() {
                 </Tabs.Panel>
               }
             />
-
-            <Route
-              path="treasury"
-              element={
-                <Tabs.Panel value="treasury" pt="lg">
-                  <div>Tesoro</div>
-                </Tabs.Panel>
-              }
-            />
           </Route>
         </Routes>
       </AppShell>
