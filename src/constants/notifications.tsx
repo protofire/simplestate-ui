@@ -19,7 +19,11 @@ export enum NotificationType {
   DEPOSIT_RENT_SUCCESS,
   DEPOSIT_RENT_ERROR,
   CLAIM_RENT_SUCCESS,
-  CLAIM_RENT_ERROR
+  CLAIM_RENT_ERROR,
+  INVEST_SIMPLEARN_SUCCESS,
+  INVEST_SIMPLEARN_ERROR,
+  REDEEM_SIMPLEARN_SUCCESS,
+  REDEEM_SIMPLEARN_ERROR,
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -194,6 +198,50 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando retirar la renta',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.INVEST_SIMPLEARN_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Inversión exitosa",
+        icon: <IconCheck size={18} />,
+        message: 'Inversión en simplearn realizada con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.INVEST_SIMPLEARN_ERROR: {
+      return {
+        id: "error",
+        autoClose: 10000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando realizar inversión en simplearn',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.REDEEM_SIMPLEARN_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Retiro exitoso",
+        icon: <IconCheck size={18} />,
+        message: 'Inversión en simplearn retirada con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.REDEEM_SIMPLEARN_ERROR: {
+      return {
+        id: "error",
+        autoClose: 10000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando retirar la inversión en simplearn',
         color: "red",
         radius: "md",
       }

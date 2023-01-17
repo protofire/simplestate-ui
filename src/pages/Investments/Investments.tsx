@@ -1,11 +1,11 @@
 
-import { SimpleEarnInvestment } from "./SimpleEarnInvestment/SimpleEarnInvestment";
+import { SimpleEarn } from "./SimpleEarnInvestment/SimpleEarn";
 import { SimpleProjectInvestment } from "./SimpleProjectInvestment/SimpleProjectInvestment";
 
 export function Investments() {
   return (
     <>
-      <SimpleEarnInvestment />
+      <SimpleEarn />
       <SimpleProjectInvestment />
     </>
   );

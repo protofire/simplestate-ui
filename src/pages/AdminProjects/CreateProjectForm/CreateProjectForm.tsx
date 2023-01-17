@@ -138,7 +138,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
               Dueño del proyecto <span style={{fontWeight: 300}}>(Owner)</span>
             </span>
         }>
-          <TextInput {...form.getInputProps('owner')} placeholder="Ej. 0xae6C283135480b56738CDaBdB8d7Df11E59364a9SPT33" />
+          <TextInput {...form.getInputProps('owner')} disabled placeholder="Ej. 0xae6C283135480b56738CDaBdB8d7Df11E59364a9SPT33" />
         </Input.Wrapper>
 
         {/* <Input.Wrapper

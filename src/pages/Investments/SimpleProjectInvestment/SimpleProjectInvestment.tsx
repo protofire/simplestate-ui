@@ -51,14 +51,6 @@ export function SimpleProjectInvestment() {
     });
   }, [getInvestments, updating]);
 
-  if (loading) {
-    return (
-      <Center m={"xl"}>
-        <Loader color="teal" size="lg" variant="bars" />
-      </Center>
-    );
-  }
-
   const reset = () => {
     setUpdating(u => !u);
   }
@@ -192,7 +184,10 @@ export function SimpleProjectInvestment() {
       <Title size={"lg"} mb="lg">
         Proyectos
       </Title>
-      <Table
+      {loading ? <Center m={"xl"}>
+        <Loader color="teal" size="lg" variant="bars" />
+      </Center> 
+      : <Table
         horizontalSpacing="md"
         verticalSpacing="md"
         withBorder
@@ -209,7 +204,8 @@ export function SimpleProjectInvestment() {
           </tr>
         </thead>
         <tbody>{rows}</tbody>
-      </Table>
+      </Table>}
+
       <Modal
         opened={modalState.open}
         onClose={() => setModalState({ open: false, project: null })}

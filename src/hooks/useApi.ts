@@ -8,6 +8,7 @@ import { Investment } from "../types/investment";
 import { IProjectToken } from "../types/token";
 import { IFinanctialTracking, IProjectTargets } from "../types/projectMetadata";
 import { fromDecimals, toDecimals } from "../utils/utilities";
+import { SimpleEarnInvestment } from "../types/simple-earn";
 
 export function useApi() {
   const registry = useContract('registry');
@@ -247,6 +248,18 @@ export function useApi() {
     return fromDecimals(Number(totalDeposited));
   }, [rent, signer]);
 
+  const getSimpleEarnInvestment = useCallback(async (): Promise<SimpleEarnInvestment | undefined> => {
+    if (!signer) return;
+  }, [signer]);
+
+  const investSimpleEarn = useCallback(async (amount: number) => {
+    if (!signer) return;
+  }, [signer]);
+
+  const redeemSimpleEarn = useCallback(async (amount: number) => {
+    if (!signer) return;
+  }, [signer]);
+
   return {
     fetchProjects,
     createProject,
@@ -259,6 +272,9 @@ export function useApi() {
     depositRentAmount,
     claimRent,
     getAccumulatedRent,
+    getSimpleEarnInvestment,
+    investSimpleEarn,
+    redeemSimpleEarn,
     redeem
   }
 }
