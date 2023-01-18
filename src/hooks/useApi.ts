@@ -282,7 +282,10 @@ export function useApi() {
     const rateRay = toRAYDecimals(rate);
 
     const signedContract = simplearn.sign(signer);
-    const tx: ContractTransaction = await signedContract?.functions.setInterestRate(rateRay+'', isPositive, { gasLimit: 100000 });
+    const tx: ContractTransaction = await signedContract?.functions.setInterestRate(
+      rateRay+'', 
+      isPositive, 
+      { gasLimit: 150000 });
     await tx.wait();
   }, [signer, simplearn.contract]);
 
@@ -295,7 +298,7 @@ export function useApi() {
     const approveTx: ContractTransaction = await signedUnderlyingTokenContract?.functions.approve(
       simplearn.contract?.address, 
       parsedAmount, 
-      { gasLimit: 100000 });
+      { gasLimit: 150000 });
     await approveTx.wait();
 
     const signedSimplearnContract = simplearn.sign(signer);
@@ -303,18 +306,18 @@ export function useApi() {
     await tx.wait();
   }, [signer, simplearn.contract, underlyingToken.contract]);
 
-  const redeemSimpleEarn = useCallback(async (amount: number) => {
+  const withdrawSimpleEarn = useCallback(async (amount: number) => {
     if (!signer || !simplearn.contract || !underlyingToken.contract) return;
 
     const parsedAmount = toDecimals(amount);
     const address = await signer.getAddress();
 
     const signedSimplearnContract = simplearn.sign(signer);
-    const tx: ContractTransaction = await signedSimplearnContract?.functions.redeem(
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.withdraw(
       parsedAmount, 
       address, 
       address, 
-      { gasLimit: 100000 });
+      { gasLimit: 150000 });
     await tx.wait();
 
   }, [signer]);
@@ -334,7 +337,7 @@ export function useApi() {
     getSimpleEarnInvestment,
     setSimplearnRate,
     investSimpleEarn,
-    redeemSimpleEarn,
+    withdrawSimpleEarn,
     redeem
   }
 }

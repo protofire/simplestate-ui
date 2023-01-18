@@ -16,7 +16,7 @@ import { useApi } from "../../hooks/useApi";
 import { SimpleEarnInvestment } from '../../types/simple-earn';
 
 export function SimpleEarn() {
-  const { getSimpleEarnInvestment, investSimpleEarn, redeemSimpleEarn, setSimplearnRate } = useApi();
+  const { getSimpleEarnInvestment, investSimpleEarn, withdrawSimpleEarn, setSimplearnRate } = useApi();
 
   const [investment, setInvestment] = useState<SimpleEarnInvestment>();
   const [loading, setLoading] = useState(false);
@@ -62,11 +62,11 @@ export function SimpleEarn() {
     }
   }
 
-  const redeem = async () => {
+  const withdraw = async () => {
     if(!amountToRedeem) return;
     setLoadingRedemption(true)
     try {
-      await redeemSimpleEarn(amountToRedeem);
+      await withdrawSimpleEarn(amountToRedeem);
       const notification = buildNotification(NotificationType.REDEEM_SIMPLEARN_SUCCESS);
       showNotification(notification);
       reload();
@@ -119,10 +119,10 @@ export function SimpleEarn() {
           </Grid.Col>
         </Grid>
         <Group position="center" grow>
-          <Text>Comprar Simple Earn Token (SET)</Text>
+          <Text>Invertir (USDC)</Text>
 
           <TextInput 
-            placeholder="500 SET" 
+            placeholder="500 USDC" 
             type={"number"} 
             onChange={(e) => setAmountToInvest(Number(e.target.value))}
             disabled={loadingInvestment}
@@ -136,14 +136,14 @@ export function SimpleEarn() {
             disabled={!amountToInvest || loadingInvestment}
             leftIcon={loadingInvestment && <Loader size={14} />}
           >
-            Comprar
+            Invertir
           </Button>
         </Group>
         <Group position="center" grow>
-          <Text>Redimir Simple Earn Token (SET)</Text>
+          <Text>Retirar ganancias (USDC)</Text>
 
           <TextInput 
-            placeholder="500 SET" 
+            placeholder="500 USDC" 
             type={"number"} 
             onChange={(e) => setAmountToRedeem(Number(e.target.value))}
             disabled={loadingRedemtion}
@@ -153,11 +153,11 @@ export function SimpleEarn() {
             gradient={{ from: "teal", to: "blue.9", deg: 60 }}
             radius={"lg"}
             m="md"
-            onClick={redeem}
+            onClick={withdraw}
             disabled={!amountToRedeem || !investment?.balance || loadingRedemtion}
             leftIcon={loadingRedemtion && <Loader size={14} />}
           >
-            Redimir
+            Retirar
           </Button>
         </Group>
       </Paper>
