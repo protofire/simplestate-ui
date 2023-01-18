@@ -26,6 +26,7 @@ export function SimpleEarn() {
 
   const [amountToRedeem, setAmountToRedeem] = useState<number>();
   const [loadingRedemtion, setLoadingRedemption] = useState(false);
+  const [redeemError, setRedeemError] = useState('');
 
   const [update, setUpdate] = useState(false);
 
@@ -63,7 +64,10 @@ export function SimpleEarn() {
   }
 
   const withdraw = async () => {
-    if(!amountToRedeem) return;
+    if(!amountToRedeem || !investment) return;
+    if(amountToRedeem > investment.underlyingBalance) return setRedeemError('No puedes retirar un monto mayor a tu balance');
+    setRedeemError('');
+    
     setLoadingRedemption(true)
     try {
       await withdrawSimpleEarn(amountToRedeem);
@@ -147,6 +151,10 @@ export function SimpleEarn() {
             type={"number"} 
             onChange={(e) => setAmountToRedeem(Number(e.target.value))}
             disabled={loadingRedemtion}
+            bottom={'test'}
+            description={`Balance disponible ${investment?.underlyingBalance} USDC`}
+            error={redeemError}
+            inputWrapperOrder={['label', 'input', 'description', 'error',]}
             />
           <Button
             variant="gradient"
