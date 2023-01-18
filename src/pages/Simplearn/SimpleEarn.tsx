@@ -27,6 +27,8 @@ export function SimpleEarn() {
   const [amountToRedeem, setAmountToRedeem] = useState<number>();
   const [loadingRedemtion, setLoadingRedemption] = useState(false);
 
+  const [update, setUpdate] = useState(false);
+
   const [rate, setRate] = useState<number>();
   const [loadingRate, setLoadingRate] = useState(false);
 
@@ -36,7 +38,11 @@ export function SimpleEarn() {
       setInvestment(investment);
       setLoading(false);
     });
-  }, [getSimpleEarnInvestment]);
+  }, [getSimpleEarnInvestment, update]);
+
+  const reload = () => {
+    setUpdate(u => !u);
+  } 
 
   const invest = async () => {
     if(!amountToInvest) return;
@@ -46,6 +52,7 @@ export function SimpleEarn() {
       await investSimpleEarn(amountToInvest);
       const notification = buildNotification(NotificationType.INVEST_SIMPLEARN_SUCCESS);
       showNotification(notification);
+      reload();
     } catch (err) {
       console.log(err);
       const notification = buildNotification(NotificationType.INVEST_SIMPLEARN_ERROR, {error: err});
@@ -62,6 +69,7 @@ export function SimpleEarn() {
       await redeemSimpleEarn(amountToRedeem);
       const notification = buildNotification(NotificationType.REDEEM_SIMPLEARN_SUCCESS);
       showNotification(notification);
+      reload();
     } catch (err) {
       console.log(err);
       const notification = buildNotification(NotificationType.REDEEM_SIMPLEARN_ERROR, {error: err});
@@ -78,6 +86,7 @@ export function SimpleEarn() {
       await setSimplearnRate(rate);
       const notification = buildNotification(NotificationType.RATE_SIMPLEARN_SUCCESS);
       showNotification(notification);
+      reload();
     } catch (err) {
       console.log(err);
       const notification = buildNotification(NotificationType.RATE_SIMPLEARN_ERROR, {error: err});
