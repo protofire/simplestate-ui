@@ -1,4 +1,3 @@
-import { ProjectState } from "../types/project";
 
 export enum State {
   Created = 0,
