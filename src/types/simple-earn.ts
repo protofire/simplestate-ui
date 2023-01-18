@@ -1,5 +1,6 @@
 export type SimpleEarnInvestment = {
+  symbol: string,
   balance: number,
-  value: number,
+  underlyingBalance: number,
   apy: number
 }

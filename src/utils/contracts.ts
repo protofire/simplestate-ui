@@ -7,6 +7,7 @@ import ipTokenAbi from '../abi/ipToken-abi';
 import erc20Abi from '../abi/erc20-abi';
 import rateModelAbi from '../abi/rateModel-abi';
 import rentAbi from '../abi/rent-abi';
+import simplearnAbi from '../abi/simplearn-abi';
 
 interface IContractMetadata {
 	address: string;
@@ -41,6 +42,10 @@ const contractMetadata: Record<string, IContractMetadata> = {
 	rent: {
 		address: import.meta.env.VITE_RENT_INCOME_CONTRACT_ADDRESS,
 		abi: rentAbi
+	},
+	simplearn: {
+		address: import.meta.env.VITE_SIMPLEARN_CONTRACT_ADDRESS,
+		abi: simplearnAbi
 	},
 }
 

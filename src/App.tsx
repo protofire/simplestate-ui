@@ -5,6 +5,7 @@ import { AppTabs } from "./components/AppTabs/AppTabs";
 import { Projects } from "./pages/Projects/Projects/Projects";
 import { Investments } from "./pages/Investments/Investments";
 import { AppHeader } from "./components/AppHeader/AppHeader";
+import { SimpleEarn } from "./pages/Simplearn/SimpleEarn";
 
 export default function App() {
   return (
@@ -36,6 +37,15 @@ export default function App() {
               element={
                 <Tabs.Panel value="admin" pt="lg">
                   <AdminProjects />
+                </Tabs.Panel>
+              }
+            />
+
+            <Route
+              path="simplearn"
+              element={
+                <Tabs.Panel value="simplearn" pt="lg">
+                  <SimpleEarn />
                 </Tabs.Panel>
               }
             />

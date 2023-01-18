@@ -4,3 +4,5 @@ export interface IProjectToken {
   name: string;
   supply: number;
 }
+
+export type UnderlyingToken = Pick<IProjectToken, 'address' | 'symbol'>

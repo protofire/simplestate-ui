@@ -33,7 +33,7 @@ export function AppTabs() {
           <Tabs.Tab value="projects">Proyectos</Tabs.Tab>
           <Tabs.Tab value="investments">Mis inversiones</Tabs.Tab>
           <Tabs.Tab value="admin">Administrar Proyectos</Tabs.Tab>
-          <Tabs.Tab value="treasury">Tesoro</Tabs.Tab>
+          <Tabs.Tab value="simplearn">Simplearn</Tabs.Tab>
         </Tabs.List>
         <Outlet />
       </Tabs>

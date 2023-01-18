@@ -1,5 +1,5 @@
 import { State } from "../constants/projectState";
-import { IProjectToken } from "./token";
+import { IProjectToken, UnderlyingToken } from "./token";
 
 export interface IProjectTargets {
   fundingAmountTarget: number;
@@ -50,4 +50,5 @@ export interface IProjectMetadata {
   feeModel: "listing";
   valuationModel: "rate";
   roles: IProjectRoles;
+  underlyingToken: UnderlyingToken;
 }

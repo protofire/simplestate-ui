@@ -5,9 +5,9 @@ import { useMetamask } from "./useMetamask";
 import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
 import { Investment } from "../types/investment";
-import { IProjectToken } from "../types/token";
+import { IProjectToken, UnderlyingToken } from "../types/token";
 import { IFinanctialTracking, IProjectTargets } from "../types/projectMetadata";
-import { fromDecimals, toDecimals } from "../utils/utilities";
+import { rateToAPY, fromDecimals, fromRAYDecimals, toDecimals, toRAYDecimals, apyToRate } from "../utils/utilities";
 import { SimpleEarnInvestment } from "../types/simple-earn";
 
 export function useApi() {
@@ -15,6 +15,7 @@ export function useApi() {
   const factory = useContract('factory');
   const underlyingToken = useContract('underlyingToken');
   const rent = useContract('rent');
+  const simplearn = useContract('simplearn');
 
   const { signer, connect, accounts, addToken } = useMetamask();
   const [factoryReady, setFactoryReady] = useState(false);
@@ -78,6 +79,7 @@ export function useApi() {
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
       const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
+      // const underlyingToken: UnderlyingToken = await fetchToken(tokens.underlyingToken);
 
       const targetsParsed: IProjectTargets = {
         fundingAmountTarget: fromDecimals(targets.fundingAmountTarget),
@@ -102,7 +104,8 @@ export function useApi() {
         token,
         booleanConfigs,
         modules,
-        roles
+        roles,
+        underlyingToken: { address: '', symbol: 'USDC' } // TODO: use underlying fetch.
       };
       projectList.push(projectMetadata);
     }
@@ -249,15 +252,71 @@ export function useApi() {
   }, [rent, signer]);
 
   const getSimpleEarnInvestment = useCallback(async (): Promise<SimpleEarnInvestment | undefined> => {
-    if (!signer) return;
-  }, [signer]);
+    if (!accounts[0] || !simplearn.contract) return;
+
+    const address = accounts[0];
+
+    const [symbol, [balance], [underlyingBalance], [rate, positive]] = await Promise.all([
+      simplearn.contract?.functions.symbol(),
+      simplearn.contract?.functions.balanceOf(address),
+      simplearn.contract?.functions.balanceOfInAsset(address),
+      simplearn.contract?.functions.getInterestRate()
+    ]);
+
+    const parsedRate = fromRAYDecimals(rate);
+    const apy = rateToAPY(parsedRate, positive);
+
+    return {
+      symbol,
+      apy,
+      balance: fromDecimals(Number(balance)),
+      underlyingBalance: fromDecimals(Number(underlyingBalance)),
+    }
+
+  }, [accounts[0], simplearn.contract]);
+
+  const setSimplearnRate = useCallback(async (apy: number) => {
+    if (!signer || !simplearn.contract) return;
+    const rate = apyToRate(apy);
+    const isPositive = apy >= 0;
+    const rateRay = toRAYDecimals(rate);
+
+    const signedContract = simplearn.sign(signer);
+    const tx: ContractTransaction = await signedContract?.functions.setInterestRate(rateRay+'', isPositive, { gasLimit: 100000 });
+    await tx.wait();
+  }, [signer, simplearn.contract]);
 
   const investSimpleEarn = useCallback(async (amount: number) => {
-    if (!signer) return;
-  }, [signer]);
+    if (!signer || !simplearn.contract || !underlyingToken.contract) return;
+    const parsedAmount = toDecimals(amount);
+    const address = await signer.getAddress();
+
+    const signedUnderlyingTokenContract = underlyingToken.sign(signer);
+    const approveTx: ContractTransaction = await signedUnderlyingTokenContract?.functions.approve(
+      simplearn.contract?.address, 
+      parsedAmount, 
+      { gasLimit: 100000 });
+    await approveTx.wait();
+
+    const signedSimplearnContract = simplearn.sign(signer);
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.deposit(parsedAmount, address);
+    await tx.wait();
+  }, [signer, simplearn.contract, underlyingToken.contract]);
 
   const redeemSimpleEarn = useCallback(async (amount: number) => {
-    if (!signer) return;
+    if (!signer || !simplearn.contract || !underlyingToken.contract) return;
+
+    const parsedAmount = toDecimals(amount);
+    const address = await signer.getAddress();
+
+    const signedSimplearnContract = simplearn.sign(signer);
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.redeem(
+      parsedAmount, 
+      address, 
+      address, 
+      { gasLimit: 100000 });
+    await tx.wait();
+
   }, [signer]);
 
   return {
@@ -273,6 +332,7 @@ export function useApi() {
     claimRent,
     getAccumulatedRent,
     getSimpleEarnInvestment,
+    setSimplearnRate,
     investSimpleEarn,
     redeemSimpleEarn,
     redeem

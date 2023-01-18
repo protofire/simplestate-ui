@@ -59,6 +59,7 @@ export function AdminProjects() {
   const enabledDepositRent = selectedProject?.state === State.Funded;
   const enableDepositSell = selectedProject?.state === State.Funded;
   const amountAvailable = selectedProject ? selectedProject?.financialTracking.fundingRaised - selectedProject?.financialTracking.fundingWithdrawed : 0;
+  const symbol = selectedProject?.underlyingToken.symbol;
 
   useEffect(() => {
     setLoading(true);
@@ -109,7 +110,7 @@ export function AdminProjects() {
 
     if (amountAvailable > 0) {
       var isConfirmed = confirm(
-`Todavía tenés ${amountAvailable} USDC para retirar.
+`Todavía tenés ${amountAvailable} ${symbol} para retirar.
 Una vez que deposites la venta no podrás retirar este dinero, confirmas el depósito?`
       );
       if (!isConfirmed) return;
@@ -207,11 +208,11 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
         </Text>
         <Text>
           {`Meta de financiamiento: `}
-          <strong>{`${selectedProject?.targets.fundingAmountTarget} USDC`?? ' - '}</strong>
+          <strong>{`${selectedProject?.targets.fundingAmountTarget} ${symbol}`?? ' - '}</strong>
         </Text>
         <Text>
           {`Meta de Venta: `}
-          <strong>{`${selectedProject?.targets.sellingAmountTarget} USDC`?? ' - '}</strong>
+          <strong>{`${selectedProject?.targets.sellingAmountTarget} ${symbol}`?? ' - '}</strong>
         </Text>
         <Text>
           {`Tasa de retorno: `}
@@ -225,7 +226,7 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
         </Text>
         <Text>
           {`Unidad de cuenta (Unit of account): `}
-          <strong>{selectedProject?.unitOfAccount ?? "USDC"}</strong>
+          <strong>{symbol ?? "USDC"}</strong>
         </Text>
         {selectedProject?.state !== undefined && (
           <Text>
@@ -237,7 +238,7 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
         <Divider m={20} />
 
         <Group m={"md"}>
-          <Badge color={"teal"}>{`Depósito acumulado: ${selectedProject?.financialTracking.fundingRaised} USDC`}</Badge>
+          <Badge color={"teal"}>{`Depósito acumulado: ${selectedProject?.financialTracking.fundingRaised} ${symbol}`}</Badge>
         </Group>
 
         <Group m={"md"}>
@@ -245,7 +246,7 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
         </Group>
 
         <Group m={"md"}>
-          <Badge>{`Disponible para retiro: ${amountAvailable} USDC`}</Badge>
+          <Badge>{`Disponible para retiro: ${amountAvailable} ${symbol}`}</Badge>
         </Group>
 
 
@@ -254,7 +255,7 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
             <TextInput
               icon={<IconArrowDown />}
               id="withdraw"
-              placeholder="Cantidad a retirar (USDC)"
+              placeholder={`Cantidad a retirar (${symbol})`}
               type={"number"}
               width={400}
               disabled={loadingWithdraw || amountAvailable === 0}
@@ -279,12 +280,12 @@ Una vez que deposites la venta no podrás retirar este dinero, confirmas el dep�
             <Group m={"md"}>
               <Badge>{`Renta depositada acumulada: ${totalDepositedRent} USDC`}</Badge>
             </Group>
-            <Input.Wrapper id="distribute-rent" label="Depositar renta (USDC)">
+            <Input.Wrapper id="distribute-rent" label={`Depositar renta (${symbol})`}>
               <SimpleGrid cols={2}>
                 <TextInput
                   icon={<IconArrowUp />}
                   id="distribute-rent"
-                  placeholder="Valor renta (USDC)"
+                  placeholder={`Valor renta (${symbol})`}
                   type={"number"}
                   width={400}
                   onChange={(e: any) => setRentToDeposit(Number(e.target.value))}
