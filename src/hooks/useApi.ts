@@ -5,10 +5,11 @@ import { useMetamask } from "./useMetamask";
 import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
 import { Investment } from "../types/investment";
-import { IProjectToken, UnderlyingToken } from "../types/token";
+import { IProjectToken } from "../types/token";
 import { IFinanctialTracking, IProjectTargets } from "../types/projectMetadata";
 import { rateToAPY, fromDecimals, fromRAYDecimals, toDecimals, toRAYDecimals, apyToRate } from "../utils/utilities";
 import { SimpleEarnInvestment } from "../types/simple-earn";
+import { SimpleEarnMetrics } from "../types/simple-earn-metrics";
 
 export function useApi() {
   const registry = useContract('registry');
@@ -251,16 +252,18 @@ export function useApi() {
     return fromDecimals(Number(totalDeposited));
   }, [rent, signer]);
 
-  const getSimpleEarnInvestment = useCallback(async (): Promise<SimpleEarnInvestment | undefined> => {
-    if (!accounts[0] || !simplearn.contract) return;
+  const getSimpleEarnInvestment = useCallback(async (): Promise<SimpleEarnInvestment & SimpleEarnMetrics | undefined> => {
+    if (!simplearn.contract) return;
 
     const address = accounts[0];
 
-    const [symbol, [balance], [underlyingBalance], [rate, positive]] = await Promise.all([
-      simplearn.contract?.functions.symbol(),
-      simplearn.contract?.functions.balanceOf(address),
-      simplearn.contract?.functions.balanceOfInAsset(address),
-      simplearn.contract?.functions.getInterestRate()
+    const [symbol, [balance], [underlyingBalance], [rate, positive], [totalWithdrawable], [tokenRate]] = await Promise.all([
+      simplearn.contract.functions.symbol(),
+      simplearn.contract.functions.balanceOf(address),
+      simplearn.contract.functions.balanceOfInAsset(address),
+      simplearn.contract.functions.getInterestRate(),
+      simplearn.contract.functions.totalWithdrawableAssets(),
+      simplearn.contract.functions.convertToAssets(toDecimals(1)),
     ]);
 
     const parsedRate = fromRAYDecimals(rate);
@@ -269,8 +272,10 @@ export function useApi() {
     return {
       symbol,
       apy,
-      balance: fromDecimals(Number(balance)),
-      underlyingBalance: fromDecimals(Number(underlyingBalance)),
+      balance: fromDecimals(Number(balance)) ?? 0,
+      underlyingBalance: fromDecimals(Number(underlyingBalance)) ?? 0,
+      totalWithdrawable: fromDecimals(Number(totalWithdrawable)),
+      tokenRate: fromDecimals(Number(tokenRate))
     }
 
   }, [accounts[0], simplearn.contract]);
@@ -322,6 +327,18 @@ export function useApi() {
 
   }, [signer]);
 
+  const withdrawSimplearnFunds = useCallback(async (amount: number) => {
+    if (!signer || !simplearn.contract) return;
+    const parsedAmount = toDecimals(amount);
+
+    const signedSimplearnContract = simplearn.sign(signer);
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.takeFunds(
+      parsedAmount,
+      { gasLimit: 150000 });
+    await tx.wait();
+
+  }, [signer, simplearn.contract]);
+
   return {
     fetchProjects,
     createProject,
@@ -338,6 +355,8 @@ export function useApi() {
     setSimplearnRate,
     investSimpleEarn,
     withdrawSimpleEarn,
+    simplearnAddress: simplearn.contract?.address,
+    withdrawSimplearnFunds,
     redeem
   }
 }

@@ -26,6 +26,8 @@ export enum NotificationType {
   REDEEM_SIMPLEARN_ERROR,
   RATE_SIMPLEARN_SUCCESS,
   RATE_SIMPLEARN_ERROR,
+  WITHDRAW_SIMPLEARN_SUCCESS,
+  WITHDRAW_SIMPLEARN_ERROR,
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -266,6 +268,28 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: metamaskErrors[props.error.message] ?? 'Ha ocurrido un error intentando modificar la tasa de interés anual',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_SIMPLEARN_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Retiro realizado con éxito",
+        icon: <IconCheck size={18} />,
+        message: 'Retiraste el monto existente en Simplearn con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_SIMPLEARN_ERROR: {
+      return {
+        id: "error",
+        autoClose: 10000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: 'Ocurrió un error intentando retirar los fondos, asegurate de tener el rol admin de Simplearn y de que el monto sea válido',
         color: "red",
         radius: "md",
       }

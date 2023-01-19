@@ -8,18 +8,33 @@ import {
   TextInput,
   Loader,
   Center,
+  Avatar,
+  Divider,
+  Badge,
+  Flex,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { buildNotification, NotificationType } from "../../constants/notifications";
 import { useApi } from "../../hooks/useApi";
 import { SimpleEarnInvestment } from '../../types/simple-earn';
+import { SimpleEarnMetrics } from "../../types/simple-earn-metrics";
+import tokenImg from '../../assets/SSToken.svg';
 
 export function SimpleEarn() {
-  const { getSimpleEarnInvestment, investSimpleEarn, withdrawSimpleEarn, setSimplearnRate } = useApi();
+  const { 
+    getSimpleEarnInvestment, 
+    investSimpleEarn, 
+    withdrawSimpleEarn, 
+    setSimplearnRate, 
+    simplearnAddress, 
+    withdrawSimplearnFunds 
+  } = useApi();
 
   const [investment, setInvestment] = useState<SimpleEarnInvestment>();
   const [loading, setLoading] = useState(false);
+
+  const [metrics, setMetrics] = useState<SimpleEarnMetrics>();
 
   const [amountToInvest, setAmountToInvest] = useState<number>();
   const [loadingInvestment, setLoadingInvestment] = useState(false);
@@ -28,6 +43,10 @@ export function SimpleEarn() {
   const [loadingRedemtion, setLoadingRedemption] = useState(false);
   const [redeemError, setRedeemError] = useState('');
 
+  const [amountToWithdraw, setAmountToWithdraw] = useState<number>();
+  const [loadingWithdrawAll, setLoadingWithdrawAll] = useState(false);
+  const [withdrawError, setWithdrawError] = useState('');
+
   const [update, setUpdate] = useState(false);
 
   const [rate, setRate] = useState<number>();
@@ -35,8 +54,20 @@ export function SimpleEarn() {
 
   useEffect(() => {
     setLoading(true);
-    getSimpleEarnInvestment().then((investment) => {
-      setInvestment(investment);
+    getSimpleEarnInvestment().then((simplearn) => {
+      if (simplearn) {
+        setInvestment({ 
+          apy: simplearn.apy,
+          balance: simplearn.balance,
+          symbol: simplearn.symbol, 
+          underlyingBalance: simplearn.underlyingBalance 
+        });
+
+        setMetrics({
+          tokenRate: simplearn.tokenRate,
+          totalWithdrawable: simplearn.totalWithdrawable
+        });
+      }
       setLoading(false);
     });
   }, [getSimpleEarnInvestment, update]);
@@ -100,6 +131,25 @@ export function SimpleEarn() {
     }
   }
 
+  const withdrawAllFunds = async () => {
+    if(!amountToWithdraw || !metrics) return;
+    if (amountToWithdraw > metrics.totalWithdrawable) return setWithdrawError('No se puede retirar un monto mayor al disponible.');
+
+    setLoadingWithdrawAll(true)
+    try {
+      await withdrawSimplearnFunds(amountToWithdraw);
+      const notification = buildNotification(NotificationType.WITHDRAW_SIMPLEARN_SUCCESS);
+      showNotification(notification);
+      reload();
+    } catch (err) {
+      console.log(err);
+      const notification = buildNotification(NotificationType.WITHDRAW_SIMPLEARN_ERROR, {error: err});
+      showNotification(notification);
+    } finally {
+      setLoadingWithdrawAll(false);
+    }
+  }
+
   return (
     <>
       <Title size={"lg"} mb="lg">
@@ -111,17 +161,30 @@ export function SimpleEarn() {
           <Loader color="teal" size="lg" variant="bars" />
         </Center> 
       : <><Paper radius="xs" p="lg" mb="xl" withBorder>
-        <Grid>
-          <Grid.Col span={4}>
-            <Text>Balance: {investment?.balance} SET</Text>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Text>Valor actual: {investment?.underlyingBalance} USDC</Text>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Text>APY: {investment?.apy.toFixed(2)}%</Text>
+        <Grid >
+          <Grid.Col span={6}>
+            <Group>
+            <Avatar
+              src={tokenImg}
+              alt="SimpleEarn"
+            />
+            <Text>{metrics?.tokenRate} USDC</Text>
+            </Group>
           </Grid.Col>
         </Grid>
+
+        <Divider my={20}></Divider>
+        
+        <Flex >
+         <Text mr={10}>Balance: {investment?.underlyingBalance} USDC</Text>
+          <Text  mr={30} color={'dimmed'}>({investment?.balance} SET)</Text>            
+          <Badge>
+             <Text color={'teal'}>APY: {investment?.apy.toFixed(2)}%</Text>
+          </Badge>
+        </Flex>
+
+        <Divider my={20}></Divider>
+
         <Group position="center" grow>
           <Text>Invertir (USDC)</Text>
 
@@ -173,28 +236,54 @@ export function SimpleEarn() {
           Administrar 
         </Title>
         <Paper radius="xs" p="lg" mb="xl" withBorder>
-        <Group position="center" grow>
-          <Text>Ingresar Tasa de interés anual (APY)</Text>
+          <Text size={'sm'}>Simplearn Address: {simplearnAddress}</Text>
+          <Divider my={20}></Divider>
 
-          <TextInput 
-            placeholder="ej: 5"
-            type={"number"} 
-            onChange={(e) => setRate(Number(e.target.value))}
-            disabled={loadingRate}
-            rightSection={'%'}
-            />
-          <Button
-            variant="gradient"
-            gradient={{ from: "teal", to: "blue.9", deg: 60 }}
-            radius={"lg"}
-            m="md"
-            onClick={submitRate}
-            disabled={!rate || loadingRate}
-            leftIcon={loadingRate && <Loader size={14} />}
-          >
-            Confirmar
-          </Button>
-        </Group>
+          <Text >Disponible para retiro: {metrics?.totalWithdrawable} USDC</Text>
+
+          <Group position="center" grow>
+            <Text>Retirar fondos existentes</Text>
+            <TextInput 
+              placeholder="ej: 1000"
+              type={"number"} 
+              onChange={(e) => setAmountToWithdraw(Number(e.target.value))}
+              disabled={loadingWithdrawAll}
+              error={withdrawError}
+              />
+            <Button
+              variant="gradient"
+              gradient={{ from: "teal", to: "blue.9", deg: 60 }}
+              radius={"lg"}
+              m="md"
+              onClick={withdrawAllFunds}
+              disabled={!amountToWithdraw || loadingWithdrawAll}
+              leftIcon={loadingWithdrawAll && <Loader size={14} />}
+            >
+              Confirmar
+            </Button>
+          </Group>
+
+          <Group position="center" grow>
+            <Text>Ingresar Tasa de interés anual (APY)</Text>
+            <TextInput 
+              placeholder="ej: 5"
+              type={"number"} 
+              onChange={(e) => setRate(Number(e.target.value))}
+              disabled={loadingRate}
+              rightSection={'%'}
+              />
+            <Button
+              variant="gradient"
+              gradient={{ from: "teal", to: "blue.9", deg: 60 }}
+              radius={"lg"}
+              m="md"
+              onClick={submitRate}
+              disabled={!rate || loadingRate}
+              leftIcon={loadingRate && <Loader size={14} />}
+            >
+              Confirmar
+            </Button>
+          </Group>
         </Paper>
       </>}
     </>
