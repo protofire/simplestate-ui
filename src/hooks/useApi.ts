@@ -358,6 +358,7 @@ export function useApi() {
     investSimpleEarn,
     withdrawSimpleEarn,
     simplearnAddress: simplearn.contract?.address,
+    rentIncomeAddress: rent.contract?.address,
     withdrawSimplearnFunds,
     redeem
   }

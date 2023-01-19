@@ -32,7 +32,7 @@ const useStyles = createStyles(() => ({
 }));
 
 export function AdminProjects() {
-  const { fetchProjects, withdrawFunds, depositSellingAmount, depositRentAmount, getAccumulatedRent } = useApi();
+  const { fetchProjects, withdrawFunds, depositSellingAmount, depositRentAmount, getAccumulatedRent, rentIncomeAddress } = useApi();
 
   const { classes } = useStyles();
 
@@ -206,6 +206,13 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
           {`Admin: `}
           <strong>{selectedProject?.roles.admin ?? ' - '}</strong>
         </Text>
+        {selectedProject.booleanConfigs.produceIncome && 
+        <Text>
+          {`Contrato de renta mensual: `}
+          <strong>{rentIncomeAddress}</strong>
+        </Text>
+        } 
+        
         <Text>
           {`Meta de financiamiento: `}
           <strong>{`${selectedProject?.targets.fundingAmountTarget} ${symbol}`?? ' - '}</strong>
