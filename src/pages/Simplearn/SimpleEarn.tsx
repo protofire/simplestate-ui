@@ -65,7 +65,8 @@ export function SimpleEarn() {
 
         setMetrics({
           tokenRate: simplearn.tokenRate,
-          totalWithdrawable: simplearn.totalWithdrawable
+          totalWithdrawable: simplearn.totalWithdrawable,
+          totalAssets: simplearn.totalAssets
         });
       }
       setLoading(false);
@@ -133,7 +134,7 @@ export function SimpleEarn() {
 
   const withdrawAllFunds = async () => {
     if(!amountToWithdraw || !metrics) return;
-    if (amountToWithdraw > metrics.totalWithdrawable) return setWithdrawError('No se puede retirar un monto mayor al disponible.');
+    if (amountToWithdraw > metrics.totalWithdrawable) return setWithdrawError('No se puede retirar un monto mayor a la reserva.');
 
     setLoadingWithdrawAll(true)
     try {
@@ -168,7 +169,7 @@ export function SimpleEarn() {
               src={tokenImg}
               alt="SimpleEarn"
             />
-            <Text>{metrics?.tokenRate} USDC</Text>
+            <Text>1 SET = {metrics?.tokenRate} USDC</Text>
             </Group>
           </Grid.Col>
         </Grid>
@@ -239,7 +240,10 @@ export function SimpleEarn() {
           <Text size={'sm'}>Simplearn Address: {simplearnAddress}</Text>
           <Divider my={20}></Divider>
 
-          <Text >Disponible para retiro: {metrics?.totalWithdrawable} USDC</Text>
+          <Text >Reserva: {metrics?.totalWithdrawable} USDC</Text>
+
+          <Text >Deuda con tenedores: {metrics?.totalAssets} USDC</Text>
+          <Divider my={20}></Divider>
 
           <Group position="center" grow>
             <Text>Retirar fondos existentes</Text>

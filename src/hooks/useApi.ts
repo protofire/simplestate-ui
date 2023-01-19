@@ -257,12 +257,13 @@ export function useApi() {
 
     const address = accounts[0];
 
-    const [symbol, [balance], [underlyingBalance], [rate, positive], [totalWithdrawable], [tokenRate]] = await Promise.all([
+    const [symbol, [balance], [underlyingBalance], [rate, positive], [totalWithdrawable], [totalAssets], [tokenRate]] = await Promise.all([
       simplearn.contract.functions.symbol(),
       simplearn.contract.functions.balanceOf(address),
       simplearn.contract.functions.balanceOfInAsset(address),
       simplearn.contract.functions.getInterestRate(),
       simplearn.contract.functions.totalWithdrawableAssets(),
+      simplearn.contract.functions.totalAssets(),
       simplearn.contract.functions.convertToAssets(toDecimals(1)),
     ]);
 
@@ -275,7 +276,8 @@ export function useApi() {
       balance: fromDecimals(Number(balance)) ?? 0,
       underlyingBalance: fromDecimals(Number(underlyingBalance)) ?? 0,
       totalWithdrawable: fromDecimals(Number(totalWithdrawable)),
-      tokenRate: fromDecimals(Number(tokenRate))
+      tokenRate: fromDecimals(Number(tokenRate)),
+      totalAssets: fromDecimals(Number(totalAssets))
     }
 
   }, [accounts[0], simplearn.contract]);
@@ -290,7 +292,7 @@ export function useApi() {
     const tx: ContractTransaction = await signedContract?.functions.setInterestRate(
       rateRay+'', 
       isPositive, 
-      { gasLimit: 150000 });
+      { gasLimit: 200000 });
     await tx.wait();
   }, [signer, simplearn.contract]);
 
@@ -303,7 +305,7 @@ export function useApi() {
     const approveTx: ContractTransaction = await signedUnderlyingTokenContract?.functions.approve(
       simplearn.contract?.address, 
       parsedAmount, 
-      { gasLimit: 150000 });
+      { gasLimit: 200000 });
     await approveTx.wait();
 
     const signedSimplearnContract = simplearn.sign(signer);
@@ -322,7 +324,7 @@ export function useApi() {
       parsedAmount, 
       address, 
       address, 
-      { gasLimit: 150000 });
+      { gasLimit: 200000 });
     await tx.wait();
 
   }, [signer]);
@@ -334,7 +336,7 @@ export function useApi() {
     const signedSimplearnContract = simplearn.sign(signer);
     const tx: ContractTransaction = await signedSimplearnContract?.functions.takeFunds(
       parsedAmount,
-      { gasLimit: 150000 });
+      { gasLimit: 200000 });
     await tx.wait();
 
   }, [signer, simplearn.contract]);

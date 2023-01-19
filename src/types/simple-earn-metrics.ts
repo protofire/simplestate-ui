@@ -1,4 +1,5 @@
 export type SimpleEarnMetrics = {
-  totalWithdrawable: number, 
+  totalWithdrawable: number,
+  totalAssets: number,
   tokenRate: number 
 };
