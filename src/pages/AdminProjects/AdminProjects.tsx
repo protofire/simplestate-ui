@@ -245,11 +245,11 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         <Divider m={20} />
 
         <Group m={"md"}>
-          <Badge color={"teal"}>{`Dep√≥sito acumulado: ${selectedProject?.financialTracking.fundingRaised} ${symbol}`}</Badge>
+          <Badge color={"teal"}>{`Dep√≥sito acumulado: ${selectedProject?.financialTracking.fundingRaised} ${symbol ?? 'USDC'}`}</Badge>
         </Group>
 
         <Group m={"md"}>
-          <Badge color={"red"}>{`Fondos retirados: ${selectedProject?.financialTracking.fundingWithdrawed} USDC`}</Badge>
+          <Badge color={"red"}>{`Fondos retirados: ${selectedProject?.financialTracking.fundingWithdrawed} ${symbol ?? 'USDC'}`}</Badge>
         </Group>
 
         <Group m={"md"}>
@@ -285,9 +285,9 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         {selectedProject.booleanConfigs.produceIncome && 
           <>
             <Group m={"md"}>
-              <Badge>{`Renta depositada acumulada: ${totalDepositedRent} USDC`}</Badge>
+              <Badge>{`Renta depositada acumulada: ${totalDepositedRent} ${symbol ?? 'USDC'}`}</Badge>
             </Group>
-            <Input.Wrapper id="distribute-rent" label={`Depositar renta (${symbol})`}>
+            <Input.Wrapper id="distribute-rent" label={`Depositar renta (${symbol ?? 'USDC'})`}>
               <SimpleGrid cols={2}>
                 <TextInput
                   icon={<IconArrowUp />}
@@ -315,15 +315,15 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         }
 
         <Group m={"md"}>
-          <Badge>{`Venta depositada acumulada: ${selectedProject?.financialTracking.cumulativeRedeemableAmount} USDC`}</Badge>
+          <Badge>{`Venta depositada acumulada: ${selectedProject?.financialTracking.cumulativeRedeemableAmount} ${symbol ?? 'USDC'}`}</Badge>
         </Group>
 
-        <Input.Wrapper id="distribute-sell" label="Depositar venta (USDC)">
+        <Input.Wrapper id="distribute-sell" label={`Depositar venta (${symbol ?? 'USDC'})`}>
           <SimpleGrid cols={2}>
             <TextInput
               icon={<IconArrowUp />}
               id="distribute-sell"
-              placeholder="Valor venta (USDC)"
+              placeholder={`Valor venta (${symbol ?? 'USDC'})`}
               type={"number"}
               width={400}
               disabled={!enableDepositSell || loadingDeposit}

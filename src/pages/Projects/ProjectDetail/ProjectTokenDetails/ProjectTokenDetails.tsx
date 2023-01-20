@@ -51,7 +51,7 @@ export function ProjectTokenDetails({
       await investInProject(project.address, investmentValue, project.token);
       const successNotification = buildNotification(
         NotificationType.INVEST_PROJECT_SUCCESS,
-        { investmentValue, name: project?.name }
+        { investmentValue, project }
       );
       showNotification(successNotification);
     } catch (err) {
@@ -90,7 +90,7 @@ export function ProjectTokenDetails({
             <Input.Wrapper>
               <Group position="center" grow>
                 <TextInput
-                  placeholder="500 USDC"
+                  placeholder={`500 ${project.underlyingToken.symbol ?? 'USDC'}`}
                   type={"number"}
                   onChange={(e) => setInvestmentValue(Number(e.target.value))}
                   disabled={loading || project.state !== State.Initialized}

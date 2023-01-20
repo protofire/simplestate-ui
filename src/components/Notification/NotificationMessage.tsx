@@ -1,4 +1,5 @@
 import { createStyles, Text } from "@mantine/core";
+import { IProjectMetadata } from "../../types/projectMetadata";
 
 const useStyles = createStyles(() => ({
   link: {
@@ -10,17 +11,17 @@ const useStyles = createStyles(() => ({
 }));
 
 export function NotificationMessage({
-  projectName,
+  project,
   investmentValue,
 }: {
-  projectName: string | undefined;
+  project: IProjectMetadata;
   investmentValue: number;
 }) {
   const { classes } = useStyles();
   return (
     <Text c={"gray.6"}>
-      Haz invertido <strong>{investmentValue}</strong> USDC en el proyecto:{" "}
-      <strong>{projectName}</strong>. Accedé a la lista de{" "}
+      Haz invertido <strong>{investmentValue}</strong> {project.underlyingToken.symbol ?? 'USDC'} en el proyecto:{" "}
+      <strong>{project.name}</strong>. Accedé a la lista de{" "}
       <a className={classes.link} href="/investments">
         inversiones realizadas
       </a>

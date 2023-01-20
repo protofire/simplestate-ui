@@ -38,7 +38,7 @@ export function ProjectDetail({ project }: { project: IProjectMetadata | null })
         </Text>
         <Text size={14}>
           Metas de venta:{" "}
-          <strong>{`${sellingAmountTarget} USDC`}</strong>
+          <strong>{`${sellingAmountTarget} ${project.underlyingToken.symbol ?? 'USDC'}`}</strong>
         </Text>
         <Text size={14}>
           Meta de tiempo de ventas:{" "}
@@ -46,7 +46,7 @@ export function ProjectDetail({ project }: { project: IProjectMetadata | null })
         </Text>
         <Text size={14}>
           Meta de financiamiento:{" "}
-          <strong>{`${fundingAmountTarget} USDC`}</strong>
+          <strong>{`${fundingAmountTarget} ${project.underlyingToken.symbol ?? 'USDC'}`}</strong>
         </Text>
         <Text size={14}>
           Meta de tiempo de financiamiento:{" "}

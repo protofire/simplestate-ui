@@ -110,10 +110,10 @@ export function ProjectStats({ project }: { project: IProjectMetadata }) {
             />
             <Group style={{ justifyContent: "space-between" }} mb={"md"}>
               <Text color={"dimmed"} size={12}>
-                {`Total: ${Number(fundingRaised)} USDC`}
+                {`Total: ${Number(fundingRaised)} ${project.underlyingToken.symbol ?? 'USDC'}`}
               </Text>
               <Text color={"dimmed"} size={12}>
-                {`Meta: ${Number(fundingAmountTarget)} USDC`}
+                {`Meta: ${Number(fundingAmountTarget)} ${project.underlyingToken.symbol ?? 'USDC'}`}
               </Text>
             </Group>
           </Card.Section>

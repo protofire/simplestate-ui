@@ -141,17 +141,6 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
           <TextInput {...form.getInputProps('owner')} disabled placeholder="Ej. 0xae6C283135480b56738CDaBdB8d7Df11E59364a9SPT33" />
         </Input.Wrapper>
 
-        {/* <Input.Wrapper
-          className={classes.input}
-          withAsterisk
-          label={
-            <span>
-              Depositante de ingresos <span style={{fontWeight: 300}}>(Income depositor)</span>
-            </span>
-        }>
-          <TextInput {...form.getInputProps('incomeDepositor')} placeholder="Ej. 0xae6C283135480b56738CDaBdB8d7Df11E59364a9SPT33"/>
-        </Input.Wrapper> */}
-
         <Input.Wrapper className={classes.input} label="Metadata URL">
           <TextInput {...form.getInputProps('metadataURL')} placeholder="Ej. http://someurl.io" />
         </Input.Wrapper>
@@ -163,16 +152,6 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         <Title mt={20} order={4}>Finanzas del proyecto</Title>
         
         <SimpleGrid cols={2}>
-          {/* <Input.Wrapper
-            className={classes.input}
-            withAsterisk
-            label={
-              <span>
-                Unidades en circulación <span style={{fontWeight: 300}}>(Max supply)</span>
-              </span>
-          }>
-            <NumberInput {...form.getInputProps('maxSupply')} type={'number'} placeholder="Ej. 5000" />
-          </Input.Wrapper> */}
           <Input.Wrapper
             className={classes.input}
             withAsterisk

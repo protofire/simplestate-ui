@@ -62,7 +62,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         message: (
           <NotificationMessage
             investmentValue={props.investmentValue}
-            projectName={props.name}
+            project={props.project}
           />
         ),
         color: "teal",
@@ -75,7 +75,7 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         autoClose: 10000,
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
-        message: 'Es posible que la cuenta desde la que intentas invertir no esté en la whitelist o no cuente con suficientes fondos en USDC.',
+        message: 'Es posible que la cuenta desde la que intentas invertir no esté en la whitelist o no cuente con suficientes fondos.',
         color: "red",
         radius: "md",
       }

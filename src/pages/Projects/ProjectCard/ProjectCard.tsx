@@ -80,8 +80,8 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
         </Title>
         <Text color={"dimmed"} size={14} align="center">
           {project.booleanConfigs.produceIncome
-            ? `Cobras en ${project.unitOfAccount ?? "USDC"} todos los meses`
-            : `Cobras en ${project.unitOfAccount ?? "USDC"} al finalizar el período`}
+            ? `Cobras en ${project.underlyingToken.symbol ?? "USDC"} todos los meses`
+            : `Cobras en ${project.underlyingToken.symbol ?? "USDC"} al finalizar el período`}
         </Text>
       </Card.Section>
 
@@ -130,11 +130,11 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
         />
         <Group style={{ justifyContent: "space-between" }} mb={"md"}>
           <Text color={"dimmed"} size={12}>{`Total: ${Number(fundingRaised)} ${
-            project.unitOfAccount ?? "USDC"
+            project.underlyingToken.symbol ?? "USDC"
           }`}</Text>
           <Text color={"dimmed"} size={12}>{`Meta: ${Number(
             fundingAmountTarget
-          )} ${project.unitOfAccount ?? "USDC"}`}</Text>
+          )} ${project.underlyingToken.symbol ?? "USDC"}`}</Text>
         </Group>
       </Card.Section>
       <Card.Section>

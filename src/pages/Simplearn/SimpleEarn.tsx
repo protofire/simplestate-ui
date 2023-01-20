@@ -60,8 +60,11 @@ export function SimpleEarn() {
           apy: simplearn.apy,
           balance: simplearn.balance,
           symbol: simplearn.symbol, 
-          underlyingBalance: simplearn.underlyingBalance 
+          underlyingBalance: simplearn.underlyingBalance,
+          underlyingSymbol: simplearn.underlyingSymbol
         });
+
+        console.log('underlying symbol', simplearn?.underlyingSymbol);
 
         setMetrics({
           tokenRate: simplearn.tokenRate,
@@ -169,7 +172,7 @@ export function SimpleEarn() {
               src={tokenImg}
               alt="SimpleEarn"
             />
-            <Text>1 SET = {metrics?.tokenRate} USDC</Text>
+            <Text>1 SET = {metrics?.tokenRate} {investment?.underlyingSymbol ?? 'USDC'}</Text>
             </Group>
           </Grid.Col>
         </Grid>
@@ -177,7 +180,7 @@ export function SimpleEarn() {
         <Divider my={20}></Divider>
         
         <Flex >
-         <Text mr={10}>Balance: {investment?.underlyingBalance} USDC</Text>
+         <Text mr={10}>Balance: {investment?.underlyingBalance} {investment?.underlyingSymbol ?? 'USDC'}</Text>
           <Text  mr={30} color={'dimmed'}>({investment?.balance} SET)</Text>            
           <Badge>
              <Text color={'teal'}>APY: {investment?.apy.toFixed(2)}%</Text>
@@ -187,10 +190,10 @@ export function SimpleEarn() {
         <Divider my={20}></Divider>
 
         <Group position="center" grow>
-          <Text>Invertir (USDC)</Text>
+          <Text>Invertir ({investment?.underlyingSymbol ?? 'USDC'})</Text>
 
           <TextInput 
-            placeholder="500 USDC" 
+            placeholder={`500 ${investment?.underlyingSymbol ?? 'USDC'}`}
             type={"number"} 
             onChange={(e) => setAmountToInvest(Number(e.target.value))}
             disabled={loadingInvestment}
@@ -208,15 +211,15 @@ export function SimpleEarn() {
           </Button>
         </Group>
         <Group position="center" grow>
-          <Text>Retirar ganancias (USDC)</Text>
+          <Text>Retirar ganancias ({investment?.underlyingSymbol ?? 'USDC'})</Text>
 
           <TextInput 
-            placeholder="500 USDC" 
+            placeholder={`500 ${investment?.underlyingSymbol ?? 'USDC'}`}
             type={"number"} 
             onChange={(e) => setAmountToRedeem(Number(e.target.value))}
             disabled={loadingRedemtion}
             bottom={'test'}
-            description={`Balance disponible ${investment?.underlyingBalance} USDC`}
+            description={`Balance disponible ${investment?.underlyingBalance} ${investment?.underlyingSymbol ?? 'USDC'}`}
             error={redeemError}
             inputWrapperOrder={['label', 'input', 'description', 'error',]}
             />
@@ -240,9 +243,9 @@ export function SimpleEarn() {
           <Text size={'sm'}>Simplearn Address: {simplearnAddress}</Text>
           <Divider my={20}></Divider>
 
-          <Text >Reserva: {metrics?.totalWithdrawable} USDC</Text>
+          <Text >Reserva: {metrics?.totalWithdrawable} {investment?.underlyingSymbol ?? 'USDC'}</Text>
 
-          <Text >Deuda con tenedores: {metrics?.totalAssets} USDC</Text>
+          <Text >Deuda con tenedores: {metrics?.totalAssets} {investment?.underlyingSymbol ?? 'USDC'}</Text>
           <Divider my={20}></Divider>
 
           <Group position="center" grow>
