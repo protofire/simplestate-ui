@@ -70,8 +70,9 @@ export function AdminProjects() {
   }, [fetchProjects, updating]);
 
   const reset = () => {
-    setUpdating(u => !u);
+    setProjects([]);
     setSelectedProject(undefined);
+    setUpdating(u => !u);
   }
 
   const onProjectSelected = async (address: string) => {
@@ -173,6 +174,7 @@ Una vez que deposites la venta no podrÃ¡s retirar este dinero, confirmas el depÃ
           disabled={loading}
           placeholder={"Seleccionar proyecto"}
           onChange={onProjectSelected}
+          value={selectedProject?.address ?? null}
         ></Select>
         <Button
           color={"teal"}
@@ -183,6 +185,8 @@ Una vez que deposites la venta no podrÃ¡s retirar este dinero, confirmas el depÃ
           Crear proyecto
         </Button>
       </Group>
+
+      <button onClick={reset}>check</button>
 
       <Modal
         size={"xl"}
