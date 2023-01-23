@@ -186,8 +186,6 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         </Button>
       </Group>
 
-      <button onClick={reset}>check</button>
-
       <Modal
         size={"xl"}
         opened={open}
