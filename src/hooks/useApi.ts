@@ -50,37 +50,55 @@ export function useApi() {
     return balance;
   }
 
-  const fetchProjectRate = async (projectAddress: string, rateModelAddress: string) => {
-    const contract = registry.initContract(rateModelAddress, 'rateModel');
-    const [rate] = await contract.functions.getRate(projectAddress);
-    return rate;
-  }
-
   const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
-    if (!registry.contract) return [];
+    if (!registry.contract || !rent.contract) return [];
 
     const { initContract, contract } = registry;
     const functions = contract.functions;
 
     const projectList: IProjectMetadata[] = [];
     const size = await functions.getNumberOfProjects();
+
     for (let i = size - 1; i >= 0; i--) {
       const [address] = await functions.keys(i);
       const projectContract = initContract(address, 'project');
-      const [metadata, [state], targets, financialTracking, tokens, booleanConfigs, modules, roles] = await Promise.all([
-        projectContract?.functions.metadata(),
-        projectContract?.functions.state(),
-        projectContract?.functions.targets(),
-        projectContract?.functions.financialTracking(),
-        projectContract?.functions.tokens(),
-        projectContract?.functions.booleanConfigs(),
-        projectContract?.functions.modules(),
-        projectContract?.functions.roles()
-      ]);
+
+      const initialPromises = [
+        projectContract.functions.metadata(),
+        projectContract.functions.state(),
+        projectContract.functions.targets(),
+        projectContract.functions.financialTracking(),
+        projectContract.functions.tokens(),
+        projectContract.functions.booleanConfigs(),
+        projectContract.functions.modules(),
+        projectContract.functions.roles(),
+      ];
+      
+      const [
+        metadata, 
+        [state], 
+        targets, 
+        financialTracking, 
+        tokens, 
+        booleanConfigs, 
+        modules, 
+        roles
+      ] = await Promise.all(initialPromises);
+
+      const complementPromises: any = [fetchToken(tokens.unitOfAccountToken)];
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
-      const token: IProjectToken | undefined = hasToken ? await fetchToken(tokens.ipToken) : undefined;
-      const underlyingToken: UnderlyingToken = await fetchToken(tokens.unitOfAccountToken);
+      if (hasToken) {
+        complementPromises.push(fetchToken(tokens.ipToken));
+      }
+      if (booleanConfigs.produceIncome) {
+        complementPromises.push(rent.contract.functions.projectsIcomeDistribution(address));
+      }
+      
+      const results = await Promise.all(complementPromises);
+      const underlyingToken = results[0];
+      const token = hasToken ? results[1] : undefined;
+      const rentIncome = booleanConfigs.produceIncome ? results[results.length - 1] : undefined;
 
       const targetsParsed: IProjectTargets = {
         fundingAmountTarget: fromDecimals(targets.fundingAmountTarget),
@@ -106,12 +124,13 @@ export function useApi() {
         booleanConfigs,
         modules,
         roles,
-        underlyingToken 
+        underlyingToken,
+        estimatedRent: Number(rentIncome.estimatedRent)
       };
       projectList.push(projectMetadata);
     }
     return projectList;
-  }, [registry.contract]);
+  }, [registry.contract, rent.contract]);
 
   const createProject = useCallback(async (
     name: string,
@@ -121,7 +140,8 @@ export function useApi() {
     sellTime: number,
     metadataURL: string,
     produceIncome: boolean,
-    allowPartialSell: boolean
+    allowPartialSell: boolean,
+    rentAmount: number
   ): Promise<Event[] | undefined> => {
     if (!signer) return;
     const signedContract = factory.sign(signer);
@@ -133,7 +153,8 @@ export function useApi() {
       sellTime,
       metadataURL,
       produceIncome,
-      allowPartialSell
+      allowPartialSell,
+      toDecimals(rentAmount)
     );
     const recipt = await tx.wait();
     return recipt.events;

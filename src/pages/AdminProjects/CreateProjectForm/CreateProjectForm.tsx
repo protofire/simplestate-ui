@@ -35,6 +35,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
   const { classes } = useStyles();
   const { connect, accounts } = useMetamask();
   const [loading, setLoading] = useState(false);
+  const [rentField, setRentField] = useState(false);
 
   useEffect(() => {
     connect()
@@ -62,7 +63,8 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
       produceIncome: false,
       allowPartialSell: false,
       feeModel: 'listing',
-      valuationModel: 'rate'
+      valuationModel: 'rate',
+      rentAmount: ''
     },
 
     validate: {
@@ -94,6 +96,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
     setLoading(true);
     try {
       const fundingAmount = Number(form.values.fundingAmount);
+      const rentAmount = form.values.rentAmount ? Number(form.values.rentAmount) : 0;
       const fundingTime = calculateFundingTime();
       const sellAmount = Number(form.values.sellAmount);
       const sellTime = calculateSellTime();
@@ -105,8 +108,9 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
         sellAmount,
         sellTime,
         form.values.metadataURL,
-        form.values.produceIncome,
-        form.values.allowPartialSell
+        rentField,
+        form.values.allowPartialSell,
+        rentAmount
       );
       const successNotification = buildNotification(NotificationType.CREATE_PROJECT_SUCCESS);
       showNotification(successNotification);
@@ -222,17 +226,23 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
           size={'sm'} 
           labelPosition={'left'}
           {...form.getInputProps('produceIncome')}
+          onChange={(e) => setRentField(e.currentTarget.checked)}
         />
-        {/* <Switch 
-          className={classes.input} 
-          onLabel="SI" 
-          offLabel="NO" 
-          label={'Admite venta parcial'} 
-          color={'teal'} 
-          size={'sm'} 
-          labelPosition={'left'}
-          {...form.getInputProps('allowPartialSell')}
-        /> */}
+
+        {rentField && 
+          <SimpleGrid cols={2}>
+            <Input.Wrapper
+              className={classes.input}
+              withAsterisk
+              label={
+                <span>
+                  Renta estimada <span style={{fontWeight: 300}}>(USDC)</span>
+                </span>
+            }>
+              <NumberInput {...form.getInputProps('rentAmount')} type={'number'} placeholder="Ej. 1000" />
+            </Input.Wrapper>
+          </SimpleGrid>}
+
 
         <SimpleGrid cols={2}>
           <Input.Wrapper

@@ -51,4 +51,5 @@ export interface IProjectMetadata {
   valuationModel: "rate";
   roles: IProjectRoles;
   underlyingToken: UnderlyingToken;
+  estimatedRent?: number;
 }

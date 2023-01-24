@@ -136,6 +136,11 @@ export default [
 				"internalType": "bool",
 				"name": "_allowPartialSell",
 				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_rentAmount",
+				"type": "uint256"
 			}
 		],
 		"name": "deployProject",
@@ -243,6 +248,19 @@ export default [
 			}
 		],
 		"name": "setRentIncome",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_unitOfAccountToken",
+				"type": "address"
+			}
+		],
+		"name": "setUnitOfAccountToken",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
