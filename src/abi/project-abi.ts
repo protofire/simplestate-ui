@@ -77,11 +77,6 @@ export default [
 		"type": "error"
 	},
 	{
-		"inputs": [],
-		"name": "SellBeforeFund",
-		"type": "error"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -126,19 +121,6 @@ export default [
 			}
 		],
 		"name": "FeeModelSet",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "FundingAmontTargetSet",
 		"type": "event"
 	},
 	{
@@ -272,19 +254,6 @@ export default [
 			}
 		],
 		"name": "IpTokenSet",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			}
-		],
-		"name": "NameSet",
 		"type": "event"
 	},
 	{
@@ -816,11 +785,6 @@ export default [
 			},
 			{
 				"internalType": "uint256",
-				"name": "avgTimeBetweenUpdates",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
 				"name": "numberOfUpdates",
 				"type": "uint256"
 			}
@@ -942,6 +906,19 @@ export default [
 			}
 		],
 		"name": "setFeeModel",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fundingAmountTarget",
+				"type": "uint256"
+			}
+		],
+		"name": "setFundingAmountTarget",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

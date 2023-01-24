@@ -36,12 +36,22 @@ export function useApi() {
 
   const fetchToken = async (address: string): Promise<IProjectToken> => {
     const token = registry.initContract(address, 'ipToken');
-    const [[symbol], [name], [supply]] = await Promise.all([
-      token.functions.symbol(),
-      token.functions.name(),
-      token.functions.totalSupply()
-    ]);
-    return { symbol, name, address, supply: fromDecimals(supply) };
+    try {
+      const [[symbol], [name], [supply]] = await Promise.all([
+        token.functions.symbol(),
+        token.functions.name(),
+        token.functions.totalSupply()
+      ]);
+      return { symbol, name, address, supply: fromDecimals(supply) };
+    } catch (e) {
+      console.error(`Could not fetch token under address: ${address}`);
+      return {
+        symbol: '<No Token>',
+        name: '<Invalid token>',
+        supply: 0,
+        address
+      }
+    }
   }
 
   const fetchTokenBalance = async (token: string, account: string) => {
@@ -84,6 +94,8 @@ export function useApi() {
         modules, 
         roles
       ] = await Promise.all(initialPromises);
+
+      console.log('unit of account token', tokens.unitOfAccountToken);
 
       const complementPromises: any = [fetchToken(tokens.unitOfAccountToken)];
 
