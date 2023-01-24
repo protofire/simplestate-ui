@@ -223,6 +223,10 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
           {`Meta de Venta: `}
           <strong>{`${selectedProject?.targets.sellingAmountTarget} ${symbol}`?? ' - '}</strong>
         </Text>
+        {selectedProject.booleanConfigs.produceIncome && <Text>
+          {`Renta mensual: `}
+          <strong>{`${selectedProject?.estimatedRent} ${symbol}`?? ' - '}</strong>
+        </Text>}
         <Text>
           {`Tasa de retorno: `}
           <strong>
