@@ -52,4 +52,5 @@ export interface IProjectMetadata {
   roles: IProjectRoles;
   underlyingToken: UnderlyingToken;
   estimatedRent?: number;
+  profitPercent: number;
 }

@@ -51,12 +51,7 @@ interface ProjectCardParams {
 export function ProjectCard({ project, openModal }: ProjectCardParams) {
   const { classes } = useStyles();
 
-  const { 
-    fundingAmountTarget,
-    sellingAmountTarget,
-    sellingTimeTarget 
-  } = project.targets;
-
+  const { fundingAmountTarget, sellingTimeTarget } = project.targets;
   const { fundingRaised } = project.financialTracking;
 
   return (
@@ -91,12 +86,11 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
         <Grid justify={"center"}>
           <Grid.Col span={5}>
             <Text size={16} align="center">
-              {`${Utils.profit(Number(sellingAmountTarget), Number(fundingAmountTarget)).toFixed(
-                2
-              )} %`}
+              {`${project.profitPercent.toFixed(2)} %`}
             </Text>
             <Text color={"dimmed"} size={12} align="center">
               {`Ganancia estimada`}
+              {project.booleanConfigs.produceIncome && ` (Incluye renta)`}
             </Text>
           </Grid.Col>
           <Divider orientation="vertical" />

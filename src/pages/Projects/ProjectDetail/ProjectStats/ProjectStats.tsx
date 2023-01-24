@@ -31,12 +31,7 @@ const useStyles = createStyles(() => ({
 export function ProjectStats({ project }: { project: IProjectMetadata }) {
   const { classes } = useStyles();
 
-  const { 
-    sellingAmountTarget,
-    fundingAmountTarget,
-    sellingTimeTarget
-  } = project.targets;
-
+  const { fundingAmountTarget, sellingTimeTarget } = project.targets;
   const { fundingRaised,  } = project.financialTracking
 
   return (
@@ -63,14 +58,12 @@ export function ProjectStats({ project }: { project: IProjectMetadata }) {
               <Grid.Col span={5}>
                 <Text size={18} align="center" color="teal">
                   <strong>
-                    {`${Utils.profit(
-                      Number(sellingAmountTarget),
-                      Number(fundingAmountTarget)
-                    ).toFixed(2)} %`}
+                    {`${project.profitPercent.toFixed(2)} %`}
                   </strong>
                 </Text>
                 <Text color={"dimmed"} size={12} align="center">
                   {`Ganancia estimada`}
+                  {project.booleanConfigs.produceIncome && ` (Incluye renta)`}
                 </Text>
               </Grid.Col>
               <Divider orientation="vertical" />

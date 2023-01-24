@@ -226,11 +226,8 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         <Text>
           {`Tasa de retorno: `}
           <strong>
-            {Utils.profit(
-              Number(selectedProject?.targets.sellingAmountTarget),
-              Number(selectedProject?.targets.fundingAmountTarget)
-            ).toFixed(2)}{" "}
-            %
+            {selectedProject.profitPercent.toFixed(2)} {" %"} 
+            {selectedProject.booleanConfigs.produceIncome && " (Incluye renta)"}
           </strong>
         </Text>
         <Text>

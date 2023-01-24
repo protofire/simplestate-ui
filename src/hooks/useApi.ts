@@ -5,11 +5,12 @@ import { useMetamask } from "./useMetamask";
 import { ContractTransaction, Event } from "ethers";
 import { State } from "../constants/projectState";
 import { Investment } from "../types/investment";
-import { IProjectToken, UnderlyingToken } from "../types/token";
+import { IProjectToken } from "../types/token";
 import { IFinanctialTracking, IProjectTargets } from "../types/projectMetadata";
 import { rateToAPY, fromDecimals, fromRAYDecimals, toDecimals, toRAYDecimals, apyToRate } from "../utils/utilities";
 import { SimpleEarnInvestment } from "../types/simple-earn";
 import { SimpleEarnMetrics } from "../types/simple-earn-metrics";
+import * as Utils from '../utils/utilities';
 
 export function useApi() {
   const registry = useContract('registry');
@@ -60,6 +61,20 @@ export function useApi() {
     return balance;
   }
 
+  const computeProfitPercent = (
+    targets: IProjectTargets,
+    rent?: number) => {
+    const durationSeconds = targets.sellingTimeTarget - targets.fundingTimeTarget;
+    const durationMonths = ((((durationSeconds / 60) / 60) / 24) / 30);
+    const totalRent = rent ? durationMonths * rent : 0;
+    const sellingAmount = Number(targets.sellingAmountTarget) + totalRent;
+    const profitPercent = Utils.profit(
+      sellingAmount,
+      Number(targets.fundingAmountTarget)
+    );
+    return profitPercent;
+  }
+
   const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
     if (!registry.contract || !rent.contract) return [];
 
@@ -95,28 +110,17 @@ export function useApi() {
         roles
       ] = await Promise.all(initialPromises);
 
-      console.log('unit of account token', tokens.unitOfAccountToken);
-
-      const complementPromises: any = [fetchToken(tokens.unitOfAccountToken)];
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
-      if (hasToken) {
-        complementPromises.push(fetchToken(tokens.ipToken));
-      }
-      if (booleanConfigs.produceIncome) {
-        complementPromises.push(rent.contract.functions.projectsIcomeDistribution(address));
-      }
-      
-      const results = await Promise.all(complementPromises);
-      const underlyingToken = results[0];
-      const token = hasToken ? results[1] : undefined;
-      const rentIncome = booleanConfigs.produceIncome ? results[results.length - 1] : undefined;
+      const underlyingToken = await fetchToken(tokens.unitOfAccountToken);
+      const token = hasToken ? await fetchToken(tokens.ipToken) : undefined;
+      const rentIncome = booleanConfigs.produceIncome ? await rent.contract.functions.projectsIcomeDistribution(address) : undefined;
 
       const targetsParsed: IProjectTargets = {
-        fundingAmountTarget: fromDecimals(targets.fundingAmountTarget),
-        fundingTimeTarget: targets.fundingTimeTarget,
-        sellingAmountTarget: fromDecimals(targets.sellingAmountTarget),
-        sellingTimeTarget: targets.sellingTimeTarget,
+        fundingAmountTarget: fromDecimals(Number(targets.fundingAmountTarget)),
+        fundingTimeTarget: Number(targets.fundingTimeTarget),
+        sellingAmountTarget: fromDecimals(Number(targets.sellingAmountTarget)),
+        sellingTimeTarget: Number(targets.sellingTimeTarget),
       }
       const financtualTrackingParsed: IFinanctialTracking = {
         accruedFees: fromDecimals(financialTracking.accruedFees),
@@ -125,6 +129,9 @@ export function useApi() {
         fundingWithdrawed: fromDecimals(financialTracking.fundingWithdrawed),
         redeemableAmount: fromDecimals(financialTracking.redeemableAmount),
       }
+
+      const rentAmount = rentIncome ? fromDecimals(Number(rentIncome.estimatedRent)) : undefined;
+      const profitPercent = computeProfitPercent(targetsParsed, rentAmount);
 
       const projectMetadata: IProjectMetadata = {
         ...metadata,
@@ -137,7 +144,8 @@ export function useApi() {
         modules,
         roles,
         underlyingToken,
-        estimatedRent: Number(rentIncome.estimatedRent)
+        estimatedRent: booleanConfigs.produceIncome ? rentAmount : undefined,
+        profitPercent 
       };
       projectList.push(projectMetadata);
     }
