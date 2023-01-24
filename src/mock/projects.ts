@@ -47,7 +47,9 @@ export const mockProjects: IProjectMetadata[] = [
     numberOfUpdates: 0,
     permissioningModel: 'Whitelist',
     unitOfAccount: 'USDC',
-    underlyingToken: { address: '', symbol: 'USDC'}
+    underlyingToken: { address: '', symbol: 'USDC'},
+    estimatedRent: 100,
+    profitPercent: 10,
   },
   {
     name: 'Mock 1',
@@ -94,7 +96,9 @@ export const mockProjects: IProjectMetadata[] = [
     numberOfUpdates: 0,
     permissioningModel: 'Whitelist',
     unitOfAccount: 'USDC',
-    underlyingToken: { address: '', symbol: 'USDC'}
+    underlyingToken: { address: '', symbol: 'USDC'},
+    estimatedRent: 100,
+    profitPercent: 10,
   },
    {
     name: 'Mock 2',
@@ -141,6 +145,8 @@ export const mockProjects: IProjectMetadata[] = [
     numberOfUpdates: 0,
     permissioningModel: 'Whitelist',
     unitOfAccount: 'USDC',
-    underlyingToken: { address: '', symbol: 'USDC'}
+    underlyingToken: { address: '', symbol: 'USDC'},
+    estimatedRent: 100,
+    profitPercent: 10,
   }
 ];
