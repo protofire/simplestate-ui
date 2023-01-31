@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   Badge,
   TextInput,
+  Center,
 } from "@mantine/core";
 import { IconArrowDown, IconArrowUp, IconBuilding } from "@tabler/icons";
 import { useEffect, useState } from "react";
@@ -33,20 +34,21 @@ const useStyles = createStyles(() => ({
 
 export function AdminProjects() {
   const {
-    getTotalProjects,
-    fetchProjects,
     withdrawFunds,
     depositSellingAmount,
     depositRentAmount,
     getAccumulatedRent,
-    rentIncomeAddress
+    rentIncomeAddress,
+    fetchProjectNames,
+    fetchProject
   } = useApi();
 
   const { classes } = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [projects, setProjects] = useState<IProjectMetadata[]>([]);
+  const [projectNames, setProjectNames] = useState<{name:string, address:string}[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingProject, setLoadingProject] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [selectedProject, setSelectedProject] = useState<IProjectMetadata>();
 
@@ -71,27 +73,32 @@ export function AdminProjects() {
 
   useEffect(() => {
     setLoading(true);
-    getTotalProjects().then((total) => {
-      fetchProjects(total, 1, total).then((p) => {
-        setProjects(p);
-        setLoading(false);
-      });
+    fetchProjectNames().then((p) => {
+      setProjectNames(p);
+      setLoading(false);
     });
-
-  }, [fetchProjects, updating]);
+  }, [fetchProjectNames, updating]);
 
   const reset = () => {
-    setProjects([]);
+    setProjectNames([]);
     setSelectedProject(undefined);
     setUpdating(u => !u);
   }
 
   const onProjectSelected = async (address: string) => {
-    const project:IProjectMetadata | undefined = projects.find((p) => p.address === address);
-    if (!project) return;
-    setSelectedProject(project);
-    const acc = await getAccumulatedRent(address);
-    setTotalDepositedRent(acc);
+    const projectName: {address:string, name:string} | undefined = projectNames.find((p) => p.address === address);
+    if (!projectName) return;
+    setLoadingProject(true);
+    try {
+      const project = await fetchProject(projectName.address);
+      setSelectedProject(project);
+      const acc = await getAccumulatedRent(address);
+      setTotalDepositedRent(acc);
+    } catch(e) {
+      console.error(e)
+    } finally {
+      setLoadingProject(false);
+    }
   };
 
   const withdwaw = async () => {
@@ -177,7 +184,7 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
       <Group className={classes.group}>
         <Select
           label="Proyecto"
-          data={projects.map((p) => ({
+          data={projectNames.map((p) => ({
             value: p.address,
             label: p.name,
           }))}
@@ -210,7 +217,13 @@ Una vez que deposites la venta no podr√°s retirar este dinero, confirmas el dep√
         />
       </Modal>
 
-      {selectedProject && <Group style={{ display: "block" }} m={"lg"}>
+      {loadingProject &&  
+        <Center m={"xl"}>
+          <Loader color="teal" size="lg" variant="bars" />
+        </Center> }
+      
+      {(selectedProject && !loadingProject) && 
+        <Group style={{ display: "block" }} m={"lg"}>
         <Text>
           {`Address: `}
           <strong>{selectedProject?.address ?? ' - '}</strong>

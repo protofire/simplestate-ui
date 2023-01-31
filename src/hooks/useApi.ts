@@ -400,6 +400,91 @@ export function useApi() {
 
   }, [signer, simplearn.contract]);
 
+  const fetchProjectNames = useCallback(async (): Promise<{ address: string, name: string }[]> => {
+    if (!registry.contract) return [];
+
+    const total = await getTotalProjects();
+    const projects: { address: string, name: string }[] = [];
+
+    for (let i = total - 1; i >= 0; i--) {
+      const [address] = await registry.contract.functions.keys(i);
+      const projectContract = registry.initContract(address, 'project');
+
+      const metadata = await projectContract.functions.metadata();
+
+      projects.push({
+        name: metadata.name,
+        address
+      });
+    }
+    return projects;
+  }, [registry.contract]);
+
+  const fetchProject = useCallback(async (address: string): Promise<IProjectMetadata | undefined> => {
+    if (!registry.contract || !rent.contract) return undefined;
+    const projectContract = registry.initContract(address, 'project');
+    const initialPromises = [
+      projectContract.functions.metadata(),
+      projectContract.functions.state(),
+      projectContract.functions.targets(),
+      projectContract.functions.financialTracking(),
+      projectContract.functions.tokens(),
+      projectContract.functions.booleanConfigs(),
+      projectContract.functions.modules(),
+      projectContract.functions.roles(),
+    ];
+    
+    const [
+      metadata, 
+      [state], 
+      targets, 
+      financialTracking, 
+      tokens, 
+      booleanConfigs, 
+      modules, 
+      roles
+    ] = await Promise.all(initialPromises);
+
+
+    const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
+    const underlyingToken = await fetchToken(tokens.unitOfAccountToken);
+    const token = hasToken ? await fetchToken(tokens.ipToken) : undefined;
+    const rentIncome = booleanConfigs.produceIncome ? await rent.contract.functions.projectsIcomeDistribution(address) : undefined;
+
+    const targetsParsed: IProjectTargets = {
+      fundingAmountTarget: fromDecimals(Number(targets.fundingAmountTarget)),
+      fundingTimeTarget: Number(targets.fundingTimeTarget),
+      sellingAmountTarget: fromDecimals(Number(targets.sellingAmountTarget)),
+      sellingTimeTarget: Number(targets.sellingTimeTarget),
+    }
+    const financtualTrackingParsed: IFinanctialTracking = {
+      accruedFees: fromDecimals(financialTracking.accruedFees),
+      cumulativeRedeemableAmount: fromDecimals(financialTracking.cumulativeRedeemableAmount),
+      fundingRaised: fromDecimals(financialTracking.fundingRaised),
+      fundingWithdrawed: fromDecimals(financialTracking.fundingWithdrawed),
+      redeemableAmount: fromDecimals(financialTracking.redeemableAmount),
+    }
+
+    const rentAmount = rentIncome ? fromDecimals(Number(rentIncome.estimatedRent)) : undefined;
+    const profitPercent = computeProfitPercent(targetsParsed, rentAmount);
+
+    const projectMetadata: IProjectMetadata = {
+      ...metadata,
+      address,
+      state,
+      targets: targetsParsed,
+      financialTracking: financtualTrackingParsed,
+      token,
+      booleanConfigs,
+      modules,
+      roles,
+      underlyingToken,
+      estimatedRent: booleanConfigs.produceIncome ? rentAmount : undefined,
+      profitPercent 
+    };
+    return projectMetadata;
+  }, [registry.contract, rent.contract]);
+
   return {
     getTotalProjects,
     fetchProjects,
@@ -420,6 +505,8 @@ export function useApi() {
     simplearnAddress: simplearn.contract?.address,
     rentIncomeAddress: rent.contract?.address,
     withdrawSimplearnFunds,
-    redeem
+    redeem,
+    fetchProjectNames,
+    fetchProject
   }
 }
