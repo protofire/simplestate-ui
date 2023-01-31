@@ -32,7 +32,15 @@ const useStyles = createStyles(() => ({
 }));
 
 export function AdminProjects() {
-  const { fetchProjects, withdrawFunds, depositSellingAmount, depositRentAmount, getAccumulatedRent, rentIncomeAddress } = useApi();
+  const {
+    getTotalProjects,
+    fetchProjects,
+    withdrawFunds,
+    depositSellingAmount,
+    depositRentAmount,
+    getAccumulatedRent,
+    rentIncomeAddress
+  } = useApi();
 
   const { classes } = useStyles();
 
@@ -63,10 +71,13 @@ export function AdminProjects() {
 
   useEffect(() => {
     setLoading(true);
-    fetchProjects().then((p) => {
-      setProjects(p);
-      setLoading(false);
+    getTotalProjects().then((total) => {
+      fetchProjects(total, 1, total).then((p) => {
+        setProjects(p);
+        setLoading(false);
+      });
     });
+
   }, [fetchProjects, updating]);
 
   const reset = () => {

@@ -75,16 +75,31 @@ export function useApi() {
     return profitPercent;
   }
 
-  const fetchProjects = useCallback(async (): Promise<IProjectMetadata[]> => {
+  const getTotalProjects = useCallback(async (): Promise<number> => {
+    if (!registry.contract) return 0;
+    const size = await registry.contract.functions.getNumberOfProjects();
+    return Number(size);
+  }, [registry.contract]);
+
+  const fetchProjects = useCallback(async (
+    total: number,
+    page: number,
+    itemsPerPage = 3): Promise<IProjectMetadata[]> => {
     if (!registry.contract || !rent.contract) return [];
 
     const { initContract, contract } = registry;
     const functions = contract.functions;
 
     const projectList: IProjectMetadata[] = [];
-    const size = await functions.getNumberOfProjects();
 
-    for (let i = size - 1; i >= 0; i--) {
+    let from = (page * itemsPerPage) - 1;
+    let to = from - itemsPerPage + 1;
+    
+    if (from < 0) return [];
+    if (to < 0) to = 0;
+    if (from >= total) from = total - 1; // prevents overflow  
+
+    for (let i = from; i >= to; i--) {
       const [address] = await functions.keys(i);
       const projectContract = initContract(address, 'project');
 
@@ -199,7 +214,8 @@ export function useApi() {
 
   const getInvestments = useCallback(async (): Promise<Investment[] | null> => {
     if (!accounts[0]) return null;
-    const projects = await fetchProjects();
+    const totalProjects = await getTotalProjects();
+    const projects = await fetchProjects(totalProjects, 1, totalProjects);
     const tokenizedProjects = projects.filter(p => !!p.token);
     const tokens = tokenizedProjects.map(p => p.token!);
 
@@ -385,6 +401,7 @@ export function useApi() {
   }, [signer, simplearn.contract]);
 
   return {
+    getTotalProjects,
     fetchProjects,
     createProject,
     factoryReady,

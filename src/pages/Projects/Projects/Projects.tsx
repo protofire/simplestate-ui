@@ -1,12 +1,18 @@
-import { Container, SimpleGrid, Modal, Loader, Center } from "@mantine/core";
+import { Container, SimpleGrid, Modal, Loader, Center, Pagination } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/useApi";
 import { IProjectMetadata } from "../../../types/projectMetadata";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { ProjectDetail } from "../ProjectDetail/ProjectDetail";
 
+const itemsPerPage = 3;
+
 export function Projects() {
-  const { fetchProjects, registryReady } = useApi();
+  const { fetchProjects, registryReady, getTotalProjects } = useApi();
+
+  const [activePage, setPage] = useState(1);
+  const [totalProjects, setTotalProjects] = useState(0);
+
   const [projects, setProjects] = useState<IProjectMetadata[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState<{
@@ -14,13 +20,22 @@ export function Projects() {
     project: IProjectMetadata | null;
   }>({ open: false, project: null });
 
+  const totalPages = Math.ceil(totalProjects / itemsPerPage);
+
+
   useEffect(() => {
     setLoading(true);
-    fetchProjects().then((p) => {
-      setProjects(p);
-      setLoading(false);
+    getTotalProjects().then((total: number) => {
+      setTotalProjects(total);
+      console.log('total projects', total);
+      console.log('active page', activePage);
+      fetchProjects(total, activePage).then((p) => {
+        setProjects(p);
+        setLoading(false);
+      });
     });
-  }, [fetchProjects]);
+
+  }, [getTotalProjects, fetchProjects, activePage]);
 
   const openModal = (p: IProjectMetadata) => {
     setModalState({ open: true, project: p });
@@ -48,6 +63,7 @@ export function Projects() {
           <ProjectCard key={i} project={p} openModal={openModal} />
         ))}
       </SimpleGrid>
+      <Pagination color={'teal'} style={{ justifyContent: 'center' }} my={'md'} page={activePage} onChange={setPage} total={totalPages} />
       <Modal
         size={"xl"}
         opened={modalState.open}
