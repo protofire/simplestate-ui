@@ -6,6 +6,7 @@ import { Projects } from "./pages/Projects/Projects/Projects";
 import { Investments } from "./pages/Investments/Investments";
 import { AppHeader } from "./components/AppHeader/AppHeader";
 import { SimpleEarn } from "./pages/Simplearn/SimpleEarn";
+import { SimpleEarnAdmin } from "./pages/simplearn-admin/SimpleEarnAdmin";
 
 export default function App() {
   return (
@@ -46,6 +47,15 @@ export default function App() {
               element={
                 <Tabs.Panel value="simplearn" pt="lg">
                   <SimpleEarn />
+                </Tabs.Panel>
+              }
+            />
+
+            <Route
+              path="simplearn-admin"
+              element={
+                <Tabs.Panel value="simplearn-admin" pt="lg">
+                  <SimpleEarnAdmin />
                 </Tabs.Panel>
               }
             />
