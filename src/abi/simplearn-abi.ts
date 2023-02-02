@@ -16,6 +16,11 @@ export default [
 		"type": "constructor"
 	},
 	{
+		"inputs": [],
+		"name": "NotAuthorized",
+		"type": "error"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -259,6 +264,38 @@ export default [
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amoun",
+				"type": "uint256"
+			}
+		],
+		"name": "WithdrawalLimitSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "permissioningModel",
+				"type": "address"
+			}
+		],
+		"name": "permissioningModelSet",
+		"type": "event"
+	},
+	{
 		"inputs": [],
 		"name": "ADMIN_ROLE",
 		"outputs": [
@@ -433,6 +470,24 @@ export default [
 			{
 				"internalType": "uint256",
 				"name": "shares",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "currentWithdrawalLimit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
@@ -769,6 +824,19 @@ export default [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "permissioningModel",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -923,6 +991,24 @@ export default [
 			}
 		],
 		"name": "setInterestRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_time",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "setWithdrawalLimit",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

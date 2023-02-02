@@ -314,7 +314,16 @@ export function useApi() {
 
     const address = accounts[0];
 
-    const [symbol, [balance], [underlyingBalance], [rate, positive], [totalWithdrawable], [totalAssets], [tokenRate], underlyingSymbol] = await Promise.all([
+    const [
+      symbol,
+      [balance],
+      [underlyingBalance],
+      [rate, positive],
+      [totalWithdrawable],
+      [totalAssets],
+      [tokenRate],
+      [withdrawalLimitTime, withdrawalLimitAmount],
+      underlyingSymbol] = await Promise.all([
       simplearn.contract.functions.symbol(),
       simplearn.contract.functions.balanceOf(address),
       simplearn.contract.functions.balanceOfInAsset(address),
@@ -322,6 +331,7 @@ export function useApi() {
       simplearn.contract.functions.totalWithdrawableAssets(),
       simplearn.contract.functions.totalAssets(),
       simplearn.contract.functions.convertToAssets(toDecimals(1)),
+      simplearn.contract.functions.currentWithdrawalLimit(),
       underlyingToken.contract.functions.symbol()
     ]);
 
@@ -336,7 +346,9 @@ export function useApi() {
       totalWithdrawable: fromDecimals(Number(totalWithdrawable)),
       tokenRate: fromDecimals(Number(tokenRate)),
       totalAssets: fromDecimals(Number(totalAssets)),
-      underlyingSymbol
+      underlyingSymbol,
+      withdrawalLimitTime: Number(withdrawalLimitTime) / 3600, // from sec to hours
+      withdrawalLimitAmount: fromDecimals(Number(withdrawalLimitAmount))
     }
 
   }, [accounts[0], simplearn.contract, underlyingToken.contract]);
@@ -394,6 +406,21 @@ export function useApi() {
 
     const signedSimplearnContract = simplearn.sign(signer);
     const tx: ContractTransaction = await signedSimplearnContract?.functions.takeFunds(
+      parsedAmount,
+      { gasLimit: 200000 });
+    await tx.wait();
+
+  }, [signer, simplearn.contract]);
+
+
+  const setWithdrawalLimit = useCallback(async (amount: number, timeInHours: number) => {
+    if (!signer || !simplearn.contract) return;
+    const parsedAmount = toDecimals(amount);
+    const parsedTime = timeInHours * 3600;
+    const signedSimplearnContract = simplearn.sign(signer);
+
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.setWithdrawalLimit(
+      parsedTime,
       parsedAmount,
       { gasLimit: 200000 });
     await tx.wait();
@@ -507,6 +534,7 @@ export function useApi() {
     withdrawSimplearnFunds,
     redeem,
     fetchProjectNames,
-    fetchProject
+    fetchProject,
+    setWithdrawalLimit
   }
 }

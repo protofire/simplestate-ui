@@ -27,8 +27,6 @@ export function Projects() {
     setLoading(true);
     getTotalProjects().then((total: number) => {
       setTotalProjects(total);
-      console.log('total projects', total);
-      console.log('active page', activePage);
       fetchProjects(total, activePage).then((p) => {
         setProjects(p);
         setLoading(false);

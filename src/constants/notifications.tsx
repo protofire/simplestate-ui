@@ -28,6 +28,8 @@ export enum NotificationType {
   RATE_SIMPLEARN_ERROR,
   WITHDRAW_SIMPLEARN_SUCCESS,
   WITHDRAW_SIMPLEARN_ERROR,
+  WITHDRAW_LIMIT_SUCCESS,
+  WITHDRAW_LIMIT_ERROR
 }
 
 export const buildNotification = (type: NotificationType, props: any = {}): NotificationProps => {
@@ -290,6 +292,28 @@ export const buildNotification = (type: NotificationType, props: any = {}): Noti
         title: "Ocurrió un error",
         icon:<IconX size={18} />,
         message: 'Ocurrió un error intentando retirar los fondos, asegurate de tener el rol admin de Simplearn y de que el monto sea válido',
+        color: "red",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_LIMIT_SUCCESS: {
+      return {
+        id: "success",
+        autoClose: 10000,
+        title: "Límite actualizado con éxito",
+        icon: <IconCheck size={18} />,
+        message: 'Actualizaste el límite para Simplearn con éxito',
+        color: "teal",
+        radius: "md",
+      }
+    }
+    case NotificationType.WITHDRAW_LIMIT_ERROR: {
+      return {
+        id: "error",
+        autoClose: 10000,
+        title: "Ocurrió un error",
+        icon:<IconX size={18} />,
+        message: 'Ocurrió un error intentando actualizar el límite de retiro, asegurate de tener el rol necesario para realizar esta acción',
         color: "red",
         radius: "md",
       }

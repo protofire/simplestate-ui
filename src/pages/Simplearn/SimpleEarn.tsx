@@ -58,7 +58,10 @@ export function SimpleEarn() {
           tokenRate: simplearn.tokenRate,
           totalWithdrawable: simplearn.totalWithdrawable,
           totalAssets: simplearn.totalAssets,
-          symbol: simplearn.underlyingSymbol
+          symbol: simplearn.underlyingSymbol,
+          withdrawalLimitTime: simplearn.withdrawalLimitTime,
+          withdrawalLimitAmount: simplearn.withdrawalLimitAmount,
+          apy: simplearn.apy
         });
       }
       setLoading(false);
