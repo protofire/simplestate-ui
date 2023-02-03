@@ -37,6 +37,16 @@ yarn dev
 
 > Make sure to connect your wallet in the right network (Polygon mumbai or Polygon mainnet).
 
+
+### Deployment
+You can deploy the app to any hosting service, we recommend using [Netlify](https://www.netlify.com/) since it offers CI/CD integration + environment variables support.
+
+1. Create a netlify account.
+2. Go to [upload app dashboard](https://app.netlify.com/start).
+3. Select Github and link the existing repository to the app using `main` branch.
+4. Add environment variables present in `.env`.
+5. Trigger deploy.
+
 ### Project tooling + structure
 
 We use `vite` as the react framework following the standard structure for React applications. The UI library is `mantine` and for smart contracts interactions we use `ethers.js` library.
