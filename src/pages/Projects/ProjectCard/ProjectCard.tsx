@@ -75,8 +75,8 @@ export function ProjectCard({ project, openModal }: ProjectCardParams) {
         </Title>
         <Text color={"dimmed"} size={14} align="center">
           {project.booleanConfigs.produceIncome
-            ? `Cobras en ${project.underlyingToken.symbol ?? "USDC"} todos los meses`
-            : `Cobras en ${project.underlyingToken.symbol ?? "USDC"} al finalizar el período`}
+            ? `Cobras en ${project.underlyingToken.symbol ?? "USDS"} todos los meses`
+            : `Cobras en ${project.underlyingToken.symbol ?? "USDS"} al finalizar el período`}
         </Text>
       </Card.Section>
 

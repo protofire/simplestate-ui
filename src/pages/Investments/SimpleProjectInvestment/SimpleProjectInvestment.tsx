@@ -121,7 +121,7 @@ export function SimpleProjectInvestment() {
               </Group>
             </Tooltip>
             <Text align="center">
-              (<strong>{state >= State.Funded ? totalUnderlyingBalance.toFixed(2) : '-'}</strong> {investment.project.underlyingToken.symbol ?? 'USDC'})
+              (<strong>{state >= State.Funded ? totalUnderlyingBalance.toFixed(2) : '-'}</strong> {investment.project.underlyingToken.symbol ?? 'USDS'})
             </Text>
           </Flex>
         </td>
@@ -129,7 +129,7 @@ export function SimpleProjectInvestment() {
           <Group position="right" style={{visibility: produceIncome ? 'visible': 'hidden'}}>
             <Text align="center" color="gray">
               {<Text color="green">
-                <strong>{investment.claimableRent?.toFixed(2)}</strong> {investment.project.underlyingToken.symbol ?? 'USDC'}
+                <strong>{investment.claimableRent?.toFixed(2)}</strong> {investment.project.underlyingToken.symbol ?? 'USDS'}
               </Text>}
             </Text>
             <Tooltip label="Retirar renta disponible" withArrow>

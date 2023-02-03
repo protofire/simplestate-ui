@@ -55,7 +55,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
       metadataURL: '',
       permissioningModel: 'whitelist',
       maxSupply: '',
-      unitOfAccount: 'USDC',
+      unitOfAccount: 'USDS',
       fundingAmount: '',
       fundingTime: '',
       sellAmount: '',
@@ -175,7 +175,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
             withAsterisk
             label={
               <span>
-                Cantidad <span style={{fontWeight: 300}}>(USDC)</span>
+                Cantidad <span style={{fontWeight: 300}}>(USDS)</span>
               </span>
           }>
             <NumberInput {...form.getInputProps('fundingAmount')} type={'number'} placeholder="Ej. 150.000" />
@@ -200,7 +200,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
             withAsterisk
             label={
               <span>
-                Cantidad <span style={{fontWeight: 300}}>(USDC)</span>
+                Cantidad <span style={{fontWeight: 300}}>(USDS)</span>
               </span>
           }>
             <NumberInput {...form.getInputProps('sellAmount')} type={'number'} placeholder="Ej. 250.000" />
@@ -236,7 +236,7 @@ export function CreateProjectForm({ close, onCreate } : CreateProjectFormProps) 
               withAsterisk
               label={
                 <span>
-                  Renta estimada <span style={{fontWeight: 300}}>(USDC)</span>
+                  Renta estimada <span style={{fontWeight: 300}}>(USDS)</span>
                 </span>
             }>
               <NumberInput {...form.getInputProps('rentAmount')} type={'number'} placeholder="Ej. 1000" />
