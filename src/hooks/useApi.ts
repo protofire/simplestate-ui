@@ -380,7 +380,10 @@ export function useApi() {
     await approveTx.wait();
 
     const signedSimplearnContract = simplearn.sign(signer);
-    const tx: ContractTransaction = await signedSimplearnContract?.functions.deposit(parsedAmount, address);
+    const tx: ContractTransaction = await signedSimplearnContract?.functions.deposit(
+      parsedAmount, 
+      address,
+      { gasLimit: 200000 });
     await tx.wait();
   }, [signer, simplearn.contract, underlyingToken.contract]);
 
