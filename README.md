@@ -4,29 +4,38 @@ Real estate tokenization UI.
 
 ### Running this project
 
-Install dependencies.
+1. Create an [Achemy](https://dashboard.alchemy.com/) account. Under dashboard select "Create App" for the corresponding network.
+   - Polygon Mumbai for testing.
+   - Polygon for prod.
+---
+
+2. Install dependencies.
 
 ```sh
 yarn install
 ```
+---
 
-> You must also create an Alchemy account and configure a new project for the Eth Goerli testing Netwrork.
-
-Create an `.env` file at the root folder of the project and set the following variables
+3. Create an `.env` file at the root folder of the project and set the following variables
 
 ```sh
 VITE_REGISTRY_CONTRACT_ADDRESS='0x...'
 VITE_FACTORY_CONTRACT_ADDRESS='0x...'
-VITE_UNDERLYING_TOKEN_ADDRESS='0x...' # USDC
+VITE_UNDERLYING_TOKEN_ADDRESS='0x...' # USDS
 VITE_RENT_INCOME_CONTRACT_ADDRESS='0x...'
-VITE_ALCHEMY_API_KEY='...'    # the API key for your Alchemy account.
+VITE_SIMPLEARN_CONTRACT_ADDRESS='0x...'
+VITE_ALCHEMY_API_KEY='...'    # the API key for your Alchemy app.
 ```
 
-Run in local mode
+---
+
+4. Run in local mode 
 
 ```sh
 yarn dev
 ```
+
+> Make sure to connect your wallet in the right network (Polygon mumbai or Polygon mainnet).
 
 ### Project tooling + structure
 
