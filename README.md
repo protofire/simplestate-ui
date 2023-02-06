@@ -24,7 +24,8 @@ VITE_FACTORY_CONTRACT_ADDRESS='0x...'
 VITE_UNDERLYING_TOKEN_ADDRESS='0x...' # USDS
 VITE_RENT_INCOME_CONTRACT_ADDRESS='0x...'
 VITE_SIMPLEARN_CONTRACT_ADDRESS='0x...'
-VITE_ALCHEMY_API_KEY='...'    # the API key for your Alchemy app.
+VITE_ALCHEMY_ENDPOINT='https://polygon-mainnet.g.alchemy.com/v2/...' # the endpoint for your Alchemy app.
+VITE_CHAIN_ID=80001 # 80001 for mumbai testnet, 137 for polygon mainnet
 ```
 
 ---

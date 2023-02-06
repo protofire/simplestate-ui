@@ -14,7 +14,7 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-const defaultNetwork = networkEnum.MUMBAI;
+const defaultNetwork = Number(import.meta.env.VITE_CHAIN_ID ?? networkEnum.MUMBAI);
 
 export function AppHeader() {
   const { connect, connectDefault, accounts, network, sitchChainTo } = useMetamask();

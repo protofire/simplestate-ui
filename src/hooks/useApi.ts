@@ -97,7 +97,7 @@ export function useApi() {
     
     if (from < 0) return [];
     if (to < 0) to = 0;
-    if (from >= total) from = total - 1; // prevents overflow  
+    if (from >= total) from = total - 1; // prevents overflow
 
     for (let i = from; i >= to; i--) {
       const [address] = await functions.keys(i);
@@ -124,7 +124,6 @@ export function useApi() {
         modules, 
         roles
       ] = await Promise.all(initialPromises);
-
 
       const hasToken = (state !== State.Created && state !== State.ReadyForApproove);
       const underlyingToken = await fetchToken(tokens.unitOfAccountToken);
@@ -162,7 +161,9 @@ export function useApi() {
         estimatedRent: booleanConfigs.produceIncome ? rentAmount : undefined,
         profitPercent 
       };
-      projectList.push(projectMetadata);
+      if (metadata.name !== 'Test') {
+        projectList.push(projectMetadata);
+      }
     }
     return projectList;
   }, [registry.contract, rent.contract]);
@@ -442,10 +443,12 @@ export function useApi() {
 
       const metadata = await projectContract.functions.metadata();
 
-      projects.push({
-        name: metadata.name,
-        address
-      });
+      if (metadata.name !== 'Test') {
+        projects.push({
+          name: metadata.name,
+          address
+        });
+      }
     }
     return projects;
   }, [registry.contract]);
